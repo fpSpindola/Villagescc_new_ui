@@ -1,0 +1,124 @@
+{% load staticfiles %}
+
+<!-- Content should be construct with section -->
+<section class="container-fluid con-padding-top">
+  <div class="row">
+
+    <!-- Div on the left side -->
+    <div class="col-md-3">
+      <p>ALL CATEGORIES</p>
+      <nav class="sidebar">
+        <ul class="nav sidenav">
+          {% for categorie in categories %}
+          <li><a href="#items">{{ categorie }}</a>
+            <ul class="nav">
+              {% for sub_categories in categories %}
+                <li><a href="#">{{ sub_categories.sub_categories_text }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav><br><br>
+      <input
+        id="ex2"
+        type="text"
+        class="span2"
+        value=""
+        data-slider-min="10"
+        data-slider-max="1000"
+        data-slider-step="5"
+        data-slider-value="[250,450]"
+        data-slider-handle="square"/>
+        <br><br>
+        <button type="button" class="btn btn-warning" name="button">Update view</button>
+    </div>
+
+    <!-- Div on the right side -->
+    <div class="col-md-9">
+
+      <!-- Forms -->
+      <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-inline">
+          <div class="form-group col-md-3">
+            {{ form.listing_type }}
+            <!-- {{ form.fields.listing_type.choices }} -->
+          </div>
+          <div class="form-group col-md-9">
+            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">
+          </div>
+        </div>
+
+        <!-- Give space -->
+        <br><br><br>
+        <div class="form-inline float-right">
+
+          <div class="form-group">
+            <label for="">Price</label>
+            {{ form.price }}
+            <!-- <input type="text" class="form-control" name="price" value=""> -->
+          </div>
+
+          <!-- Sub Categories -->
+          {{ form.subcategories }}
+          <div class="form-group">
+            {{ form.photo }}
+          </div>
+          <input type="hidden" name="user" value="{{ request.user.id }}">
+          <input type="submit" class="btn" value="POST">
+        </div>
+      </form>
+
+      <!-- Options  -->
+      <div class="row" style="margin-top: 54px;">
+        <div class="col-md-6">
+          <!-- Split button -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-default btn-lg">All listing types</button>
+            <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Offer</a></li>
+              <li><a href="#">Request</a></li>
+              <li><a href="#">Teach</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Learn</a></li>
+              <li><a href="#">Gift</a></li>
+              <li><a href="#">Goal</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">
+            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
+          </button>
+          <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
+          </button>
+          <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">
+            <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
+          </button>
+        </div>
+      </div>
+
+      <hr>
+      <!-- After the form post show the listing -->
+      <!-- Given for loop to construct all -->
+      {% for each in listings %}
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail image">
+            <img src="{% static 'images/cover.jpg' %}" alt="...">
+            <p class="thumbnail-tag">{{ each.get_listing_type_display }}</p>
+            <p class="thumbnail-info">{{ each.title }}</p>
+            <div class="caption">
+              <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>
+              <p class="inline">{{ each.user }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
