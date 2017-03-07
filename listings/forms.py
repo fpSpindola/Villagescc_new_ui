@@ -4,6 +4,7 @@ from django.forms.widgets import Select, NumberInput
 # Import App Model
 from listings.models import Listings
 
+
 # Forms
 class ListingsForms(ModelForm):
     class Meta:

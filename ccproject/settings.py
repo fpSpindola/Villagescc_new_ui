@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from datetime import timedelta
+
+from database.databases import Database
+from database.connection_strings import POSTGRESQL
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -67,6 +71,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'profile.middleware.ProfileMiddleware',
+    'geo.middleware.LocationMiddleware',
 ]
 
 ROOT_URLCONF = 'ccproject.urls'
@@ -95,7 +101,7 @@ WSGI_APPLICATION = 'ccproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'villages',
         'USER': 'postgres'
     },
@@ -153,3 +159,13 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = 'media'
+
+GEOIP_PATH = '/usr/share/GeoIP'
+
+LOCATION_COOKIE_NAME = 'location_id'
+LOCATION_COOKIE_AGE = timedelta(days=365)
+
+LOCATION_SESSION_KEY = 'location_id'
+DEFAULT_LOCATION = ('49.2696243', '-123.0696036')  # East Vancouver.
+
+

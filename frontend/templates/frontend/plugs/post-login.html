@@ -6,9 +6,17 @@
 
     <!-- Div on the left side -->
     <div class="col-md-3">
-      <p>ALL CATEGORIES</p>
       <nav class="sidebar">
         <ul class="nav sidenav">
+          <li><a href="#items">Categories</a>
+            <ul class="nav">
+              <li><a href="#">All</a></li>
+              <li><a href="#">People</a></li>
+              <li><a href="#">Posts</a></li>
+              <li><a href="#">Trust</a></li>
+              <li><a href="#">Pay Forward</a></li>
+            </ul>
+          </li>
           {% for categorie in categories %}
           <li><a href="#items">{{ categorie }}</a>
             <ul class="nav">
@@ -20,18 +28,18 @@
           {% endfor %}
         </ul>
       </nav><br><br>
-      <input
-        id="ex2"
-        type="text"
-        class="span2"
-        value=""
-        data-slider-min="10"
-        data-slider-max="1000"
-        data-slider-step="5"
-        data-slider-value="[250,450]"
-        data-slider-handle="square"/>
-        <br><br>
-        <button type="button" class="btn btn-warning" name="button">Update view</button>
+{#      <input#}
+{#        id="ex2"#}
+{#        type="text"#}
+{#        class="span2"#}
+{#        value=""#}
+{#        data-slider-min="10"#}
+{#        data-slider-max="1000"#}
+{#        data-slider-step="5"#}
+{#        data-slider-value="[250,450]"#}
+{#        data-slider-handle="square"/>#}
+{#        <br><br>#}
+{#        <button type="button" class="btn btn-warning" name="button">Update view</button>#}
     </div>
 
     <!-- Div on the right side -->
@@ -41,11 +49,11 @@
       <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-inline">
           <div class="form-group col-md-3">
-            {{ form.listing_type }}
-            <!-- {{ form.fields.listing_type.choices }} -->
+{#            {{ form.listing_type }}#}
+{#            <!-- {{ form.fields.listing_type.choices }} -->#}
           </div>
           <div class="form-group col-md-9">
-            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">
+{#            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">#}
           </div>
         </div>
 
@@ -53,19 +61,19 @@
         <br><br><br>
         <div class="form-inline float-right">
 
-          <div class="form-group">
-            <label for="">Price</label>
-            {{ form.price }}
-            <!-- <input type="text" class="form-control" name="price" value=""> -->
-          </div>
+{#          <div class="form-group">#}
+{#            <label for="">Price</label>#}
+{#            {{ form.price }}#}
+{#            <!-- <input type="text" class="form-control" name="price" value=""> -->#}
+{#          </div>#}
 
           <!-- Sub Categories -->
-          {{ form.subcategories }}
+{#          {{ form.subcategories }}#}
           <div class="form-group">
-            {{ form.photo }}
+{#            {{ form.photo }}#}
           </div>
           <input type="hidden" name="user" value="{{ request.user.id }}">
-          <input type="submit" class="btn" value="POST">
+{#          <input type="submit" class="btn" value="POST">#}
         </div>
       </form>
 
@@ -73,22 +81,22 @@
       <div class="row" style="margin-top: 54px;">
         <div class="col-md-6">
           <!-- Split button -->
-          <div class="btn-group">
-            <button type="button" class="btn btn-default btn-lg">All listing types</button>
-            <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="caret"></span>
-              <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="#">Offer</a></li>
-              <li><a href="#">Request</a></li>
-              <li><a href="#">Teach</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Learn</a></li>
-              <li><a href="#">Gift</a></li>
-              <li><a href="#">Goal</a></li>
-            </ul>
-          </div>
+{#          <div class="btn-group">#}
+{#            <button type="button" class="btn btn-default btn-lg">All listing types</button>#}
+{#            <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#              <span class="caret"></span>#}
+{#              <span class="sr-only">Toggle Dropdown</span>#}
+{#            </button>#}
+{#            <ul class="dropdown-menu">#}
+{#              <li><a href="#">Offer</a></li>#}
+{#              <li><a href="#">Request</a></li>#}
+{#              <li><a href="#">Teach</a></li>#}
+{#              <li role="separator" class="divider"></li>#}
+{#              <li><a href="#">Learn</a></li>#}
+{#              <li><a href="#">Gift</a></li>#}
+{#              <li><a href="#">Goal</a></li>#}
+{#            </ul>#}
+{#          </div>#}
         </div>
         <div class="col-md-6">
           <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">

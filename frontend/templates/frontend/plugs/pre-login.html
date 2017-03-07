@@ -1,12 +1,12 @@
 {% load staticfiles %}
-
+{% load i18n %}
 <!-- Jumbotron should be hide after the user logged in -->
 <div class="jumbotron">
   <img src="{% static 'images/cover.jpg' %}" class="jumbotron-image"/>
   <div class="caption jumbotron-content">
     <h1>Villages Marketplace</h1>
-    <p>Everyone Has Value to Exchange</p>
-    <p>Decentralized Mutual Credit System</p>
+    <p>Everyone has value to exchange</p>
+    <p>Decentralized mutual credit system</p>
   </div>
 </div>
 
@@ -15,72 +15,63 @@
   <div class="row">
     <div class="col-md-6">
       <!-- Split button -->
-      <div class="btn-group">
-        <button type="button" class="btn btn-default btn-lg">All listing types</button>
-        <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="caret"></span>
-          <span class="sr-only">Toggle Dropdown</span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a href="#">Offer</a></li>
-          <li><a href="#">Request</a></li>
-          <li><a href="#">Teach</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Learn</a></li>
-          <li><a href="#">Gift</a></li>
-          <li><a href="#">Goal</a></li>
-        </ul>
-      </div>
     </div>
     <div class="col-md-6">
-      <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">
-        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
-      </button>
-      <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">
-        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
-      </button>
-      <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">
-        <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
-      </button>
+{#      <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">#}
+{#        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
+{#      </button>#}
+{#      <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">#}
+{#        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
+{#      </button>#}
+    {#      <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">#}
+    {#        <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
+    {#      </button>#}
     </div>
   </div>
 </section>
 
+	<script type="text/javascript"
+		src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
+{#	{% static 'geo.js' %}#}
+	<script type="text/javascript">
+{#		{% include "locator.js" %}#}
+	</script>
+
 <section class="container-fluid" id="show-home-item">
   <div class="row">
     <div class="col-md-3">
-      <p>ALL CATEGORIES</p>
       <nav class="sidebar">
         <ul class="nav sidenav">
-          <li><a href="#items">ITEMS</a>
+          <li><a href="#items">Categories</a>
             <ul class="nav">
-              <li><a href="#">TOOLS</a></li>
-              <li><a href="#">SPORTS</a></li>
-              <li><a href="#">MUSIC</a></li>
-              <li><a href="#">BOOKS & MAGAZINES</a></li>
+              <li><a href="#">ALL</a></li>
+              <li><a href="#">PEOPLE</a></li>
+              <li><a href="#">POSTS</a></li>
+              <li><a href="#">TRUST</a></li>
+              <li><a href="#">PAY FORWARD</a></li>
             </ul>
           </li>
         </ul>
       </nav>
       <br><br>
-      <input
-        id="ex2"
-        type="text"
-        class="span2"
-        value=""
-        data-slider-min="10"
-        data-slider-max="1000"
-        data-slider-step="5"
-        data-slider-value="[250,450]"
-        data-slider-handle="square"/>
-        <br><br>
-        <button type="button" class="btn btn-warning" name="button">Update view</button>
+{#      <input#}
+{#        id="ex2"#}
+{#        type="text"#}
+{#        class="span2"#}
+{#        value=""#}
+{#        data-slider-min="10"#}
+{#        data-slider-max="1000"#}
+{#        data-slider-step="5"#}
+{#        data-slider-value="[250,450]"#}
+{#        data-slider-handle="square"/>#}
+{#        <br><br>#}
+{#        <button type="button" class="btn btn-warning" name="button">Update view</button>#}
     </div>
     <hr>
     <div class="col-md-9">
 
       <!-- Given for loop to construct all -->
-{#      {% for each in listings %}#}
+      {% for each in feed_items %}
         <div class="col-sm-6 col-md-4">
           <div class="thumbnail image">
             <img src="{% static 'images/cover.jpg' %}" alt="...">
@@ -92,7 +83,17 @@
             </div>
           </div>
         </div>
-{#      {% endfor %}#}
+      {% endfor %}
     </div>
+
+        <ul>
+          {% if not request.profile %}
+              <li><a href="{% url 'feed' %}"
+              >{% trans 'Browse Marketplace' %}</a></li>
+          {% endif %}
+          <li class="{% block nav_location_class %}{% endblock %}">
+              <a href="{% url 'locator' %}?next={{ request.path }}"
+              >{{ request.location|default:_('Location') }}</a></li>
+      </ul>
   </div>
 </section>

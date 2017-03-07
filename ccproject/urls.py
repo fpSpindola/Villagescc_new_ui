@@ -24,11 +24,15 @@ from accounts import urls as accounts_urls
 from frontend import urls as frontend_urls
 from about import urls as about_urls
 from payment_raja import urls as payment_urls
+from feed import urls as feed_urls
+from geo import urls as geo_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(frontend_urls, namespace='frontend')),
     url(r'^accounts/', include(accounts_urls, namespace='accounts')),
     url(r'^about/', include(about_urls), name='about'),
+    url(r'^feed/', include(feed_urls), name='feed'),
+    url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

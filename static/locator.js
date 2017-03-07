@@ -7,7 +7,7 @@ $(document).ready(function() {
 		query = $('#loc_search').val();
 		loc_search(query);
 		return false;
-	});
+	});	
 
 	// Init map, etc.
 	var prev_pt = wkt_to_latlng($('#id_point').val());

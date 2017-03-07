@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 # Forms
 from listings.forms import ListingsForms
+from feed.forms import FeedFilterForm, DATE_FORMAT
 
 # models
 from listings.models import Listings

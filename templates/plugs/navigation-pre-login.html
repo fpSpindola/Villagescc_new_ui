@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -33,18 +34,16 @@
 
     <div id="navbar" class="navbar-collapse collapse navtop">
       <ul class="nav navbar-nav">
-        <li><a href="#">How it works</a></li>
-        <li><a href="#contact">Contact us</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li><a href="{% url 'how_it_works' %}">How it works</a></li>
+            <li><a href="#">Motivation</a></li>
+            <li><a href="#">Privacy</a></li>
             <li role="separator" class="divider"></li>
-            <li class="dropdown-header">Nav header</li>
-            <li><a href="#">Separated link</a></li>
-            <li><a href="#">One more separated link</a></li>
+            <li><a href="#">Developers</a></li>
+            <li><a href="#">Donate</a></li>
+            <li><a href="#">Contact us</a></li>
           </ul>
         </li>
       </ul>

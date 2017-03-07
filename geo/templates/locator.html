@@ -1,22 +1,24 @@
-{% extends "home_base.html" %}
+{% extends 'base.html' %}
+{% load staticfiles %}
 {% load i18n %}
-
-{% load media %}
 
 {% block title %}{% trans 'Set Your Location' %}{% endblock %}
 
 {% block nav_location_class %}{% trans 'selected' %}{% endblock %}
-
-{% block extrahead %}
-	<script type="text/javascript"
-		src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
-	{% include_media 'geo.js' %}
-	<script type="text/javascript">
-		{% include "locator.js" %}
-	</script>
-{% endblock %}
-
 {% block content %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        {% block ready_js %}{% endblock %}
+        init_instruction_input();
+        init_feed_items();
+    });
+</script>
+
+<script type="text/javascript"
+        src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
+<script type="text/javascript">
+    {% include "locator.js" %}
+</script>
 <h2>{% trans 'Set Your Location' %}</h2>
 
 {% if form.errors %}

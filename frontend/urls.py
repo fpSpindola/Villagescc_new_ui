@@ -7,5 +7,6 @@ from accounts import views as accounts_views
 
 urlpatterns = [
     url(r'^$', frontend_views.home, name='home'),
-    url(r'^profile/(?P<username>\w+)/$', accounts_views.profile)
+    url(r'^profile/(?P<username>\w+)/$', accounts_views.profile),
+
 ]
