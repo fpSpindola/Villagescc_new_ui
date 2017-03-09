@@ -32,9 +32,6 @@ INVITE_CODE_KEY = 'invite_code'
 # Session key for profile ID of link sharer.
 SHARED_BY_PROFILE_ID_KEY = 'shared_by'
 
-# URL param key for username of link sharer.
-SHARED_BY_USERNAME_KEY = 'u'
-
 MESSAGES = {
     'profile_saved': _("Profile saved."),
     'contact_sent': _("Message sent."),

@@ -1,4 +1,4 @@
-{% load profile location humanize media %}
+{% load profile location humanize staticfiles %}
 {% load i18n %}
 <div class="feed_item_user unit">
 	{% block user %}
@@ -10,7 +10,7 @@
 <div class="feed_item_content unit lastUnit">
 	<h3 class="feed_item_title">
 		{% if item.trusted %}
-			<img src="{% media_url 'img/heart_icon.png' %}"
+			<img src="{% static 'img/heart_icon.png' %}"
 				title="{% trans 'Trusted User' %}"
 				alt="{% trans 'Heart icon = trusted user' %}">
 		{% endif %}

@@ -5,29 +5,20 @@
   <div class="row">
 
     <!-- Div on the left side -->
-    <div class="col-md-3">
-      <nav class="sidebar">
-        <ul class="nav sidenav">
-          <li><a href="#items">Categories</a>
-            <ul class="nav">
-              <li><a href="#">All</a></li>
-              <li><a href="#">People</a></li>
-              <li><a href="#">Posts</a></li>
-              <li><a href="#">Trust</a></li>
-              <li><a href="#">Pay Forward</a></li>
-            </ul>
-          </li>
-          {% for categorie in categories %}
-          <li><a href="#items">{{ categorie }}</a>
-            <ul class="nav">
-              {% for sub_categories in categories %}
-                <li><a href="#">{{ sub_categories.sub_categories_text }}</a></li>
-              {% endfor %}
-            </ul>
-          </li>
-          {% endfor %}
-        </ul>
-      </nav><br><br>
+{#    <div class="col-md-3">#}
+{#      <nav class="sidebar">#}
+{#        <ul class="nav sidenav">#}
+{#          <li><a href="#items">Categories</a>#}
+{#            <ul class="nav">#}
+{#              <li><a href="#">All</a></li>#}
+{#              <li><a href="#">People</a></li>#}
+{#              <li><a href="#">Posts</a></li>#}
+{#              <li><a href="#">Trust</a></li>#}
+{#              <li><a href="#">Pay Forward</a></li>#}
+{#            </ul>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </nav><br><br>#}
 {#      <input#}
 {#        id="ex2"#}
 {#        type="text"#}
@@ -40,7 +31,7 @@
 {#        data-slider-handle="square"/>#}
 {#        <br><br>#}
 {#        <button type="button" class="btn btn-warning" name="button">Update view</button>#}
-    </div>
+{#    </div>#}
 
     <!-- Div on the right side -->
     <div class="col-md-9">
@@ -48,11 +39,14 @@
       <!-- Forms -->
       <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-inline">
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-12">
+              <h4 class="" style="font-weight: 600; font-family: 'Source Code Pro', sans-serif">
+                  Welcome to Villages.cc {{ request.profile.name }}! What do you want to do?</h4>
 {#            {{ form.listing_type }}#}
 {#            <!-- {{ form.fields.listing_type.choices }} -->#}
           </div>
           <div class="form-group col-md-9">
+
 {#            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">#}
           </div>
         </div>
@@ -78,9 +72,9 @@
       </form>
 
       <!-- Options  -->
-      <div class="row" style="margin-top: 54px;">
-        <div class="col-md-6">
-          <!-- Split button -->
+{#      <div class="row" style="margin-top: 54px;">#}
+{#        <div class="col-md-6">#}
+{#          <!-- Split button -->#}
 {#          <div class="btn-group">#}
 {#            <button type="button" class="btn btn-default btn-lg">All listing types</button>#}
 {#            <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
@@ -97,36 +91,95 @@
 {#              <li><a href="#">Goal</a></li>#}
 {#            </ul>#}
 {#          </div>#}
-        </div>
-        <div class="col-md-6">
-          <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">
-            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
-          </button>
-          <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">
-            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
-          </button>
-          <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">
-            <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
-          </button>
-        </div>
-      </div>
+{#        </div>#}
+{#        <div class="col-md-6">#}
+{#          <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">#}
+{#            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
+{#          </button>#}
+{#          <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">#}
+{#            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
+{#          </button>#}
+{#          <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">#}
+{#            <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
+{#          </button>#}
+{#        </div>#}
+{#      </div>#}
 
       <hr>
       <!-- After the form post show the listing -->
       <!-- Given for loop to construct all -->
-      {% for each in listings %}
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail image">
-            <img src="{% static 'images/cover.jpg' %}" alt="...">
-            <p class="thumbnail-tag">{{ each.get_listing_type_display }}</p>
-            <p class="thumbnail-info">{{ each.title }}</p>
-            <div class="caption">
-              <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>
-              <p class="inline">{{ each.user }}</p>
+{#      {% for each in listings %}#}
+        <div class="col-sm-5 col-md-2">
+            <div class="thumbnail">
+                <a href="{% url 'feed' %}" class="thumbnail">
+                    <img src="{% static 'images/all_Easy-Resize.com.jpg' %}" alt="...">
+                    <div class="caption">
+                        <h5>All</h5>
+                    </div>
+                <div class="caption">
+{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
+{#                    <p class="inline">{{ each.user }}</p>#}
+                </div>
+                </a>
             </div>
-          </div>
         </div>
-      {% endfor %}
+         <div class="col-sm-5 col-md-2">
+            <div class="thumbnail image">
+                <a href="#" class="thumbnail image">
+                    <img src="{% static 'images/people_Easy-Resize.com.jpg' %}" alt="...">
+                    <div class="caption">
+                        <h5>People</h5>
+                    </div>
+                <div class="caption">
+{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
+{#                    <p class="inline">{{ each.user }}</p>#}
+                </div>
+                </a>
+            </div>
+        </div>
+         <div class="col-sm-5 col-md-2">
+            <div class="thumbnail image">
+                <a href="#" class="thumbnail">
+                    <img src="{% static 'images/posts_Easy-Resize.com.jpg' %}" alt="...">
+                    <div class="caption">
+                        <h5>Posts</h5>
+                    </div>
+                <div class="caption">
+{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
+{#                    <p class="inline">{{ each.user }}</p>#}
+                </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-5 col-md-2">
+            <div class="thumbnail">
+                <a href="#" class="thumbnail">
+                    <img src="{% static 'images/trust_Easy-Resize.com.jpg' %}" alt="...">
+                    <div class="caption">
+                        <h5>Trust</h5>
+                    </div>
+                <div class="caption">
+{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
+{#                    <p class="inline">{{ each.user }}</p>#}
+                </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-5 col-md-2">
+            <div class="thumbnail">
+                <a href="#" class="thumbnail">
+                    <img src="{% static 'images/back-payment-icon-10.png' %}" alt="...">
+                    <div class="caption">
+                        <h5>Pay Forward</h5>
+                    </div>
+                <div class="caption">
+{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
+{#                    <p class="inline">{{ each.user }}</p>#}
+                </div>
+                </a>
+            </div>
+        </div>
+{#      {% endfor %}#}
     </div>
   </div>
 </section>

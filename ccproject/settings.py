@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     # Custom apps
     'geo',
@@ -112,6 +113,7 @@ DATABASES = {
     }
 }
 
+DATABASE_ROUTERS = ('ripple.router.RippleRouter',)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -155,6 +157,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+ENDORSEMENT_BONUS = 5
+
+FEED_ITEMS_PER_PAGE = 20
 
 MEDIA_URL = '/media/'
 

@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,8 @@
 
     <!-- Font-awesome -->
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:700" rel="stylesheet">
     <link href="{% static 'content.css' %}" rel="stylesheet">
 
 
@@ -32,43 +34,64 @@
 
       {% block extrahead %}{% endblock %}
     <![endif]-->
-   	<!-- Navbar fixed top -->
-		<style>
-/*			body {
-				min-height: 2000px;
-				padding-top: 70px;
-			}*/
-		</style>
-  </head>
-  <body>
+    <!-- Navbar fixed top -->
+    <style>
+        /*			body {
+                        min-height: 2000px;
+                        padding-top: 70px;
+                    }*/
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'success'%}
+                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
+                            <i class="fa fa-check"></i>{{ message }}
+                        </div>
+                    {% else %}
+                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
+                            <i class="fa fa-meh-o"></i>{{ message }}
+                        </div>
+                    {% endif %}
+                    <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
+                {% endfor %}
+            {% endif %}
 
-    <!-- Main Navigation -->
-    <!-- Navigation / from plugs / we need to show two plugs here -->
-    <!-- 1. if user not logged in comes from pre-login  -->
-    <!-- 2. lf user logged in comes from post-login -->
-    {% if request.user.is_authenticated %}
-      {% include 'plugs/navigation-post-login.html' %}
-    {% else %}
-      {% include 'plugs/navigation-pre-login.html' %}
-    {% endif %}
 
-    <!-- Page content -->
-    {% block content %}{% endblock content %}
+            <!-- Main Navigation -->
+            <!-- Navigation / from plugs / we need to show two plugs here -->
+            <!-- 1. if user not logged in comes from pre-login  -->
+            <!-- 2. lf user logged in comes from post-login -->
+            {% block content %}{% endblock content %}
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
-    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+            {% if request.user.is_authenticated %}
+                {% include 'plugs/navigation-post-login.html' %}
+            {% else %}
+                {% include 'plugs/navigation-pre-login.html' %}
+            {% endif %}
 
-    <!-- Bootstrap slider -->
-    <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
-    <script>
-      // Without JQuery
-      var elem = document.getElementById('ex2');
-      if (elem) {
-        new Slider("#ex2", { tooltip: 'always', id: "slider12c", min: 0, max: 10, range: true, value: [3, 7] });
-      }
-    </script>
-  </body>
+            <!-- Page content -->
+
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+            <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+            <!-- Bootstrap slider -->
+            <script src="{% static 'seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}" charset="utf-8"></script>
+            <script>
+                // Without JQuery
+                var elem = document.getElementById('ex2');
+                if (elem) {
+                    new Slider("#ex2", { tooltip: 'always', id: "slider12c", min: 0, max: 10, range: true, value: [3, 7] });
+                }
+            </script>
+        </div>
+    </div>
+</body>
 </html>

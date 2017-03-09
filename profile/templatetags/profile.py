@@ -1,10 +1,12 @@
 from django import template
 from mediagenerator.utils import media_url
 from general.templatetags.image import resize
-from profile.views import SHARED_BY_USERNAME_KEY
 from django.conf import settings
 
 register = template.Library()
+
+# URL param key for username of link sharer.
+SHARED_BY_USERNAME_KEY = 'u'
 
 PROFILE_LINK_TEMPLATE = '''<a href="%s">%s</a>'''
 
@@ -14,8 +16,7 @@ def profile_image_url(profile, size):
         return resize(profile.photo, size)
     else:
         square_side = min((int(i) for i in size.split('x')))
-        return media_url('img/generic_user_%dx%d.png' % (
-                square_side, square_side))
+        return '/static/img/generic_user_%dx%d.png' % (square_side, square_side)
 
 @register.simple_tag
 def profile_display(profile, request, text="you", not_you_text=None):

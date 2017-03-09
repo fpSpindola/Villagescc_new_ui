@@ -26,6 +26,10 @@ from about import urls as about_urls
 from payment_raja import urls as payment_urls
 from feed import urls as feed_urls
 from geo import urls as geo_urls
+from profile import urls as profile_urls
+from post import urls as post_urls
+from endorsement import urls as endorsement_urls
+from relate import urls as relate_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -33,6 +37,10 @@ urlpatterns = [
     url(r'^accounts/', include(accounts_urls, namespace='accounts')),
     url(r'^about/', include(about_urls), name='about'),
     url(r'^feed/', include(feed_urls), name='feed'),
+    url(r'^profile/', include(profile_urls), name='profile'),
+    url(r'^posts/', include(post_urls), name='posts'),
+    url(r'^edorsements/', include(endorsement_urls), name='endorsements'),
+    url('^relate/', include(relate_urls), name='relate'),
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
