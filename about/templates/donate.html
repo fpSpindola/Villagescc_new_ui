@@ -1,10 +1,12 @@
-{% extends "about_base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block title %}{% trans 'Donate' %}{% endblock %}
 
 {% block content %}
-{{ block.super }}
+
+<div align="center" style="text-align: justify; text-justify: inter-word; margin-left: 192px; margin-right: 192px;">
+<br><br><br><br><br>
 
 <h3>{% trans 'Support Villages with your Donation' %}</h3>
 
@@ -56,3 +58,4 @@
 
 <p>{% trans 'Thanks!' %}</p>
 {% endblock %}
+</div>

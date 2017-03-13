@@ -1,5 +1,11 @@
 {% load profile relate humanize %}
 {% load i18n %}
+
+<style>
+    html {
+        padding: 15px;
+    }
+</style>
 <h2>{{ profile }}</h2>
 
 {% if profile == request.profile %}

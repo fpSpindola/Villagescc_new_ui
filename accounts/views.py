@@ -1,5 +1,5 @@
 # Django http and shortcuts import
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -72,7 +72,7 @@ def login_view(request):
         except:
             messages.error(request, "User not found")
             return HttpResponseRedirect(reverse('accounts:login'))
-    return render(request, 'accounts/login.html')
+    return render(request, 'accounts/sign_in.html')
 
 
 def logout_view(request):
@@ -90,6 +90,19 @@ def profile(request, username=None):
     else:
         profile = Profile.objects.get(user__username=request.user.username)
     return render(request, 'accounts/profile.html', {'profile': profile})
+
+
+def my_profile(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
+    if profile == request.profile:
+        template = 'my_profile.html'
+    else:
+        template = 'profile.html'
+        if request.profile:
+            my_endorsement = request.profile.endorsement_for(profile)
+            account = profile.account(request.profile)
+    return locals(), template
+
 
 
 def settings_view(request):

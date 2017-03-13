@@ -3,57 +3,61 @@
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <img class="navbar-brand" id="navbar-logo" src="{% static 'images/logo.png' %}" alt="Brand">
-      <a href="{% url 'frontend:home' %}" class="navbar-brand navbar-title navtop">VILLAGES.CC</a>
-    </div>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img class="navbar-brand" id="navbar-logo" src="{% static 'images/logo.png' %}" alt="Brand">
+            <a href="{% url 'frontend:home' %}" class="navbar-brand navbar-title navtop">VILLAGES.CC</a>
+        </div>
 
-    <!-- Navbar form -->
-    <form class="navbar-form navbar-left">
+        <!-- Navbar form -->
+        <form class="navbar-form navbar-left">
 
-      <div class="form-group navtop">
-        <input type="text" class="form-control form-nav-what" placeholder="What do you need?">
-      </div>
+            <div class="form-group navtop">
+                <input type="text" class="form-control form-nav-what" placeholder="What do you need?">
+            </div>
 
-      <div class="input-group navtop">
-        <input type="text" class="form-control form-nav-location" placeholder="Location">
-        <span class="input-group-btn">
+            <div class="input-group navtop">
+                <input type="text" class="form-control form-nav-location" placeholder="Location">
+                <span class="input-group-btn">
           <button class="btn btn-default" type="button">
             <i class="fa fa-search" aria-hidden="true"></i>
           </button>
         </span>
-      </div><!-- /input-group -->
-    </form>
-
-    <div id="navbar" class="navbar-collapse collapse navtop">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'how_it_works' %}">How it works</a></li>
-            <li><a href="#">Motivation</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Developers</a></li>
-            <li><a href="#">Donate</a></li>
-            <li><a href="#">Contact us</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right navbar-auth">
-        <li><a href="{% url 'accounts:signup' %}">Sign up</a></li>
-        <li><a href="{% url 'accounts:login' %}">Log in</a></li>
-        <li class="active-home"><a href="./">+ Post a new listing <span class="sr-only">(current)</span></a></li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div>
+            </div><!-- /input-group -->
+        </form>
+        <div id="navbar" class="navbar-collapse collapse navtop navbar-right">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'feed' %}">All</a></li>
+                        <li><a href="{% url 'accounts:profiles' %}?{{ url_param_str }}">People</a></li>
+                        <li><a href="{% url 'posts' %}?{{ url_param_str }}">Posts</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Us<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'how_it_works' %}">How it works</a></li>
+                        <li><a href="{% url 'motivation' %}">Motivation</a></li>
+                        <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'developers' %}">Developers</a></li>
+                        <li><a href="{% url 'donate' %}">Donate</a></li>
+                        <li><a href="{% url 'contact_us' %}">Feedback</a></li>
+                    </ul>
+                </li>
+            </ul>
+                <ul class="nav navbar-nav navbar-right navbar-auth">
+                    <li><a href="{% url 'accounts:sign_in_log_in' %}">Log in</a></li>
+                    <li><a href="{% url 'accounts:sign_in_register' %}">Sign up</a></li>
+                </ul>
+        </div><!--/.nav-collapse -->
+    </div>
 </nav>
-
-

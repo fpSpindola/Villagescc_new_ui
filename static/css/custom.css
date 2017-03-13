@@ -208,7 +208,7 @@
     .nav-pills li a:hover,
     .nav-pills li a:focus{
         color: white;
-        background-color: #18bc9c;
+        background-color: #E97C4A;
         transition: background-color 0.5s;
     }
     .content-home{

@@ -21,12 +21,13 @@ RADII = [rc[0] for rc in RADIUS_CHOICES]
 DEFAULT_RADIUS = 5000
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
+
 class FeedFilterForm(forms.Form):
     d = forms.DateTimeField(
         label="Up to date", required=False, input_formats=[DATE_FORMAT])
     q = forms.CharField(
         label="Search", required=False, widget=forms.TextInput(
-            attrs={'class': 'instruction_input', 'help': _("Search")}))
+            attrs={'class': 'form-control instruction_input', 'help': _("Search")}))
     radius = forms.TypedChoiceField(
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None)
     trusted = forms.BooleanField(required=False)
@@ -105,7 +106,8 @@ class FeedFilterForm(forms.Form):
             save_settings = True
         if save_settings:
             self.profile.settings.save()
-    
+
+
 def next_query_radius(radius):
     i = RADII.index(radius)
     return RADII[i + 1]

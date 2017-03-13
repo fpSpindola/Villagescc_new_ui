@@ -1,5 +1,33 @@
 {% load staticfiles %}
 
+<style>
+h1 { color: #ff4411; font-size: 20px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
+
+
+p { font-family: 'Inder', sans-serif; line-height: 28px; margin-bottom: 15px; color: #666; }
+
+
+a { color: #ff4411; transition: .5s; -moz-transition: .5s; -webkit-transition: .5s; -o-transition: .5s; }
+
+
+a:hover { color: #a03c21 }
+
+
+.date { float: left }
+
+
+.author { float: right }
+
+
+.entry-content { border-bottom: 3px solid #666; padding: 0 0 15px 0; margin-bottom: 8px; }
+
+
+.meta-info { padding: 5px; overflow: hidden; }
+
+
+.meta-info p { font-family: 'Fenix', serif; font-style: italic; color: #666; font-size: 16px; }
+</style>
+
 <!-- Content should be construct with section -->
 <section class="container-fluid con-padding-top">
   <div class="row">
@@ -40,8 +68,8 @@
       <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-inline">
           <div class="form-group col-md-12">
-              <h4 class="" style="font-weight: 600; font-family: 'Source Code Pro', sans-serif">
-                  Welcome to Villages.cc {{ request.profile.name }}! What do you want to do?</h4>
+              <h1 class="">
+                  Welcome to Villages.cc Marketplace {{ request.profile.name }}! What do you want to do?</h1>
 {#            {{ form.listing_type }}#}
 {#            <!-- {{ form.fields.listing_type.choices }} -->#}
           </div>
@@ -125,7 +153,7 @@
         </div>
          <div class="col-sm-5 col-md-2">
             <div class="thumbnail image">
-                <a href="#" class="thumbnail image">
+                <a href="{% url 'accounts:profiles' %}?{{ url_param_str }}" class="thumbnail image">
                     <img src="{% static 'images/people_Easy-Resize.com.jpg' %}" alt="...">
                     <div class="caption">
                         <h5>People</h5>
@@ -139,7 +167,7 @@
         </div>
          <div class="col-sm-5 col-md-2">
             <div class="thumbnail image">
-                <a href="#" class="thumbnail">
+                <a href="{% url 'posts' %}?{{ url_param_str }}" class="thumbnail">
                     <img src="{% static 'images/posts_Easy-Resize.com.jpg' %}" alt="...">
                     <div class="caption">
                         <h5>Posts</h5>
@@ -153,7 +181,7 @@
         </div>
         <div class="col-sm-5 col-md-2">
             <div class="thumbnail">
-                <a href="#" class="thumbnail">
+                <a href="{% url 'endorsements' %}?{{ url_param_str }}" class="thumbnail">
                     <img src="{% static 'images/trust_Easy-Resize.com.jpg' %}" alt="...">
                     <div class="caption">
                         <h5>Trust</h5>
@@ -167,7 +195,7 @@
         </div>
         <div class="col-sm-5 col-md-2">
             <div class="thumbnail">
-                <a href="#" class="thumbnail">
+                <a href="{% url 'acknowledgements' %}?{{ url_param_str }}" class="thumbnail">
                     <img src="{% static 'images/back-payment-icon-10.png' %}" alt="...">
                     <div class="caption">
                         <h5>Pay Forward</h5>

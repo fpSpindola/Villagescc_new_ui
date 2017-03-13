@@ -1,59 +1,106 @@
 {% load staticfiles %}
 {% load i18n %}
 <!-- Jumbotron should be hide after the user logged in -->
-<div class="jumbotron">
-  <img src="{% static 'images/cover.jpg' %}" class="jumbotron-image"/>
-  <div class="caption jumbotron-content">
-    <h1>Villages Marketplace</h1>
-    <p>Everyone has value to exchange</p>
-    <p>Decentralized mutual credit system</p>
-  </div>
-</div>
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Roboto:400,900);
 
-<!-- Content should be construct with section -->
+
+    .module {
+        background:
+                linear-gradient(
+                        rgba(0, 0, 0, 0.6),
+                        rgba(0, 0, 0, 0.6)
+                ),
+                url({% static 'images/cover.jpg' %});
+        background-size: 100% 100%;
+        width: 100%;
+        height: 100vh;
+        margin: 0 0 0 0;
+        position: relative;
+        float: left;
+    }
+
+    .top h2 {
+        color: white;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .lr p {
+        font-family: 'Roboto', sans-serif;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        color: white;
+        margin: 0;
+    }
+
+    .mid h2 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 900;
+        color: white;
+        text-transform: uppercase;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 2rem;
+        transform: translate(-50%, -50%);
+    }
+
+    .cap p {
+        padding: 20px;
+        color: white;
+        font: 12px Monaco, Mono-Space;
+        margin: 0;
+    }
+
+    body,html {
+        height: 100%;
+
+    }
+    html {
+        margin: 0;
+    }
+</style>
+<br><br><br><br>
+
+
+{#<!-- Content should be construct with section -->#}
 <section class="container-fluid" id="home-sub-menu">
-  <div class="row">
-    <div class="col-md-6">
-      <!-- Split button -->
+    <div class="row">
+        <div class="module mid">
+            <h2>Villages.cc Marketplace</h2>
+        </div>
+
+        <br style="clear: both;">
     </div>
-    <div class="col-md-6">
-{#      <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">#}
-{#        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
-{#      </button>#}
-{#      <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">#}
-{#        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
-{#      </button>#}
-    {#      <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">#}
-    {#        <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
-    {#      </button>#}
-    </div>
-  </div>
 </section>
-
-	<script type="text/javascript"
-		src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
+<hr>
+<script type="text/javascript"
+        src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
 {#	{% static 'geo.js' %}#}
-	<script type="text/javascript">
-{#		{% include "locator.js" %}#}
-	</script>
+<script type="text/javascript">
+    {#		{% include "locator.js" %}#}
+</script>
 
-<section class="container-fluid" id="show-home-item">
-  <div class="row">
-    <div class="col-md-3">
-      <nav class="sidebar">
-        <ul class="nav sidenav">
-          <li><a href="#items">Categories</a>
-            <ul class="nav">
-              <li><a href="#">ALL</a></li>
-              <li><a href="#">PEOPLE</a></li>
-              <li><a href="#">POSTS</a></li>
-              <li><a href="#">TRUST</a></li>
-              <li><a href="#">PAY FORWARD</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-      <br><br>
+{#<section class="container-fluid" id="show-home-item">#}
+{#  <div class="row">#}
+{#    <div class="col-md-3">#}
+{#      <nav class="sidebar">#}
+{#        <ul class="nav sidenav">#}
+{#          <li><a href="#items">Categories</a>#}
+{#            <ul class="nav">#}
+{#              <li><a href="#">ALL</a></li>#}
+{#              <li><a href="#">PEOPLE</a></li>#}
+{#              <li><a href="#">POSTS</a></li>#}
+{#              <li><a href="#">TRUST</a></li>#}
+{#              <li><a href="#">PAY FORWARD</a></li>#}
+{#            </ul>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </nav>#}
+{#      <br><br>#}
 {#      <input#}
 {#        id="ex2"#}
 {#        type="text"#}
@@ -66,34 +113,34 @@
 {#        data-slider-handle="square"/>#}
 {#        <br><br>#}
 {#        <button type="button" class="btn btn-warning" name="button">Update view</button>#}
-    </div>
-    <hr>
-    <div class="col-md-9">
-
-      <!-- Given for loop to construct all -->
-      {% for each in feed_items %}
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail image">
-            <img src="{% static 'images/cover.jpg' %}" alt="...">
-            <p class="thumbnail-tag">Gift</p>
-            <p class="thumbnail-info">9' Long Board</p>
-            <div class="caption">
-              <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>
-              <p class="inline">Thumbnail label</p>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-
-        <ul>
-          {% if not request.profile %}
-              <li><a href="{% url 'feed' %}"
-              >{% trans 'Browse Marketplace' %}</a></li>
-          {% endif %}
-          <li class="{% block nav_location_class %}{% endblock %}">
-              <a href="{% url 'locator' %}?next={{ request.path }}"
-              >{{ request.location|default:_('Location') }}</a></li>
-      </ul>
-  </div>
-</section>
+{#    </div>#}
+{#    <hr>#}
+{#    <div class="col-md-9">#}
+{##}
+{#      <!-- Given for loop to construct all -->#}
+{#      {% for each in feed_items %}#}
+{#        <div class="col-sm-6 col-md-4">#}
+{#          <div class="thumbnail image">#}
+{#            <img src="{% static 'images/cover.jpg' %}" alt="...">#}
+{#            <p class="thumbnail-tag">Gift</p>#}
+{#            <p class="thumbnail-info">9' Long Board</p>#}
+{#            <div class="caption">#}
+{#              <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
+{#              <p class="inline">Thumbnail label</p>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{##}
+{#        <ul>#}
+{#          {% if not request.profile %}#}
+{#              <li><a href="{% url 'feed' %}"#}
+{#              >{% trans 'Browse Marketplace' %}</a></li>#}
+{#          {% endif %}#}
+{#          <li class="{% block nav_location_class %}{% endblock %}">#}
+{#              <a href="{% url 'locator' %}?next={{ request.path }}"#}
+{#              >{{ request.location|default:_('Location') }}</a></li>#}
+{#      </ul>#}
+{#  </div>#}
+{#</section>#}

@@ -1,0 +1,81 @@
+<style>
+    #messages span {
+        margin: 0 25px 0 15px;
+    }
+    #messages i {
+        margin-right: 25px;
+    }
+</style>
+
+{% extends 'default.html' %}
+{% block content %}
+
+    <div class="page-header col-sm-12">
+        <h2 class="col-sm-7"><i class="fa fa-sign-in"></i>Sign In</h2>
+
+        {% if alert_failed %}
+            <div class="alert alert-danger col-sm-5 pull-right">
+                <a class="close" data-dismiss="alert" aria-label="close">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+                <p class="alert-error"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <strong>{{ alert_failed.warning }}</strong> {{ alert_failed.message }}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    <section class="col-sm-12">
+        <div class="access">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation">
+                    <a href="{% url 'sign_in_log_in' %}" id="login">
+                        <h4><i class="fa fa-sign-in margin-right"></i> Login</h4></a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'sign_in_register' %}" id="register">
+                        <h4><i class="fa fa-user margin-right"></i> Register</h4>
+                    </a>
+                </li>
+            </ul>
+
+            <div id="div-sign_in">
+                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-input">
+                            <label class="col-sm-5 label-input">{{ field.label_tag }}</label>
+                            <div class="">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    <div class="col-sm-offset-5" id="div-button">
+                        <button type="submit" class="btn btn-success button-access">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function(){
+            getUrl();
+        });
+
+        function getUrl() {
+            var urlName = $(location).attr('pathname').split('/');
+            if (urlName[3] == "log_in") {
+                $('#login').addClass('nav-home-active');
+            } else {
+                if (urlName[3] == "register") {
+                    $('#register').addClass('nav-home-active');
+                }
+            }
+        }
+
+        setInterval(function () {
+            $('.alert').fadeOut("medium");
+        }, 3000);
+
+    </script>
+{% endblock %}
+

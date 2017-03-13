@@ -15,7 +15,8 @@ class FeedbackForm(forms.Form):
             _("Villages.cc Feedback"),
             self.get_sender(), 'feedback_email.txt',
             {'feedback': self.cleaned_data['feedback']})
-    
+
+
 class AnonymousFeedbackForm(FeedbackForm):
     name = forms.CharField(label=_("Name"), required=False)
     email = forms.EmailField(label=_("Email"),

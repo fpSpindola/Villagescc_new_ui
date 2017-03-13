@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Villages.cc</title>
-
     <!-- Bootstrap -->
     <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'stylesheets/main.css' %}" rel="stylesheet">
 
     <!-- Font-awesome -->
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:700" rel="stylesheet">
     <link href="{% static 'content.css' %}" rel="stylesheet">
@@ -22,6 +22,13 @@
     <!-- bootstrap-slider -->
     <link href="{% static 'seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css' %}" rel="stylesheet">
 
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <script src="{% static 'js/toastr.js' %}"></script>
+    <script src="{% static 'js/bootstrap-switch.min.js' %}"></script>
+    <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
     <script src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script src="{% static 'common.js' %}"></script>
     <script src="{% static 'geo.js' %}"></script>
@@ -35,17 +42,11 @@
       {% block extrahead %}{% endblock %}
     <![endif]-->
     <!-- Navbar fixed top -->
-    <style>
-        /*			body {
-                        min-height: 2000px;
-                        padding-top: 70px;
-                    }*/
-    </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-sm-12" style="padding: 0">
             {% if messages %}
                 {% for message in messages %}
                     {% if message.tags == 'success'%}
@@ -66,6 +67,7 @@
             <!-- Navigation / from plugs / we need to show two plugs here -->
             <!-- 1. if user not logged in comes from pre-login  -->
             <!-- 2. lf user logged in comes from post-login -->
+
             {% block content %}{% endblock content %}
 
             {% if request.user.is_authenticated %}
@@ -93,5 +95,6 @@
             </script>
         </div>
     </div>
+</div>
 </body>
 </html>

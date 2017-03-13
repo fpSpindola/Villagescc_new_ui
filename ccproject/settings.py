@@ -108,7 +108,7 @@ DATABASES = {
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db2',
+        'NAME': 'villagesripple',
         'USER': 'postgres'
     }
 }

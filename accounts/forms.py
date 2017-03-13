@@ -1,10 +1,12 @@
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from django import forms
 
 # App model
 from profile.models import Profile
 
 # Forms
+
 class RegisterForm(ModelForm):
     """ Signup form """
 
@@ -22,6 +24,8 @@ class UserForm(ModelForm):
     """
     User form to update the user information in the settings page
     """
+    password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email']
