@@ -1,4 +1,5 @@
 {% load profile relate humanize %}
+{% load staticfiles %}
 {% load i18n %}
 
 <style>
@@ -6,122 +7,314 @@
         padding: 15px;
     }
 </style>
-<h2>{{ profile }}</h2>
 
-{% if profile == request.profile %}
-	<p><a href="{% url 'edit_profile' %}">{% trans 'Edit My Profile' %}</a></p>
-{% endif %}
 
-{% if my_endorsement %}
-<p>
-	{% blocktrans count hearts=my_endorsement.weight %}
-		You have endorsed this user with <strong>{{ hearts }}</strong> heart.
-	{% plural %}
-		You have endorsed this user with <strong>{{ hearts }}</strong> hearts.
-	{% endblocktrans %}
-	<a href="{% url 'endorse_user' profile.username %}">{% trans 'Edit' %}</a>
-</p>
-<hr>
-{% endif %}
-
-<div class="feature line">
-	<div class="unit">
-		<img src="{% profile_image_url profile '150x200' %}">
-	</div>
-
-	<div class="profile_fields unit lastUnit">
-		<table class="data">
-			<tr>
-				<th>{% trans 'Name' %}</th>
-				<td>{{ profile.name }}</td>
-			</tr>
-			<tr>
-				<th>{% trans 'Username' %}</th>
-				<td>{{ profile.username }}</td>
-			</tr>
-			<tr>
-				<th>{% trans 'Home Location' %}</th>
-				<td>
-			{% if profile == request.profile %}
-					<a href="{% url 'locator' %}?next={{ request.path }}"
-						>{{ profile.location.full_name }}</a>
-			{% else %}
-					{{ profile.location.full_name }}
-			{% endif %}
-				</td>
-			</tr>
-		{% if request.profile %}
-			<tr>
-				<th>{% trans 'Registered' %}</th>
-				<td>{{ profile.user.date_joined|naturalday }}</td>
-			</tr>
-			{% comment - TODO: last_login != last online time %}
-			<tr>
-				<th>{% trans 'Last Online' %}</th>
-				<td>{{ profile.user.last_login|naturalday }}</td>
-			</tr>
-			{% endcomment %}
-		{% endif %}
-		</table>
-
-		{{ profile.description|urlize|linebreaks }}
-	</div>
+<div class="container-fluid" id="profile-container-fluid">
+  <div class="jumbotron" id="profile-jumbotron">
+    <h2>{{ profile.name }}</h2>
+  </div>
 </div>
 
-{% if request.profile %}
-<h3>{% trans 'Relationships Summary' %}</h3>
-	{% if profile == request.profile %}
-		{% include "relationships_summary.html" %}
-		<p><a href="{% url 'relationships' %}">{% trans 'More' %}</a></p>
-	{% else %}
-	<table class="data">
-		<tr title="{% blocktrans %}Max. trusted acknowledgements I
-					would accept from this user{% endblocktrans %}">
-			<th><a href="{% url 'profile_endorsements' profile.username %}"
-				>{% trans 'Reputation' %}</a>
-			</th>
-			<td>{% reputation profile request.profile %}</td>
-		</tr>
-		<tr title="{% blocktrans %}Sum of all acknowledgements
-					sent and received{% endblocktrans %}">
-			<th>{% trans 'Overall Balance' %}</th>
-			<td>
-				{% blocktrans count hours=profile.overall_balance %}
-					{{hours}} hour
-				{% plural %}
-					{{hours}} hours
-				{% endblocktrans %}
-			</td>
-		</tr>
-		<tr title="{% blocktrans %}Sum of all acknowledgements
-					sent and received, but only from trusted
-					partners{% endblocktrans %}">
-			<th>{% trans 'Trusted Balance' %}</th>
-			<td>
-				{% blocktrans count hours=profile.trusted_balance %}
-					{{hours}} hour
-				{% plural %}
-					{{hours}} hours
-				{% endblocktrans %}
-			</td>
-		</tr>
-		{% if account %}
-		<tr>
-			<th><a href="{% url 'relationship' profile.username %}"
-				>{% trans 'Balance with Me' %}</a>
-			</th>
-			<td>
-				{% blocktrans count hours=account.balance %}
-					{{hours}} hour
-				{% plural %}
-					{{hours}} hours
-				{% endblocktrans %}
-			</td>
-		</tr>
-		{% endif %}
-	</table>
+<section class="container-fluid" id="profile-info">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="inside-profile-info">
+        <p>{{ profile.description }}</p>
+      </div>
+    </div>
 
-	<p><a href="{% url 'profile_endorsements' profile.username %}
-		">{% trans 'More' %}</a></p>
-	{% endif %}
-{% endif %}
+    <div class="col-md-4" style="text-align: center;">
+      <img src="{% profile_image_url request.profile '250x300' %}" alt="" height=88px width=88px class="img-circle">
+      <p class="profile-star-rating">
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+{#        <i class="fa fa-star" aria-hidden="true"></i>#}
+      </p>
+      <div class="btn-group btn-group-lg" role="group" aria-label="...">
+        <button type="button" class="btn btn-default btn-warning">
+          <i class="fa fa-heart" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-default btn-success">
+          <i class="fa fa-usd" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-default btn-danger">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container-fluid" id="profile-listing-info">
+  <div class="row">
+    <div class="col-md-9">
+      <h3>7 open listing</h3>
+      <bold><hr></bold>
+      <div class="listing-image">
+        <!-- Construct in the for loop -->
+{#        {% for each in listings %}#}
+          <div class="col-sm-6 col-md-4">
+            <div class="thumbnail image">
+              <img src="{% static 'images/cover.jpg' %}" alt="...">
+              <p class="thumbnail-tag">$30 / Day</p>
+              <p class="thumbnail-info">9' Long Board</p>
+            </div>
+          </div>
+{#        {% endfor %}#}
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i> - 7 Hours</a></p>
+      <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
+      <p><a href="#"><i class="fa fa-home" aria-hidden="true"></i> {{ profile.location.full_name }}</a></p>
+
+{#      <div class="card">#}
+{#        <h4>Offerings</h4>#}
+{#        <span class="badge">Massage</span>#}
+{#        <span class="badge">Web Design</span>#}
+{#        <span class="badge">Child Care</span>#}
+{#        <span class="badge">Off Grid</span>#}
+{#      </div>#}
+{#      <div class="card">#}
+{#        <h4>Requests</h4>#}
+{#        <span class="badge">Massage</span>#}
+{#        <span class="badge">Organic Vegan Food</span>#}
+{#        <span class="badge">Help Building</span>#}
+{#        <span class="badge">Kids Stuff</span>#}
+{#      </div>#}
+    </div>
+  </div>
+</section>
+
+<!-- Relationship with -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+      <h3>My Relationship with Dave Platford</h3>
+      <table class="table table-bordered table-relationship">
+        <tbody>
+          <tr>
+            <td>Current Balance</td>
+            <td>8 hours</td>
+          </tr>
+          <tr>
+            <td>Dave platford's endorsement of you</td>
+            <td>5 hours</td>
+          </tr>
+          <tr>
+            <td>Your endorsement of Dave Platford</td>
+            <td>10 hours</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- our transcation history -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+      <h3>Our Transaction History</h3>
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>11/20/2016</td>
+            <td>-6 hours</td>
+            <td>Good Job painting</td>
+            <td>
+              <p class="profile-star-rating">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>11/11/2016</td>
+            <td>+ 4 hours</td>
+            <td></td>
+            <td>
+              <p class="profile-star-rating">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>11/9/2016</td>
+            <td>+10 hours</td>
+            <td></td>
+            <td>
+              <p class="profile-star-rating">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- endorsed by -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+      <h3>Endorsed by:</h3>
+      <hr>
+      <h4>2 received reviews(100% postive, 2/2)</h4>
+      <hr>
+      <div class="Media">
+        <img class="Media-figure" src="https://randomuser.me/api/portraits/thumb/men/83.jpg" alt="">
+        <p class="Media-body">Everything went well</p>
+      </div>
+      <hr>
+      <div class="Media">
+        <img class="Media-figure" src="https://randomuser.me/api/portraits/thumb/men/83.jpg" alt="">
+        <p class="Media-body">Everything went well</p>
+      </div>
+      <hr>
+    </div>
+
+  </div>
+</section>
+
+{#<h2>{{ profile }}</h2>#}
+{##}
+{#{% if profile == request.profile %}#}
+{#	<p><a href="{% url 'edit_profile' %}">{% trans 'Edit My Profile' %}</a></p>#}
+{#{% endif %}#}
+{##}
+{#{% if my_endorsement %}#}
+{#<p>#}
+{#	{% blocktrans count hearts=my_endorsement.weight %}#}
+{#		You have endorsed this user with <strong>{{ hearts }}</strong> heart.#}
+{#	{% plural %}#}
+{#		You have endorsed this user with <strong>{{ hearts }}</strong> hearts.#}
+{#	{% endblocktrans %}#}
+{#	<a href="{% url 'endorse_user' profile.username %}">{% trans 'Edit' %}</a>#}
+{#</p>#}
+{#<hr>#}
+{#{% endif %}#}
+{##}
+{#<div class="feature line">#}
+{#	<div class="unit">#}
+{#		<img src="{% profile_image_url profile '150x200' %}">#}
+{#	</div>#}
+{##}
+{#	<div class="profile_fields unit lastUnit">#}
+{#		<table class="data">#}
+{#			<tr>#}
+{#				<th>{% trans 'Name' %}</th>#}
+{#				<td>{{ profile.name }}</td>#}
+{#			</tr>#}
+{#			<tr>#}
+{#				<th>{% trans 'Username' %}</th>#}
+{#				<td>{{ profile.username }}</td>#}
+{#			</tr>#}
+{#			<tr>#}
+{#				<th>{% trans 'Home Location' %}</th>#}
+{#				<td>#}
+{#			{% if profile == request.profile %}#}
+{#					<a href="{% url 'locator' %}?next={{ request.path }}"#}
+{#						>{{ profile.location.full_name }}</a>#}
+{#			{% else %}#}
+{#					{{ profile.location.full_name }}#}
+{#			{% endif %}#}
+{#				</td>#}
+{#			</tr>#}
+{#		{% if request.profile %}#}
+{#			<tr>#}
+{#				<th>{% trans 'Registered' %}</th>#}
+{#				<td>{{ profile.user.date_joined|naturalday }}</td>#}
+{#			</tr>#}
+{#			{% comment - TODO: last_login != last online time %}#}
+{#			<tr>#}
+{#				<th>{% trans 'Last Online' %}</th>#}
+{#				<td>{{ profile.user.last_login|naturalday }}</td>#}
+{#			</tr>#}
+{#			{% endcomment %}#}
+{#		{% endif %}#}
+{#		</table>#}
+{##}
+{#		{{ profile.description|urlize|linebreaks }}#}
+{#	</div>#}
+{#</div>#}
+{##}
+{#{% if request.profile %}#}
+{#<h3>{% trans 'Relationships Summary' %}</h3>#}
+{#	{% if profile == request.profile %}#}
+{#		{% include "relationships_summary.html" %}#}
+{#		<p><a href="{% url 'relationships' %}">{% trans 'More' %}</a></p>#}
+{#	{% else %}#}
+{#	<table class="data">#}
+{#		<tr title="{% blocktrans %}Max. trusted acknowledgements I#}
+{#					would accept from this user{% endblocktrans %}">#}
+{#			<th><a href="{% url 'profile_endorsements' profile.username %}"#}
+{#				>{% trans 'Reputation' %}</a>#}
+{#			</th>#}
+{#			<td>{% reputation profile request.profile %}</td>#}
+{#		</tr>#}
+{#		<tr title="{% blocktrans %}Sum of all acknowledgements#}
+{#					sent and received{% endblocktrans %}">#}
+{#			<th>{% trans 'Overall Balance' %}</th>#}
+{#			<td>#}
+{#				{% blocktrans count hours=profile.overall_balance %}#}
+{#					{{hours}} hour#}
+{#				{% plural %}#}
+{#					{{hours}} hours#}
+{#				{% endblocktrans %}#}
+{#			</td>#}
+{#		</tr>#}
+{#		<tr title="{% blocktrans %}Sum of all acknowledgements#}
+{#					sent and received, but only from trusted#}
+{#					partners{% endblocktrans %}">#}
+{#			<th>{% trans 'Trusted Balance' %}</th>#}
+{#			<td>#}
+{#				{% blocktrans count hours=profile.trusted_balance %}#}
+{#					{{hours}} hour#}
+{#				{% plural %}#}
+{#					{{hours}} hours#}
+{#				{% endblocktrans %}#}
+{#			</td>#}
+{#		</tr>#}
+{#		{% if account %}#}
+{#		<tr>#}
+{#			<th><a href="{% url 'relationship' profile.username %}"#}
+{#				>{% trans 'Balance with Me' %}</a>#}
+{#			</th>#}
+{#			<td>#}
+{#				{% blocktrans count hours=account.balance %}#}
+{#					{{hours}} hour#}
+{#				{% plural %}#}
+{#					{{hours}} hours#}
+{#				{% endblocktrans %}#}
+{#			</td>#}
+{#		</tr>#}
+{#		{% endif %}#}
+{#	</table>#}
+{##}
+{#	<p><a href="{% url 'profile_endorsements' profile.username %}#}
+{#		">{% trans 'More' %}</a></p>#}
+{#	{% endif %}#}
+{#{% endif %}#}
