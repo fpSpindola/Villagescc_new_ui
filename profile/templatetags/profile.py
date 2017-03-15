@@ -1,5 +1,4 @@
 from django import template
-from mediagenerator.utils import media_url
 from general.templatetags.image import resize
 from django.conf import settings
 

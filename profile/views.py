@@ -273,7 +273,7 @@ def profile_posts(request, username):
         template = 'my_posts.html'
         extra_context = {}
     else:
-        template = 'profile_posts.html'    
+        template = 'profile_posts.html'
         extra_context = {'profile': profile}
     return feed(request, item_type=Post, poster=profile, template=template,
                 extra_context=extra_context)

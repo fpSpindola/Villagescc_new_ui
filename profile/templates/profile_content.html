@@ -4,7 +4,9 @@
 
 <style>
     html {
-        padding: 15px;
+        padding-top: 40px;
+        padding-left: 50px;
+        padding-right: 50px;
     }
 </style>
 
@@ -19,12 +21,13 @@
   <div class="row">
     <div class="col-md-8">
       <div class="inside-profile-info">
+        <p>Profile description:</p>
         <p>{{ profile.description }}</p>
       </div>
     </div>
 
     <div class="col-md-4" style="text-align: center;">
-      <img src="{% profile_image_url request.profile '250x300' %}" alt="" height=88px width=88px class="img-circle">
+      <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
       <p class="profile-star-rating">
 {#        <i class="fa fa-star" aria-hidden="true"></i>#}
 {#        <i class="fa fa-star" aria-hidden="true"></i>#}
@@ -74,24 +77,26 @@
       <br>
       <br>
       <br>
-      <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i> - 7 Hours</a></p>
+
+      <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</a></p>
+        {% endblocktrans %}
       <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
       <p><a href="#"><i class="fa fa-home" aria-hidden="true"></i> {{ profile.location.full_name }}</a></p>
 
-{#      <div class="card">#}
-{#        <h4>Offerings</h4>#}
-{#        <span class="badge">Massage</span>#}
-{#        <span class="badge">Web Design</span>#}
-{#        <span class="badge">Child Care</span>#}
-{#        <span class="badge">Off Grid</span>#}
-{#      </div>#}
-{#      <div class="card">#}
-{#        <h4>Requests</h4>#}
-{#        <span class="badge">Massage</span>#}
-{#        <span class="badge">Organic Vegan Food</span>#}
-{#        <span class="badge">Help Building</span>#}
-{#        <span class="badge">Kids Stuff</span>#}
-{#      </div>#}
+      <div class="card">
+        <h4>Offerings</h4>
+        <span class="badge">Massage</span>
+        <span class="badge">Web Design</span>
+        <span class="badge">Child Care</span>
+        <span class="badge">Off Grid</span>
+      </div>
+      <div class="card">
+        <h4>Requests</h4>
+        <span class="badge">Massage</span>
+        <span class="badge">Organic Vegan Food</span>
+        <span class="badge">Help Building</span>
+        <span class="badge">Kids Stuff</span>
+      </div>
     </div>
   </div>
 </section>

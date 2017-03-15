@@ -3,8 +3,6 @@ from PIL import Image
 
 from django import template
 
-from mediagenerator.utils import media_url
-
 register = template.Library()
 
 @register.filter
