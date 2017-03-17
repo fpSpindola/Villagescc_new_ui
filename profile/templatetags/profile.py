@@ -18,6 +18,14 @@ def profile_image_url(profile, size):
         return '/static/img/generic_user_%dx%d.png' % (square_side, square_side)
 
 @register.simple_tag
+def product_image_url(listing, size):
+    if listing and listing.photo:
+        return resize(listing.photo, size)
+    else:
+        square_side = min((int(i) for i in size.split('x')))
+        return '/static/img/default_product.png'
+
+@register.simple_tag
 def profile_display(profile, request, text="you", not_you_text=None):
     if profile == request.profile:
         return text
