@@ -31,6 +31,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'ccproject', 'locale/'),
+)
+
 
 # Application definition
 
@@ -174,4 +178,4 @@ LOCATION_COOKIE_AGE = timedelta(days=365)
 LOCATION_SESSION_KEY = 'location_id'
 DEFAULT_LOCATION = ('49.2696243', '-123.0696036')  # East Vancouver.
 
-
+INVITATION_ONLY = False

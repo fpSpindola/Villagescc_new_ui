@@ -17,6 +17,7 @@ ERRORS = {
     'invalid_username': _("That username or email isn't recognized."),
 }
 
+
 class RegistrationForm(UserCreationForm):
     # Parent class has username, password1, and password2.
     name = forms.CharField(
