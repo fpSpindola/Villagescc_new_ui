@@ -85,98 +85,127 @@
 </script>
 
 <section class="container-fluid" id="home-sub-menu">
-  <div class="row">
-    <div class="col-md-6">
-      <!-- Split button -->
-      <div class="btn-group">
-        <button type="button" class="btn btn-default btn-lg">All listing types</button>
-        <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="caret"></span>
-          <span class="sr-only">Toggle Dropdown</span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a href="#">Offer</a></li>
-          <li><a href="#">Request</a></li>
-          <li><a href="#">Teach</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Learn</a></li>
-          <li><a href="#">Gift</a></li>
-          <li><a href="#">Goal</a></li>
-        </ul>
-      </div>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Split button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-lg">All listing types</button>
+                <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Offer</a></li>
+                    <li><a href="#">Request</a></li>
+                    <li><a href="#">Teach</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Learn</a></li>
+                    <li><a href="#">Gift</a></li>
+                    <li><a href="#">Goal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
+            </button>
+            <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
+            </button>
+            <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">
+                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
+            </button>
+        </div>
     </div>
-    <div class="col-md-6">
-      <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">
-        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
-      </button>
-      <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">
-        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
-      </button>
-      <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">
-        <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
-      </button>
-    </div>
-  </div>
 </section>
 
 <section class="container-fluid" id="show-home-item">
-  <div class="row">
-    <div class="col-md-3">
-         <p>ALL CATEGORIES</p>
-      <nav class="sidebar">
-        <ul class="nav sidenav">
-          <li><a href="#items">ITEMS</a>
-            <ul class="nav">
-              <li><a href="#">TOOLS</a></li>
-              <li><a href="#">SPORTS</a></li>
-              <li><a href="#">MUSIC</a></li>
-              <li><a href="#">BOOKS & MAGAZINES</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-      <br><br>
-      <input
-        id="ex2"
-        type="text"
-        class="span2"
-        value=""
-        data-slider-min="10"
-        data-slider-max="1000"
-        data-slider-step="5"
-        data-slider-value="[250,450]"
-        data-slider-handle="square"/>
-        <br><br>
-        <button type="button" class="btn btn-warning" name="button">Update view</button>
-    </div>
-    <hr>
-    <div class="col-md-9">
-
-      <!-- Given for loop to construct all -->
-      {% for each in listings %}
-        <div class="col-sm-8 col-md-4" style="padding-right: 0">
-          <div class="thumbnail image">
-            <img src="{% product_image_url each '280x280'%}" alt="...">
-            <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
-            <p class="thumbnail-info"></p>
-            <div class="caption">
-              <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-              <p class="inline">{{ each.title }}</p>
-            </div>
-          </div>
+    <div class="row">
+        <div class="col-md-3">
+            <p>ALL CATEGORIES</p>
+            <nav class="sidebar">
+                <ul class="nav sidenav">
+                    {% for each in categories %}
+                        {% if each.categories_text == 'ITEMS' %}
+                            <li><a href="#items">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in item_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'SERVICES' %}
+                            <li><a href="#services">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in services_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'RIDESHARE' %}
+                            <li><a href="#rideshare">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in rideshare_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'HOUSING/ACCOMODATION' %}
+                            <li><a href="#housing">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in housing_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+            <br>
+            <h3>Distance</h3>
+            <br>
+            <input
+                    id="ex2"
+                    type="text"
+                    class="span2"
+                    value=""
+                    data-slider-min="10"
+                    data-slider-max="1000"
+                    data-slider-step="5"
+                    data-slider-value="[250,450]"
+                    data-slider-handle="square"/>
+            <br><br>
+            <button type="button" class="btn btn-warning" name="button">Update view</button>
         </div>
-      {% endfor %}
+        <hr>
+        <div class="col-md-9">
+
+            <!-- Given for loop to construct all -->
+            {% for each in listings %}
+                <div class="col-sm-8 col-md-4" style="padding-right: 0">
+                    <div class="thumbnail image">
+                        <img src="{% product_image_url each '280x280'%}" alt="...">
+                        <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
+                        <p class="thumbnail-info"></p>
+                        <div class="caption">
+                            <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                            <p class="inline">{{ each.title }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
-{##}
-{#        <ul>#}
-{#          {% if not request.profile %}#}
-{#              <li><a href="{% url 'feed' %}"#}
-{#              >{% trans 'Browse Marketplace' %}</a></li>#}
-{#          {% endif %}#}
-{#          <li class="{% block nav_location_class %}{% endblock %}">#}
-{#              <a href="{% url 'locator' %}?next={{ request.path }}"#}
-{#              >{{ request.location|default:_('Location') }}</a></li>#}
-{#      </ul>#}
-{#  </div>#}
+    {##}
+    {#        <ul>#}
+    {#          {% if not request.profile %}#}
+    {#              <li><a href="{% url 'feed' %}"#}
+    {#              >{% trans 'Browse Marketplace' %}</a></li>#}
+    {#          {% endif %}#}
+    {#          <li class="{% block nav_location_class %}{% endblock %}">#}
+    {#              <a href="{% url 'locator' %}?next={{ request.path }}"#}
+    {#              >{{ request.location|default:_('Location') }}</a></li>#}
+    {#      </ul>#}
+    {#  </div>#}
 </section>

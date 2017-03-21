@@ -8,7 +8,7 @@ from feed.forms import FeedFilterForm, DATE_FORMAT
 
 # models
 from listings.models import Listings
-from categories.models import Categories
+from categories.models import Categories, SubCategories
 
 
 # Create your views here.
@@ -30,8 +30,16 @@ def home(request):
     # GET Request
     listings = Listings.objects.all()
     form = ListingsForms()
-    categories = Categories.objects.all()
+    categories_list = Categories.objects.all()
+    item_sub_categories = SubCategories.objects.all().filter(categories=1)
+    services_sub_categories = SubCategories.objects.all().filter(categories=2)
+    rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+    housing_sub_categories = SubCategories.objects.all().filter(categories=4)
     return render(request, 'frontend/home.html',{
+        'item_sub_categories': item_sub_categories,
+        'services_sub_categories': services_sub_categories,
+        'rideshare_sub_categories': rideshare_sub_categories,
+        'housing_sub_categories': housing_sub_categories,
         'listings': listings,
         'form': form,
-        'categories': categories})
+        'categories': categories_list})
