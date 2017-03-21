@@ -36,6 +36,18 @@ LOCALE_PATHS = (
 )
 
 
+SERVER_EMAIL = 'web@villages.cc'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'web@villages.cc'
+EMAIL_HOST_USER = 'web@villages.cc'
+EMAIL_HOST_PASSWORD = 'webvillagescc'
+SITE_DOMAIN = 'villages.cc'
+HELP_EMAIL = 'info@villages.cc'
+EMAIL_SUBJECT_PREFIX = "[Villages] "
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,7 +97,9 @@ ROOT_URLCONF = 'ccproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'accounts', 'templates'),
+                 os.path.join(BASE_DIR, 'accounts', 'sign_in', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

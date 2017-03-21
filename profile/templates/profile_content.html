@@ -105,27 +105,50 @@
 <section class="container-fluid">
   <div class="row">
     <div class="col-md-9">
-      <h3>My Relationship with Dave Platford</h3>
+    {% if request.profile %}
+      <h3>My Relationship with {{ profile.name }}</h3>
       <table class="table table-bordered table-relationship">
         <tbody>
           <tr>
             <td>Current Balance</td>
-            <td>8 hours</td>
+            <td>{{ balance }}</td>
           </tr>
+          {% if account.partner_endorsement %}
           <tr>
-            <td>Dave platford's endorsement of you</td>
-            <td>5 hours</td>
+            {% blocktrans count hearts=account.partner_endorsement.weight %}
+            <td>{{ partner }} endorsement of you</td>
+            {% plural %}
+                {{ partner }} endorsement of you
+            {% endblocktrans %}
+            <td>{% blocktrans count hearts=account.partner_endorsement.weight %}
+				{{ hearts }} heart
+			{% plural %}
+				{{ hearts }} hearts
+			{% endblocktrans %}</td>
           </tr>
+          {% endif %}
+          {% if account.endorsement %}
           <tr>
-            <td>Your endorsement of Dave Platford</td>
-            <td>10 hours</td>
+            {% blocktrans count hearts=account.endorsement.weight %}
+            <td>Your endorsement of {{ partner }}</td>
+            {% plural %}
+                <td>Your endorsement of {{ partner }}</td>
+            {% endblocktrans %}
+            <td>{% blocktrans count hearts=account.endorsement.weight %}
+				{{ hearts }} heart
+			{% plural %}
+				{{ hearts }} hearts
+			{% endblocktrans %}</td>
           </tr>
+        {% endif %}
         </tbody>
       </table>
+    {% endif %}
     </div>
   </div>
 </section>
 
+{% if request.profile %}
 <!-- our transcation history -->
 <section class="container-fluid">
   <div class="row">
@@ -180,11 +203,14 @@
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if request.profile %}
 <!-- endorsed by -->
 <section class="container-fluid">
   <div class="row">
     <div class="col-md-9">
+      <p>{{ profile_endorsement }}</p>
       <h3>Endorsed by:</h3>
       <hr>
       <h4>2 received reviews(100% postive, 2/2)</h4>
@@ -203,6 +229,7 @@
 
   </div>
 </section>
+{% endif %}
 
 {#<h2>{{ profile }}</h2>#}
 {##}

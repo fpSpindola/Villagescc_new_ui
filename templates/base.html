@@ -68,7 +68,8 @@
             <!-- 1. if user not logged in comes from pre-login  -->
             <!-- 2. lf user logged in comes from post-login -->
 
-            {% block content %}{% endblock content %}
+            {% block content %}
+            {% endblock content %}
 
             {% if request.user.is_authenticated %}
                 {% include 'plugs/navigation-post-login.html' %}

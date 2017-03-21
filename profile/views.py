@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login
@@ -256,11 +256,25 @@ def edit_profile(request):
 @render()
 def profile(request, username):
     profile = get_object_or_404(Profile, user__username=username)
+    if request.profile:
+        eligible_profiles = Profile.objects.exclude(pk=request.profile.id)
+        profile_endorsements = get_object_or_404(eligible_profiles, user__username=username)
     if profile == request.profile:
         template = 'my_profile.html'
     else:
         template = 'profile.html'
         if request.profile:
+            partner = get_object_or_404(Profile, user__username=username)
+            if partner == request.profile:
+                raise Http404
+            account = request.profile.account(partner)
+            if account:
+                entries = account.entries
+                balance = account.balance
+            else:
+                entries = []
+                balance = 0
+            profile = partner  # For profile_base.html.
             my_endorsement = request.profile.endorsement_for(profile)
             account = profile.account(request.profile)
     return locals(), template

@@ -145,13 +145,16 @@ class SignInUserRegister(View):
                 # Notifications.
                 send_registration_email(profile)
                 messages.info(request, MESSAGES['registration_done'])
-                return redirect(edit_profile)
+                return django_render(request, 'profile.html')
+            # else:
+            #     messages.add_message(request, messages.ERROR, 'An error occurred, please contact an administrator.')
+            #     return django_render(request, 'accounts/sign_in.html', {'form': form})
         else:
             initial = {}
             if invitation:
                 initial['email'] = invitation.to_email
             form = RegistrationForm(initial=initial)
-        return locals()
+        return django_render(request, 'accounts/sign_in.html', {'form': form})
 
 @login_required
 @render()

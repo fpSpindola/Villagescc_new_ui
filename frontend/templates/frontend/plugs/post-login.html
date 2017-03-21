@@ -33,33 +33,51 @@ a:hover { color: #a03c21 }
   <div class="row">
 
     <!-- Div on the left side -->
-{#    <div class="col-md-3">#}
-{#      <nav class="sidebar">#}
-{#        <ul class="nav sidenav">#}
-{#          <li><a href="#items">Categories</a>#}
-{#            <ul class="nav">#}
-{#              <li><a href="#">All</a></li>#}
-{#              <li><a href="#">People</a></li>#}
-{#              <li><a href="#">Posts</a></li>#}
-{#              <li><a href="#">Trust</a></li>#}
-{#              <li><a href="#">Pay Forward</a></li>#}
-{#            </ul>#}
-{#          </li>#}
-{#        </ul>#}
-{#      </nav><br><br>#}
-{#      <input#}
-{#        id="ex2"#}
-{#        type="text"#}
-{#        class="span2"#}
-{#        value=""#}
-{#        data-slider-min="10"#}
-{#        data-slider-max="1000"#}
-{#        data-slider-step="5"#}
-{#        data-slider-value="[250,450]"#}
-{#        data-slider-handle="square"/>#}
-{#        <br><br>#}
-{#        <button type="button" class="btn btn-warning" name="button">Update view</button>#}
-{#    </div>#}
+
+         <p>ALL CATEGORIES</p>
+      <div class="col-md-3 menu-container">
+      <nav class="sidebar">
+        <ul class="nav sidenav menu clearfix">
+            <ul>
+              <li><a href="#items">ITEMS</a>
+                  <ul class="sub-menu clearfix">
+                      <li><a href="#">subitem1</a></li>
+                      <li><a href="#">subitem1</a></li>
+                      <li><a href="#">subitem1</a></li>
+                      <li><a href="#">subitem1</a></li>
+                      <li><a href="#">subitem1</a></li>
+                      <li><a href="#">subitem1</a></li>
+                  </ul>
+            </ul>
+            <ul>
+              <li><a href="#">TOOLS</a></li>
+            </ul>
+            <ul>
+              <li><a href="#">SPORTS</a></li>
+            </ul>
+            <ul>
+              <li><a href="#">MUSIC</a></li>
+            </ul>
+            <ul>
+              <li><a href="#">BOOKS & MAGAZINES</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <br><br>
+      <input
+        id="ex2"
+        type="text"
+        class="span2"
+        value=""
+        data-slider-min="10"
+        data-slider-max="1000"
+        data-slider-step="5"
+        data-slider-value="[250,450]"
+        data-slider-handle="square"/>
+        <br><br>
+        <button type="button" class="btn btn-warning" name="button">Update view</button>
+    </div>
 
     <!-- Div on the right side -->
     <div class="col-md-9">
@@ -70,12 +88,12 @@ a:hover { color: #a03c21 }
           <div class="form-group col-md-12">
               <h1 class="">
                   Welcome to Villages.cc Marketplace {{ request.profile.name }}! What do you want to do?</h1>
-{#            {{ form.listing_type }}#}
-{#            <!-- {{ form.fields.listing_type.choices }} -->#}
+            {{ form.listing_type }}
+            <!-- {{ form.fields.listing_type.choices }} -->
           </div>
           <div class="form-group col-md-9">
 
-{#            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">#}
+            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">
           </div>
         </div>
 
@@ -83,19 +101,19 @@ a:hover { color: #a03c21 }
         <br><br><br>
         <div class="form-inline float-right">
 
-{#          <div class="form-group">#}
-{#            <label for="">Price</label>#}
-{#            {{ form.price }}#}
-{#            <!-- <input type="text" class="form-control" name="price" value=""> -->#}
-{#          </div>#}
+          <div class="form-group">
+            <label for="">Price</label>
+            {{ form.price }}
+            <!-- <input type="text" class="form-control" name="price" value=""> -->
+          </div>
 
           <!-- Sub Categories -->
-{#          {{ form.subcategories }}#}
+          {{ form.subcategories }}
           <div class="form-group">
-{#            {{ form.photo }}#}
+            {{ form.photo }}
           </div>
           <input type="hidden" name="user" value="{{ request.user.id }}">
-{#          <input type="submit" class="btn" value="POST">#}
+          <input type="submit" class="btn" value="POST">
         </div>
       </form>
 
