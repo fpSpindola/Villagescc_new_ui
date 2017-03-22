@@ -12,7 +12,7 @@ from categories.models import Categories, SubCategories
 
 
 # Create your views here.
-def home(request):
+def home(request, type_filter):
     """
     This is home page but before logged in user will see this pages
     returns before login home.
@@ -28,7 +28,10 @@ def home(request):
             print form.errors
 
     # GET Request
-    listings = Listings.objects.all()
+    if type_filter:
+        listings = Listings.objects.all().filter(subcategories__sub_categories_text=type_filter)
+    else:
+        listings = Listings.objects.all()
     form = ListingsForms()
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)

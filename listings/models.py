@@ -18,14 +18,12 @@ class Listings(models.Model):
     TEACH = 'Teach'
     LEARN = 'Learn'
     GIFT = 'Gift'
-    GOAL = 'Goal'
     LISTING_TYPE = (
         ('OF', OFFER),
         ('RQ', REQUEST),
         ('TC', TEACH),
         ('LR', LEARN),
         ('GT', GIFT),
-        ('GL', GOAL)
     )
     listing_type = models.CharField(max_length=2, choices=LISTING_TYPE)
     photo = models.ImageField(upload_to='media')

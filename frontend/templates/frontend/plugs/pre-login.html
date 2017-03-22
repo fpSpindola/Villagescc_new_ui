@@ -130,7 +130,7 @@
                             <li><a href="#items">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in item_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                        <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -138,7 +138,7 @@
                             <li><a href="#services">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in services_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                        <li><a href="#"></a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -183,7 +183,7 @@
 
             <!-- Given for loop to construct all -->
             {% for each in listings %}
-                <div class="col-sm-8 col-md-4" style="padding-right: 0">
+                <div class="col-sm-8 col-md-4" style="padding-right: 0; width: 31%">
                     <div class="thumbnail image">
                         <img src="{% product_image_url each '280x280'%}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>

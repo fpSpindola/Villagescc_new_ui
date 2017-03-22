@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles profile %}
 
 <style>
 h1 { color: #ff4411; font-size: 20px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
@@ -28,204 +28,159 @@ a:hover { color: #a03c21 }
 .meta-info p { font-family: 'Fenix', serif; font-style: italic; color: #666; font-size: 16px; }
 </style>
 
-<!-- Content should be construct with section -->
-<section class="container-fluid con-padding-top">
-  <div class="row">
+<div style="height: 100px;"></div>
 
-    <!-- Div on the left side -->
+<section class="container-fluid" id="home-sub-menu">
+    <div class="row">
+    <div class="col-md-3">
 
-         <p>ALL CATEGORIES</p>
-      <div class="col-md-3 menu-container">
-      <nav class="sidebar">
-        <ul class="nav sidenav menu clearfix">
-            <ul>
-              <li><a href="#items">ITEMS</a>
-                  <ul class="sub-menu clearfix">
-                      <li><a href="#">subitem1</a></li>
-                      <li><a href="#">subitem1</a></li>
-                      <li><a href="#">subitem1</a></li>
-                      <li><a href="#">subitem1</a></li>
-                      <li><a href="#">subitem1</a></li>
-                      <li><a href="#">subitem1</a></li>
-                  </ul>
-            </ul>
-            <ul>
-              <li><a href="#">TOOLS</a></li>
-            </ul>
-            <ul>
-              <li><a href="#">SPORTS</a></li>
-            </ul>
-            <ul>
-              <li><a href="#">MUSIC</a></li>
-            </ul>
-            <ul>
-              <li><a href="#">BOOKS & MAGAZINES</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-      <br><br>
-      <input
-        id="ex2"
-        type="text"
-        class="span2"
-        value=""
-        data-slider-min="10"
-        data-slider-max="1000"
-        data-slider-step="5"
-        data-slider-value="[250,450]"
-        data-slider-handle="square"/>
-        <br><br>
-        <button type="button" class="btn btn-warning" name="button">Update view</button>
     </div>
+        <div class="col-md-6">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
+                <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
+                    <span class="caret"></span>
+                </button>
+                <div class="input-group">
+                    <input type="text" id="offer-price" class="form-control" placeholder="Price" style="width: 12%; padding-left: 5px;" data-toggle="tooltip" title="Field used for type Offer"readonly>
+                    <input type="text" class="form-control" placeholder="Search" style="width: 88%">
+                    <span class="input-group-btn" id="basic-addon1">
+                        <a href="#" class="btn btn-success" type="button">
+                            <i class="fa fa-search" style="margin-right: 0;"></i></a>
+                    </span>
 
-    <!-- Div on the right side -->
-    <div class="col-md-9">
+                </div>
 
-      <!-- Forms -->
-      <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
-        <div class="form-inline">
-          <div class="form-group col-md-12">
-              <h1 class="">
-                  Welcome to Villages.cc Marketplace {{ request.profile.name }}! What do you want to do?</h1>
-            {{ form.listing_type }}
-            <!-- {{ form.fields.listing_type.choices }} -->
-          </div>
-          <div class="form-group col-md-9">
-
-            <input type="text" class="form-control full-width input-lg" name="title" value="" placeholder="Garden Help">
-          </div>
+                <ul class="dropdown-menu">
+                    <li><a href="#">All listings types</a></li>
+                    <li><a href="#">Offer</a></li>
+                    <li><a href="#">Request</a></li>
+                    <li><a href="#">Teach</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Learn</a></li>
+                    <li><a href="#">Gift</a></li>
+                </ul>
+            </div>
+            <a href="#" style="padding-top: 5px;"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a>
         </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
+            </button>
+            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
+            </button>
+            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">
+                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
+            </button>
+        </div>
+    </div>
+</section>
 
-        <!-- Give space -->
+<script>
+    $(function() {
+        $(".dropdown-menu li a").click(function(){
+            $(".btn-change:first-child").text($(this).text());
+            $(".btn-change:first-child").val($(this).text());
+            if ($(".btn-change:first-child").text() == 'Offer') {
+                $("#offer-price").attr("readonly", false);
+            }else {
+                $("#offer-price").attr("readonly", true);
+            }
+        });
+    });
+</script>
+
+<section class="container-fluid" id="show-home-item">
+    <div class="row">
+        <div class="col-md-3">
         <br><br><br>
-        <div class="form-inline float-right">
+            <p><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></p>
+            <nav class="sidebar">
+                <ul class="nav sidenav">
+                    {% for each in categories %}
+                        {% if each.categories_text == 'ITEMS' %}
+                            <li><a href="#items">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in item_sub_categories %}
+                                        <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'SERVICES' %}
+                            <li><a href="#services">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in services_sub_categories %}
+                                        <li><a href="#"></a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'RIDESHARE' %}
+                            <li><a href="#rideshare">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in rideshare_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% elif each.categories_text == 'HOUSING/ACCOMODATION' %}
+                            <li><a href="#housing">{{ each.categories_text }}</a>
+                                <ul class="nav">
+                                    {% for each_sub_category in housing_sub_categories %}
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+            <br>
+            <div class="distance-range">
+            <h3 style="text-align: center">Distance</h3>
+            <br>
+            <input
+                    id="ex2"
+                    type="text"
+                    class="span2"
+                    value=""
+                    data-slider-min="10"
+                    data-slider-max="1000"
+                    data-slider-step="5"
+                    data-slider-value="[250,450]"
+                    data-slider-handle="square"/>
+            <br><br>
+            <button type="button" class="btn btn-warning" name="button">Update view</button>
+            </div>
+        </div>
+        <hr>
+        <div class="col-md-9">
 
-          <div class="form-group">
-            <label for="">Price</label>
-            {{ form.price }}
-            <!-- <input type="text" class="form-control" name="price" value=""> -->
-          </div>
-
-          <!-- Sub Categories -->
-          {{ form.subcategories }}
-          <div class="form-group">
-            {{ form.photo }}
-          </div>
-          <input type="hidden" name="user" value="{{ request.user.id }}">
-          <input type="submit" class="btn" value="POST">
-        </div>
-      </form>
-
-      <!-- Options  -->
-{#      <div class="row" style="margin-top: 54px;">#}
-{#        <div class="col-md-6">#}
-{#          <!-- Split button -->#}
-{#          <div class="btn-group">#}
-{#            <button type="button" class="btn btn-default btn-lg">All listing types</button>#}
-{#            <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#              <span class="caret"></span>#}
-{#              <span class="sr-only">Toggle Dropdown</span>#}
-{#            </button>#}
-{#            <ul class="dropdown-menu">#}
-{#              <li><a href="#">Offer</a></li>#}
-{#              <li><a href="#">Request</a></li>#}
-{#              <li><a href="#">Teach</a></li>#}
-{#              <li role="separator" class="divider"></li>#}
-{#              <li><a href="#">Learn</a></li>#}
-{#              <li><a href="#">Gift</a></li>#}
-{#              <li><a href="#">Goal</a></li>#}
-{#            </ul>#}
-{#          </div>#}
-{#        </div>#}
-{#        <div class="col-md-6">#}
-{#          <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">#}
-{#            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
-{#          </button>#}
-{#          <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">#}
-{#            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
-{#          </button>#}
-{#          <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">#}
-{#            <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
-{#          </button>#}
-{#        </div>#}
-{#      </div>#}
-
-      <hr>
-      <!-- After the form post show the listing -->
-      <!-- Given for loop to construct all -->
-{#      {% for each in listings %}#}
-        <div class="col-sm-5 col-md-2">
-            <div class="thumbnail">
-                <a href="{% url 'feed' %}" class="thumbnail">
-                    <img src="{% static 'images/all_Easy-Resize.com.jpg' %}" alt="...">
-                    <div class="caption">
-                        <h5>All</h5>
+            <!-- Given for loop to construct all -->
+            {% for each in listings %}
+                <div class="col-sm-8 col-md-4" style="padding-right: 0; width: 31%">
+                    <div class="thumbnail image">
+                        <img src="{% product_image_url each '280x280'%}" alt="...">
+                        <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
+                        <p class="thumbnail-info"></p>
+                        <div class="caption">
+                            <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                            <p class="inline">{{ each.title }}</p>
+                        </div>
                     </div>
-                <div class="caption">
-{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
-{#                    <p class="inline">{{ each.user }}</p>#}
                 </div>
-                </a>
-            </div>
+            {% endfor %}
         </div>
-         <div class="col-sm-5 col-md-2">
-            <div class="thumbnail image">
-                <a href="{% url 'accounts:profiles' %}?{{ url_param_str }}" class="thumbnail image">
-                    <img src="{% static 'images/people_Easy-Resize.com.jpg' %}" alt="...">
-                    <div class="caption">
-                        <h5>People</h5>
-                    </div>
-                <div class="caption">
-{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
-{#                    <p class="inline">{{ each.user }}</p>#}
-                </div>
-                </a>
-            </div>
-        </div>
-         <div class="col-sm-5 col-md-2">
-            <div class="thumbnail image">
-                <a href="{% url 'posts' %}?{{ url_param_str }}" class="thumbnail">
-                    <img src="{% static 'images/posts_Easy-Resize.com.jpg' %}" alt="...">
-                    <div class="caption">
-                        <h5>Posts</h5>
-                    </div>
-                <div class="caption">
-{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
-{#                    <p class="inline">{{ each.user }}</p>#}
-                </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-sm-5 col-md-2">
-            <div class="thumbnail">
-                <a href="{% url 'endorsements' %}?{{ url_param_str }}" class="thumbnail">
-                    <img src="{% static 'images/trust_Easy-Resize.com.jpg' %}" alt="...">
-                    <div class="caption">
-                        <h5>Trust</h5>
-                    </div>
-                <div class="caption">
-{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
-{#                    <p class="inline">{{ each.user }}</p>#}
-                </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-sm-5 col-md-2">
-            <div class="thumbnail">
-                <a href="{% url 'acknowledgements' %}?{{ url_param_str }}" class="thumbnail">
-                    <img src="{% static 'images/back-payment-icon-10.png' %}" alt="...">
-                    <div class="caption">
-                        <h5>Pay Forward</h5>
-                    </div>
-                <div class="caption">
-{#                    <img src="https://randomuser.me/api/portraits/thumb/men/83.jpg" class="img-circle inline"/>#}
-{#                    <p class="inline">{{ each.user }}</p>#}
-                </div>
-                </a>
-            </div>
-        </div>
-{#      {% endfor %}#}
     </div>
-  </div>
+    {##}
+    {#        <ul>#}
+    {#          {% if not request.profile %}#}
+    {#              <li><a href="{% url 'feed' %}"#}
+    {#              >{% trans 'Browse Marketplace' %}</a></li>#}
+    {#          {% endif %}#}
+    {#          <li class="{% block nav_location_class %}{% endblock %}">#}
+    {#              <a href="{% url 'locator' %}?next={{ request.path }}"#}
+    {#              >{{ request.location|default:_('Location') }}</a></li>#}
+    {#      </ul>#}
+    {#  </div>#}
 </section>
