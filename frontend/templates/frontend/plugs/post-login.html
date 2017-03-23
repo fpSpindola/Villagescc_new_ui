@@ -32,9 +32,16 @@ a:hover { color: #a03c21 }
 
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
-    <div class="col-md-3">
-        <p>Welcome to Villages.cc Marketplace {{ request.profile }}!</p>
-    </div>
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-body">
+                    Welcome {{ request.profile }}
+                </div>
+                <div class="panel-footer">
+                    <p><i class="fa fa-balance-scale" aria-hidden="true"> Your balance: {{ request.profile.overall_balance }} hours</i>
+                    </div>
+            </div>
+        </div>
         <div class="col-md-6">
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
@@ -42,17 +49,13 @@ a:hover { color: #a03c21 }
                     <span class="caret"></span>
                 </button>
                 <div class="input-group">
-                    <input type="text" id="offer-price" class="form-control" placeholder="Price" style="width: 12%; padding-left: 5px;" data-toggle="tooltip" title="Field used for type Offer"readonly>
-                    <input type="text" class="form-control" placeholder="Search" style="width: 88%">
+                    <input type="text" class="form-control" placeholder="Post description" style="width: 100%">
                     <span class="input-group-btn" id="basic-addon1">
                         <a href="#" class="btn btn-success" type="button">
                             <i class="fa fa-search" style="margin-right: 0;"></i></a>
                     </span>
-
                 </div>
-
                 <ul class="dropdown-menu">
-                    <li><a href="#">All listings types</a></li>
                     <li><a href="#">Offer</a></li>
                     <li><a href="#">Request</a></li>
                     <li><a href="#">Teach</a></li>
@@ -61,7 +64,9 @@ a:hover { color: #a03c21 }
                     <li><a href="#">Gift</a></li>
                 </ul>
             </div>
+            <div>
             <a href="#" style="padding-top: 5px;"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a>
+            </div>
         </div>
         <div class="col-md-3">
             <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">
@@ -76,20 +81,6 @@ a:hover { color: #a03c21 }
         </div>
     </div>
 </section>
-
-<script>
-    $(function() {
-        $(".dropdown-menu li a").click(function(){
-            $(".btn-change:first-child").text($(this).text());
-            $(".btn-change:first-child").val($(this).text());
-            if ($(".btn-change:first-child").text() == 'Offer') {
-                $("#offer-price").attr("readonly", false);
-            }else {
-                $("#offer-price").attr("readonly", true);
-            }
-        });
-    });
-</script>
 
 <section class="container-fluid" id="show-home-item">
     <div class="row">

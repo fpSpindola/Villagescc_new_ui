@@ -256,9 +256,9 @@ def edit_profile(request):
 @render()
 def profile(request, username):
     profile = get_object_or_404(Profile, user__username=username)
-    if request.profile:
-        eligible_profiles = Profile.objects.exclude(pk=request.profile.id)
-        profile_endorsements = get_object_or_404(eligible_profiles, user__username=username)
+    # if request.profile:
+    #     eligible_profiles = Profile.objects.exclude(pk=request.profile.id)
+    #     profile_endorsements = get_object_or_404(eligible_profiles, user__username=username)
     if profile == request.profile:
         template = 'my_profile.html'
     else:
