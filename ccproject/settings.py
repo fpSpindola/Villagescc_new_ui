@@ -69,12 +69,12 @@ INSTALLED_APPS = [
     'pages',
     'admin',
     'about',
+    'listings',
 
     'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
     'endorsement.apps.EndorsementConfig',
     'payment_raja.apps.PaymentConfig',
-    'listings.apps.ListingsConfig',
     'categories.apps.CategoriesConfig'
 
 ]
@@ -99,7 +99,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
                  os.path.join(BASE_DIR, 'accounts', 'templates'),
-                 os.path.join(BASE_DIR, 'accounts', 'sign_in', 'templates')],
+                 os.path.join(BASE_DIR, 'accounts', 'sign_in', 'templates'),
+                 os.path.join(BASE_DIR, 'listings', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

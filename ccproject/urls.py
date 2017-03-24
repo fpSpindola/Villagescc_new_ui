@@ -30,6 +30,7 @@ from profile import urls as profile_urls
 from post import urls as post_urls
 from endorsement import urls as endorsement_urls
 from relate import urls as relate_urls
+from listings import urls as listings_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'^about/', include(about_urls), name='about'),
     url(r'^feed/', include(feed_urls), name='feed'),
     url(r'^profile/', include(profile_urls), name='profile'),
+    url(r'^listings/', include(listings_urls), name='listings'),
     url(r'^posts/', include(post_urls), name='posts'),
     url(r'^edorsements/', include(endorsement_urls), name='endorsements'),
     url('^relate/', include(relate_urls), name='relate'),

@@ -2,6 +2,11 @@
 {% load i18n %}
 {% load staticfiles %}
 
+
+{% include 'new_post_modal.html' %}
+
+    <!-- Modal -->
+
 <!-- Fixed navbar -->
 <div class="container">
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -60,7 +65,7 @@
                     </li>
                     <li>
                         <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="...">
-                            <button type="button" class="btn btn-default btn-warning" data-toggle="tooltip" title="Post new listing">
+                            <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="Post new listing">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </button>
                             <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Check your relationships">

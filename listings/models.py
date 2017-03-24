@@ -10,7 +10,7 @@ from categories.models import SubCategories
 class Listings(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
     title = models.CharField(max_length=220)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
     subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
 
     OFFER = 'Offer'
