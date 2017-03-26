@@ -2,6 +2,20 @@
 {% block content %}
 
     <div class="page-header col-sm-12">
+    {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'success'%}
+                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
+                            <i class="fa fa-check"></i>{{ message }}
+                        </div>
+                    {% else %}
+                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
+                            <i class="fa fa-meh-o"></i>{{ message }}
+                        </div>
+                    {% endif %}
+                    <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
+                {% endfor %}
+            {% endif %}
         <h2 class="col-sm-7"><i class="fa fa-sign-in"></i>Sign In</h2>
 
         {% if alert_failed %}
@@ -16,14 +30,13 @@
         {% endif %}
     </div>
 
-    <section class="col-sm-12">
         <div class="access">
-            <ul class="nav nav-pills nav-justified">
-                <li role="presentation">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="active">
                     <a href="{% url 'sign_in_log_in' %}" id="login">
                         <h4><i class="fa fa-sign-in margin-right"></i> Login</h4></a>
                 </li>
-                <li role="presentation">
+                <li role="active">
                     <a href="{% url 'sign_in_register' %}" id="register">
                         <h4><i class="fa fa-user margin-right"></i> Register</h4>
                     </a>
@@ -45,7 +58,6 @@
                 </form>
             </div>
         </div>
-    </section>
 
     <script>
         $(document).ready(function(){

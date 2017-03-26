@@ -47,22 +47,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12" style="padding: 0">
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'success'%}
-                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
-                            <i class="fa fa-check"></i>{{ message }}
-                        </div>
-                    {% else %}
-                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
-                            <i class="fa fa-meh-o"></i>{{ message }}
-                        </div>
-                    {% endif %}
-                    <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
-                {% endfor %}
-            {% endif %}
-
-
             <!-- Main Navigation -->
             <!-- Navigation / from plugs / we need to show two plugs here -->
             <!-- 1. if user not logged in comes from pre-login  -->

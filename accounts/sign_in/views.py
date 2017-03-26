@@ -88,23 +88,29 @@ class SignInUserLogIn(View):
         return django_render(request, 'accounts/sign_in.html', {'form': form})
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
+        if request.POST:
+            form = UserForm(request.POST)
+            if form.is_valid():
+                username = request.POST['username']
+                password = request.POST['password']
 
-        # Check the user in database or return
-        try:
-            user = User.objects.get(username=username)
-            user = authenticate(username=username, password=password)
-            if user:
-                # Password matching and user found with authenticate
-                login(request, user)
-                return HttpResponseRedirect(reverse('frontend:home'))
+            # Check the user in database or return
+                try:
+                    user = User.objects.get(username=username)
+                    user = authenticate(username=username, password=password)
+                    if user:
+                        # Password matching and user found with authenticate
+                        login(request, user)
+                        return HttpResponseRedirect(reverse('frontend:home'))
+                    else:
+                        # Password wrong
+                        messages.error(request, 'Username or Password is wrong')
+                except Exception as e:
+                    messages.error(request, "User not found")
+                    return django_render(request, 'accounts/sign_in.html', {'form': form})
             else:
-                # Password wrong
-                messages.error(request, 'Username or Password is wrong')
-        except:
-            messages.error(request, "User not found")
-            return HttpResponseRedirect(reverse('accounts:login'))
+                messages.add_message(request, messages.ERROR, 'Something went wrong!')
+                return redirect(SignInUserLogIn, {'form': form})
 
 
 class SignInUserRegister(View):
