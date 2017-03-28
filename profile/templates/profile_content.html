@@ -42,8 +42,8 @@
         <button type="button" class="btn btn-default btn-success">
           <i class="fa fa-usd" aria-hidden="true"></i>
         </button>
-        <button type="button" class="btn btn-default btn-danger">
-          <i class="fa fa-envelope" aria-hidden="true"></i>
+        <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Edit my profile">
+          <i class="fa fa-cog" aria-hidden="true"></i>
         </button>
       </div>
     </div>
@@ -53,19 +53,26 @@
 <section class="container-fluid" id="profile-listing-info">
   <div class="row">
     <div class="col-md-9">
-      <h3>7 open listing</h3>
+    {% if listings %}
+      <h3>{{ listings.count }} open listings</h3>
       <bold><hr></bold>
+    {% endif %}
       <div class="listing-image">
         <!-- Construct in the for loop -->
-{#        {% for each in listings %}#}
-          <div class="col-sm-6 col-md-4">
-            <div class="thumbnail image">
-              <img src="{% static 'images/cover.jpg' %}" alt="...">
-              <p class="thumbnail-tag">$30 / Day</p>
-              <p class="thumbnail-info">9' Long Board</p>
-            </div>
+        {% for each in listings %}
+          <div class="col-sm-6 col-md-4" style="width: 30%;">
+              <div class="thumbnail">
+                  <img src="{% product_image_url each '280x280'%}">
+                  <div class="caption">
+                      <p class="thumbnail-tag" data-toggle="tooltip" title="{{ each.subcategories.sub_categories_text }}" style="align-content: center; margin-left: -115px;">{{ each.subcategories.sub_categories_text }}</p>
+                      <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                      <a href="#"><h4 class="inline">{{ each.user }}</h4></a>
+                      <hr>
+                      <h4>{{ each.title }}</h4>
+                  </div>
+              </div>
           </div>
-{#        {% endfor %}#}
+        {% endfor %}
 
       </div>
 

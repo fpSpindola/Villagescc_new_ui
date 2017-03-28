@@ -89,28 +89,29 @@ class SignInUserLogIn(View):
 
     def post(self, request):
         if request.POST:
-            form = UserForm(request.POST)
-            if form.is_valid():
-                username = request.POST['username']
-                password = request.POST['password']
+            username = request.POST['username']
+            password = request.POST['password']
 
-            # Check the user in database or return
-                try:
+        # Check the user in database or return
+            try:
+                if not '@' in username:
                     user = User.objects.get(username=username)
                     user = authenticate(username=username, password=password)
-                    if user:
-                        # Password matching and user found with authenticate
-                        login(request, user)
-                        return HttpResponseRedirect(reverse('frontend:home'))
-                    else:
-                        # Password wrong
-                        messages.error(request, 'Username or Password is wrong')
-                except Exception as e:
-                    messages.error(request, "User not found")
-                    return django_render(request, 'accounts/sign_in.html', {'form': form})
-            else:
-                messages.add_message(request, messages.ERROR, 'Something went wrong!')
-                return redirect(SignInUserLogIn, {'form': form})
+                else:
+                    user = User.objects.get(email=username)
+                    user = authenticate(username=user.username, password=password)
+                if user:
+                    # Password matching and user found with authenticate
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('frontend:home'))
+                else:
+                    # Password wrong
+                    messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
+                    return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, " User not found")
+                # return django_render(request, 'accounts/sign_in.html', {'form': form})
+                return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
 
 
 class SignInUserRegister(View):

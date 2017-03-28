@@ -8,6 +8,7 @@ from profile.models import (
     Profile, Invitation, Settings, PasswordResetLink)
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
+from django.utils import timezone
 
 ERRORS = {
     'email_dup': _("That email address is registered to another user."),
@@ -20,8 +21,11 @@ ERRORS = {
 
 class RegistrationForm(UserCreationForm):
     # Parent class has username, password1, and password2.
-    name = forms.CharField(
+    first_name = forms.CharField(
         max_length=100, required=False, label=_("Name"), help_text=_(
+            "Name displayed to other users. You can change this later."))
+    last_name = forms.CharField(
+        max_length=100, required=False, label=_("Last name"), help_text=_(
             "Name displayed to other users. You can change this later."))
     email = forms.EmailField(
         max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
@@ -53,12 +57,16 @@ class RegistrationForm(UserCreationForm):
     def save(self, location, language):
         data = self.cleaned_data
         user = super(RegistrationForm, self).save(commit=False)
-        user.last_login = datetime.now()
+        user.last_login = timezone.now()
+        user.email = data['email']
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
         user.save()
         profile = Profile(user=user, name=data.get('name', ''))
         if not location.id:
             location.save()
         profile.location = location
+        profile.name = data['first_name'] + ' ' + data['last_name']
         profile.save()
         profile.settings.email = data['email']
         profile.settings.language = language
@@ -74,7 +82,8 @@ class RegistrationForm(UserCreationForm):
         return self.cleaned_data['password1']
 
 RegistrationForm.base_fields.keyOrder = [
-    'name', 'email', 'username', 'password1', 'password2']
+    'first_name', 'last_name', 'email', 'username', 'password1', 'password2']
+
 
 class ForgotPasswordForm(forms.Form):
     username_or_email = forms.CharField(label=_("Username or email"))

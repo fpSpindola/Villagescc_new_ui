@@ -13,6 +13,7 @@ from django.conf import settings
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
+from listings.models import Listings
 from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
     RequestInvitationForm, ForgotPasswordForm)
@@ -260,6 +261,21 @@ def profile(request, username):
     #     eligible_profiles = Profile.objects.exclude(pk=request.profile.id)
     #     profile_endorsements = get_object_or_404(eligible_profiles, user__username=username)
     if profile == request.profile:
+        listings = Listings.objects.all().filter(user_id=profile.user_id)
+        partner = get_object_or_404(Profile, user__username=username)
+        if partner == request.profile:
+            raise Http404
+        account = request.profile.account(partner)
+        if account:
+            entries = account.entries
+            balance = account.balance
+        else:
+            entries = []
+            balance = 0
+
+        profile = partner  # For profile_base.html.
+        my_endorsement = request.profile.endorsement_for(profile)
+        account = profile.account(request.profile)
         template = 'my_profile.html'
     else:
         template = 'profile.html'
@@ -274,6 +290,7 @@ def profile(request, username):
             else:
                 entries = []
                 balance = 0
+
             profile = partner  # For profile_base.html.
             my_endorsement = request.profile.endorsement_for(profile)
             account = profile.account(request.profile)
