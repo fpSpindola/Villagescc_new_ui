@@ -19,6 +19,7 @@ urlpatterns = patterns(
         dict(item_type=Profile, template='profiles.html', do_filter=True),
         name='profiles'),
     url(r'^profiles/([^/]+)/$', 'profile', name='profile'),
+    url(r'^profile/my_profile', 'my_profile', name='my_profile'),
     url(r'^profiles/([^/]+)/posts/$', 'profile_posts', name='profile_posts'),
     url(r'^profiles/([^/]+)/endorsements/$', 'profile_endorsements',
         name='profile_endorsements'),

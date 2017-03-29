@@ -13,6 +13,7 @@ from django.conf import settings
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
+from django.shortcuts import render as django_render
 from listings.models import Listings
 from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
@@ -254,44 +255,25 @@ def edit_profile(request):
     return locals()
 
 
+def my_profile(request):
+    listings = Listings.objects.filter(user_id=request.profile.user_id)
+    my_endorsements = request.profile.endorsement_for(request.profile)
+    account = request.profile.account(request.profile)
+    entries = account.entries
+    balance = account.balance
+    return django_render(request, 'my_profile.html', {'profile': request.profile, 'listings': listings,
+                                                      'my_endorsements': my_endorsements, 'account': account,
+                                                      'entries': entries, 'balance': balance})
+
+
 @render()
 def profile(request, username):
     profile = get_object_or_404(Profile, user__username=username)
-    # if request.profile:
-    #     eligible_profiles = Profile.objects.exclude(pk=request.profile.id)
-    #     profile_endorsements = get_object_or_404(eligible_profiles, user__username=username)
     if profile == request.profile:
-        listings = Listings.objects.all().filter(user_id=profile.user_id)
-        partner = get_object_or_404(Profile, user__username=username)
-        if partner == request.profile:
-            raise Http404
-        account = request.profile.account(partner)
-        if account:
-            entries = account.entries
-            balance = account.balance
-        else:
-            entries = []
-            balance = 0
-
-        profile = partner  # For profile_base.html.
-        my_endorsement = request.profile.endorsement_for(profile)
-        account = profile.account(request.profile)
         template = 'my_profile.html'
     else:
         template = 'profile.html'
         if request.profile:
-            partner = get_object_or_404(Profile, user__username=username)
-            if partner == request.profile:
-                raise Http404
-            account = request.profile.account(partner)
-            if account:
-                entries = account.entries
-                balance = account.balance
-            else:
-                entries = []
-                balance = 0
-
-            profile = partner  # For profile_base.html.
             my_endorsement = request.profile.endorsement_for(profile)
             account = profile.account(request.profile)
     return locals(), template

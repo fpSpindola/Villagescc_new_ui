@@ -90,7 +90,7 @@
                         {% endif %}
                         <ul class="dropdown-menu" style="margin-left: -91px;">
                             {% if request.profile %}
-                                <li><a href="{{ request.profile.get_absolute_url }}">Profile</a></li>
+                                <li><a href="{% url 'my_profile' %}">Profile</a></li>
                                 <li><a href="#">Manage Listing</a></li>
                                 <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
                             {% endif %}
