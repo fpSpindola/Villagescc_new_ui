@@ -62,6 +62,17 @@
     html {
         margin: 0;
     }
+    .thumbnail{
+        width : 300px;
+        height: 250px;
+        overflow: auto;
+    }
+
+    .thumbnail .listing {
+        width: 100%;
+        height: 150px;
+        display: block;
+    }
 </style>
 <br><br><br><br>
 
@@ -183,14 +194,14 @@
 
             <!-- Given for loop to construct all -->
             {% for each in listings %}
-                <div class="col-sm-8 col-md-4" style="padding-right: 0; width: 31%">
-                    <div class="thumbnail image">
-                        <img src="{% product_image_url each '280x280'%}" alt="...">
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
                         <p class="thumbnail-info"></p>
                         <div class="caption">
                             <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                            <p class="inline">{{ each.title }}</p>
+                            <p>{{ each.title }}</p>
                         </div>
                     </div>
                 </div>

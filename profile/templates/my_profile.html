@@ -11,15 +11,23 @@
 {% load i18n %}
 
 <style>
-    html{
-        padding-left: 15%;
-        padding-right: 20%;
-    }
-    .image {
+
+.image {
     width: 60px;
     height: 60px;
     float: left;
     border: 1px hidden #999;
+}
+.thumbnail{
+    width : 300px;
+    height: 250px;
+    overflow: auto;
+}
+
+.thumbnail .listing {
+    width: 100%;
+    height: 150px;
+    display: block;
 }
 </style>
 
@@ -63,62 +71,53 @@
 
 <section class="container-fluid" id="profile-listing-info">
   <div class="row">
+  {% if listings %}
     <div class="col-md-9">
       <h3>Open listings</h3>
-        {% if listings %}
       <bold><hr></bold>
-
-      <div class="listing-image">
         <!-- Construct in the for loop -->
         {% for each in listings %}
-          <div class="col-sm-6 col-md-4" style="width: 30%;">
-              <div class="thumbnail">
-                  <img src="{% product_image_url each '280x280'%}">
-                  <div class="caption">
-                      <p class="thumbnail-tag" data-toggle="tooltip" title="{{ each.subcategories.sub_categories_text }}" style="align-content: center; margin-left: -115px;">{{ each.subcategories.sub_categories_text }}</p>
-                      <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                      <a href="#"><h4 class="inline">{{ each.user }}</h4></a>
-                      <hr>
-                      <h4>{{ each.title }}</h4>
-                  </div>
-              </div>
-          </div>
+          <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
+                        <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
+                        <p class="thumbnail-info"></p>
+                        <div class="caption">
+                            <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                            <p>{{ each.title }}</p>
+                        </div>
+                    </div>
+                </div>
         {% endfor %}
-
-      </div>
             {% else %}
             <b>There is no open listings for you. <a href="javascript:void(0)">Create</a> one now?</b>
     </div>
 {% endif %}
-    <div class="col-md-3">
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+</div>
+<div class="col-md-3" style="padding-top: 60px;">
+  <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</a></p>
+    {% endblocktrans %}
+  <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
+  <p><a href="#"><i class="fa fa-home" aria-hidden="true"></i> {{ profile.location.full_name }}</a></p>
 
-      <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</a></p>
-        {% endblocktrans %}
-      <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
-      <p><a href="#"><i class="fa fa-home" aria-hidden="true"></i> {{ profile.location.full_name }}</a></p>
-
-      <div class="card">
-        <h4>Offerings</h4>
-        <span class="badge">Massage</span>
-        <span class="badge">Web Design</span>
-        <span class="badge">Child Care</span>
-        <span class="badge">Off Grid</span>
-      </div>
-      <div class="card">
-        <h4>Requests</h4>
-        <span class="badge">Massage</span>
-        <span class="badge">Organic Vegan Food</span>
-        <span class="badge">Help Building</span>
-        <span class="badge">Kids Stuff</span>
-      </div>
-    </div>
+  <div class="card">
+    <h4>Offerings</h4>
+    <span class="badge">Massage</span>
+    <span class="badge">Web Design</span>
+    <span class="badge">Child Care</span>
+    <span class="badge">Off Grid</span>
   </div>
+  <div class="card">
+    <h4>Requests</h4>
+    <span class="badge">Massage</span>
+    <span class="badge">Organic Vegan Food</span>
+    <span class="badge">Help Building</span>
+    <span class="badge">Kids Stuff</span>
+  </div>
+</div>
 </section>
+
+
 
 <!-- Relationship with -->
 {#<section class="container-fluid">#}
@@ -228,15 +227,15 @@
   <div class="row">
     <div class="col-md-9">
       <h3>Endorsed by:</h3>
-      <h4></h4>
-      <hr>
-    {% if each_endorsement_received %}
+    {% if endorsements_received %}
       {% for each_endorsement_received in endorsements_received %}
+          <h4></h4>
+          <hr>
           <div class="image">
-            <img class="img-rounded" src="{% profile_image_url each_endorsement_received.recipient '60x60' %}" alt="">
+            <img class="img-rounded" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
           </div>
             <p class="text">Description: {{ each_endorsement_received.text }}</p>
-            <p class="text">From {{ request.profile.name }} to {{ each_endorsement_made.recipient.name }}</p>
+            <p class="text">From {{ each_endorsement_received.endorser.name }} to {{ request.profile.name }}</p>
           <hr>
       {% endfor %}
     {% else %}
@@ -249,26 +248,25 @@
 </section>
 
 <section class="container-fluid">
-  <div class="row">
-    <div class="col-md-9">
-      <h3>Endorsements made:</h3>
-      <h4></h4>
-      <hr>
-      {% for each_endorsement_made in endorsements_made %}
-      {% if each_endorsement_made %}
-          <div class="image">
-            <img class="img-rounded" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
-          </div>
-            <p class="text">Description: {{ each_endorsement_made.text }}</p>
-            <p class="Media-body">From {{ request.profile.name }} to {{ each_endorsement_made.recipient.name }}</p>
-      {% else %}
-          <div class="image">
-            <p class="text">No endorsements made yet</p>
-          </div>
-      {% endif %}
-      {% endfor %}
-      <hr>
+    <div class="row">
+        <div class="col-md-9">
+            <h3>Endorsements made:</h3>
+            {% if endorsements_made %}
+                {% for each_endorsement_made in endorsements_made %}
+                    <h4></h4>
+                    <hr>
+                    <div class="image">
+                        <img class="img-rounded" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+                    </div>
+                    <p class="text">Description: {{ each_endorsement_made.text }}</p>
+                    <p class="Media-body">From {{ request.profile.name }} to {{ each_endorsement_made.recipient.name }}</p>
+                {% endfor %}
+
+            {% else %}
+                <p class="text">No endorsements made yet</p>
+            {% endif %}
+            <hr>
+        </div>
     </div>
-  </div>
 </section>
 {% endblock %}

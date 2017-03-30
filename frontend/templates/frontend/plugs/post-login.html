@@ -1,17 +1,29 @@
 {% load staticfiles profile %}
 
 <style>
-    .html {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
+.html {
+    padding-left: 15px;
+    padding-right: 15px;
+}
 
 h1 { color: #ff4411; font-size: 20px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
 p { font-family: 'Inder', sans-serif; line-height: 28px; margin-bottom: 15px; color: #666; }
 a { color: #ff4411; transition: .5s; -moz-transition: .5s; -webkit-transition: .5s; -o-transition: .5s; }
 a:hover { color: #a03c21 }
 
-    .meta-info p { font-family: 'Fenix', serif; font-style: italic; color: #666; font-size: 16px; }
+.meta-info p { font-family: 'Fenix', serif; font-style: italic; color: #666; font-size: 16px; }
+
+.thumbnail{
+    width : 300px;
+    height: 250px;
+    overflow: auto;
+}
+
+.thumbnail .listing {
+    width: 100%;
+    height: 150px;
+    display: block;
+}
 </style>
 
 <div style="height: 100px;"></div>
@@ -61,7 +73,7 @@ a:hover { color: #a03c21 }
             </nav>
             <br>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="width: 55%;">
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
                 <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
@@ -106,36 +118,23 @@ a:hover { color: #a03c21 }
             </button>
         </div>
 
-        <div style="height: 50px;"></div>
+        <div style="height: 80px;"></div>
 
         <hr>
         <div class="col-md-9">
-        {% for each in listings %}
-                     <div class="col-sm-6 col-md-4" style="width: 30%;">
-                        <div class="thumbnail">
-                            <img src="{% product_image_url each '280x280'%}">
-                            <div class="caption">
-                                <p class="thumbnail-tag" data-toggle="tooltip" title="{{ each.subcategories.sub_categories_text }}" style="align-content: center">{{ each.subcategories.sub_categories_text }}</p>
-                                <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                                <a href="#"><h4 class="inline">{{ each.user }}</h4></a>
-                                <hr>
-                                <h4>{{ each.title }}</h4>
-                            </div>
+            {% for each in listings %}
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
+                        <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
+                        <p class="thumbnail-info"></p>
+                        <div class="caption">
+                            <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                            <p>{{ each.title }}</p>
                         </div>
                     </div>
-                   <div class="col-sm-6 col-md-4" style="width: 30%;">
-                        <div class="thumbnail">
-                            <img src="{% product_image_url each '280x280'%}">
-                            <div class="caption">
-                                <p class="thumbnail-tag" data-toggle="tooltip" title="{{ each.subcategories.sub_categories_text }}" style="align-content: center">{{ each.subcategories.sub_categories_text }}</p>
-                                <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                                <a href="#"><h4 class="inline">{{ each.user }}</h4></a>
-                                <hr>
-                                <h4>{{ each.title }}</h4>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
         </div>
     </div>
 </section>
