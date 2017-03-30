@@ -25,7 +25,7 @@ def home(request, type_filter):
             form.save()
             return HttpResponseRedirect(reverse('frontend:home'))
         else:
-            print form.errors
+            print(form.errors)
 
     # GET Request
     if type_filter:
