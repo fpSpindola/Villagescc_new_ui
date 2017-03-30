@@ -15,6 +15,7 @@ class EndorsementManager(models.Manager):
             for endorsement in self.all():
                 endorsement.update_trust_network()
 
+
 class Endorsement(models.Model):
     endorser = models.ForeignKey(Profile, related_name='endorsements_made')
     recipient = models.ForeignKey(

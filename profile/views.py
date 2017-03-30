@@ -257,13 +257,15 @@ def edit_profile(request):
 
 def my_profile(request):
     listings = Listings.objects.filter(user_id=request.profile.user_id)
-    my_endorsements = request.profile.endorsement_for(request.profile)
+    endorsements_received = request.profile.endorsements_received.all()
+    endorsements_made = request.profile.endorsements_made.all()
     account = request.profile.account(request.profile)
     entries = account.entries
     balance = account.balance
     return django_render(request, 'my_profile.html', {'profile': request.profile, 'listings': listings,
-                                                      'my_endorsements': my_endorsements, 'account': account,
-                                                      'entries': entries, 'balance': balance})
+                                                      'endorsements_made': endorsements_made,
+                                                      'endorsements_received': endorsements_received,
+                                                      'account': account, 'entries': entries, 'balance': balance})
 
 
 @render()

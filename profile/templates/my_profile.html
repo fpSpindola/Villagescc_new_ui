@@ -11,11 +11,16 @@
 {% load i18n %}
 
 <style>
-    html {
-        padding-top: 40px;
-        padding-left: 50px;
-        padding-right: 50px;
+    html{
+        padding-left: 15%;
+        padding-right: 20%;
     }
+    .image {
+    width: 60px;
+    height: 60px;
+    float: left;
+    border: 1px hidden #999;
+}
 </style>
 
 
@@ -29,8 +34,8 @@
   <div class="row">
     <div class="col-md-8">
       <div class="inside-profile-info">
-        <p>Profile description:</p>
-        <p>{{ profile.description }}</p>
+        <h3>Profile description:</h3>
+        <b>{{ profile.description }}</b>
       </div>
     </div>
 
@@ -55,13 +60,14 @@
   </div>
 </section>
 
+
 <section class="container-fluid" id="profile-listing-info">
   <div class="row">
     <div class="col-md-9">
-    {% if listings %}
-      <h3>{{ listings.count }} open listings</h3>
+      <h3>Open listings</h3>
+        {% if listings %}
       <bold><hr></bold>
-    {% endif %}
+
       <div class="listing-image">
         <!-- Construct in the for loop -->
         {% for each in listings %}
@@ -80,9 +86,10 @@
         {% endfor %}
 
       </div>
-
+            {% else %}
+            <b>There is no open listings for you. <a href="javascript:void(0)">Create</a> one now?</b>
     </div>
-
+{% endif %}
     <div class="col-md-3">
       <br>
       <br>
@@ -114,133 +121,154 @@
 </section>
 
 <!-- Relationship with -->
-<section class="container-fluid">
-  <div class="row">
-    <div class="col-md-9">
-    {% if request.profile %}
-      <h3>My Relationships</h3>
-      <table class="table table-bordered table-relationship">
-        <tbody>
-          <tr>y
-            <td>Current Balance</td>
-            <td>{{ balance }}</td>
-          </tr>
-          {% if account.partner_endorsement %}
-          <tr>
-            {% blocktrans count hearts=account.partner_endorsement.weight %}
-            <td>{{ partner }} endorsement of you</td>
-            {% plural %}
-                {{ partner }} endorsement of you
-            {% endblocktrans %}
-            <td>{% blocktrans count hearts=account.partner_endorsement.weight %}
-				{{ hearts }} heart
-			{% plural %}
-				{{ hearts }} hearts
-			{% endblocktrans %}</td>
-          </tr>
-          {% endif %}
-          {% if account.endorsement %}
-          <tr>
-            {% blocktrans count hearts=account.endorsement.weight %}
-            <td>Your endorsement of {{ partner }}</td>
-            {% plural %}
-                <td>Your endorsement of {{ partner }}</td>
-            {% endblocktrans %}
-            <td>{% blocktrans count hearts=account.endorsement.weight %}
-				{{ hearts }} heart
-			{% plural %}
-				{{ hearts }} hearts
-			{% endblocktrans %}</td>
-          </tr>
-        {% endif %}
-        </tbody>
-      </table>
-    {% endif %}
-    </div>
-  </div>
-</section>
+{#<section class="container-fluid">#}
+{#  <div class="row">#}
+{#    <div class="col-md-9">#}
+{#    {% if request.profile %}#}
+{#      <h3>My Relationships</h3>#}
+{#      <table class="table table-bordered table-relationship">#}
+{#        <tbody>#}
+{#          <tr>#}
+{#            <td>Current Balance</td>#}
+{#            <td>{{ balance }}</td>#}
+{#          </tr>#}
+{#          {% if account.partner_endorsement %}#}
+{#          <tr>#}
+{#            {% blocktrans count hearts=account.partner_endorsement.weight %}#}
+{#            <td>{{ partner }} endorsement of you</td>#}
+{#            {% plural %}#}
+{#                {{ partner }} endorsement of you#}
+{#            {% endblocktrans %}#}
+{#            <td>{% blocktrans count hearts=account.partner_endorsement.weight %}#}
+{#				{{ hearts }} heart#}
+{#			{% plural %}#}
+{#				{{ hearts }} hearts#}
+{#			{% endblocktrans %}</td>#}
+{#          </tr>#}
+{#          {% endif %}#}
+{#          {% if account.endorsement %}#}
+{#          <tr>#}
+{#            {% blocktrans count hearts=account.endorsement.weight %}#}
+{#            <td>Your endorsement of {{ partner }}</td>#}
+{#            {% plural %}#}
+{#                <td>Your endorsement of {{ partner }}</td>#}
+{#            {% endblocktrans %}#}
+{#            <td>{% blocktrans count hearts=account.endorsement.weight %}#}
+{#				{{ hearts }} heart#}
+{#			{% plural %}#}
+{#				{{ hearts }} hearts#}
+{#			{% endblocktrans %}</td>#}
+{#          </tr>#}
+{#        {% endif %}#}
+{#        </tbody>#}
+{#      </table>#}
+{#    {% endif %}#}
+{#    </div>#}
+{#  </div>#}
+{#</section>#}
 
-{% if request.profile %}
-<!-- our transcation history -->
-<section class="container-fluid">
-  <div class="row">
-    <div class="col-md-9">
-      <h3>Our Transaction History</h3>
-      <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <td>11/20/2016</td>
-            <td>-6 hours</td>
-            <td>Good Job painting</td>
-            <td>
-              <p class="profile-star-rating">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td>11/11/2016</td>
-            <td>+ 4 hours</td>
-            <td></td>
-            <td>
-              <p class="profile-star-rating">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td>11/9/2016</td>
-            <td>+10 hours</td>
-            <td></td>
-            <td>
-              <p class="profile-star-rating">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-{% endif %}
+{#{% if request.profile %}#}
+{#<!-- our transcation history -->#}
+{#<section class="container-fluid">#}
+{#  <div class="row">#}
+{#    <div class="col-md-9">#}
+{#      <h3>Our Transaction History</h3>#}
+{#      <table class="table table-bordered">#}
+{#        <tbody>#}
+{#          <tr>#}
+{#            <td>11/20/2016</td>#}
+{#            <td>-6 hours</td>#}
+{#            <td>Good Job painting</td>#}
+{#            <td>#}
+{#              <p class="profile-star-rating">#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#              </p>#}
+{#            </td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td>11/11/2016</td>#}
+{#            <td>+ 4 hours</td>#}
+{#            <td></td>#}
+{#            <td>#}
+{#              <p class="profile-star-rating">#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#              </p>#}
+{#            </td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td>11/9/2016</td>#}
+{#            <td>+10 hours</td>#}
+{#            <td></td>#}
+{#            <td>#}
+{#              <p class="profile-star-rating">#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#                <i class="fa fa-star" aria-hidden="true"></i>#}
+{#              </p>#}
+{#            </td>#}
+{#          </tr>#}
+{#        </tbody>#}
+{#      </table>#}
+{#    </div>#}
+{#  </div>#}
+{#</section>#}
+{#{% endif %}#}
 
-{% if request.profile %}
-<!-- endorsed by -->
 <section class="container-fluid">
   <div class="row">
     <div class="col-md-9">
-      <p>{{ profile_endorsement }}</p>
       <h3>Endorsed by:</h3>
+      <h4></h4>
       <hr>
-      <h4>2 received reviews(100% postive, 2/2)</h4>
-      <hr>
-      <div class="Media">
-        <img class="Media-figure" src="https://randomuser.me/api/portraits/thumb/men/83.jpg" alt="">
-        <p class="Media-body">Everything went well</p>
-      </div>
-      <hr>
-      <div class="Media">
-        <img class="Media-figure" src="https://randomuser.me/api/portraits/thumb/men/83.jpg" alt="">
-        <p class="Media-body">Everything went well</p>
-      </div>
+    {% if each_endorsement_received %}
+      {% for each_endorsement_received in endorsements_received %}
+          <div class="image">
+            <img class="img-rounded" src="{% profile_image_url each_endorsement_received.recipient '60x60' %}" alt="">
+          </div>
+            <p class="text">Description: {{ each_endorsement_received.text }}</p>
+            <p class="text">From {{ request.profile.name }} to {{ each_endorsement_made.recipient.name }}</p>
+          <hr>
+      {% endfor %}
+    {% else %}
+        <p class="text">No endorsements received yet</p>
+    {% endif %}
+
       <hr>
     </div>
-
   </div>
 </section>
-{% endif %}
 
+<section class="container-fluid">
+  <div class="row">
+    <div class="col-md-9">
+      <h3>Endorsements made:</h3>
+      <h4></h4>
+      <hr>
+      {% for each_endorsement_made in endorsements_made %}
+      {% if each_endorsement_made %}
+          <div class="image">
+            <img class="img-rounded" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+          </div>
+            <p class="text">Description: {{ each_endorsement_made.text }}</p>
+            <p class="Media-body">From {{ request.profile.name }} to {{ each_endorsement_made.recipient.name }}</p>
+      {% else %}
+          <div class="image">
+            <p class="text">No endorsements made yet</p>
+          </div>
+      {% endif %}
+      {% endfor %}
+      <hr>
+    </div>
+  </div>
+</section>
 {% endblock %}
