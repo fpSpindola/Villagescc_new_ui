@@ -71,8 +71,8 @@
 
 <section class="container-fluid" id="profile-listing-info">
   <div class="row">
-  {% if listings %}
     <div class="col-md-9">
+    {% if listings %}
       <h3>Open listings</h3>
       <bold><hr></bold>
         <!-- Construct in the for loop -->
@@ -91,10 +91,9 @@
         {% endfor %}
             {% else %}
             <b>There is no open listings for you. <a href="javascript:void(0)">Create</a> one now?</b>
-    </div>
 {% endif %}
-</div>
-<div class="col-md-3" style="padding-top: 60px;">
+    </div>
+  <div class="col-md-3" style="padding-top: 60px;">
   <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</a></p>
     {% endblocktrans %}
   <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
@@ -115,6 +114,8 @@
     <span class="badge">Kids Stuff</span>
   </div>
 </div>
+</div>
+
 </section>
 
 
@@ -259,7 +260,7 @@
                         <img class="img-rounded" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
                     </div>
                     <p class="text">Description: {{ each_endorsement_made.text }}</p>
-                    <p class="Media-body">From {{ request.profile.name }} to {{ each_endorsement_made.recipient.name }}</p>
+                    <p class="Media-body">From <a href="{{ request.profile.get_absolute_url }}">{{ request.profile.name }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
                 {% endfor %}
 
             {% else %}
