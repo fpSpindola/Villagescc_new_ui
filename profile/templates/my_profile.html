@@ -119,54 +119,6 @@
 </section>
 
 
-
-<!-- Relationship with -->
-{#<section class="container-fluid">#}
-{#  <div class="row">#}
-{#    <div class="col-md-9">#}
-{#    {% if request.profile %}#}
-{#      <h3>My Relationships</h3>#}
-{#      <table class="table table-bordered table-relationship">#}
-{#        <tbody>#}
-{#          <tr>#}
-{#            <td>Current Balance</td>#}
-{#            <td>{{ balance }}</td>#}
-{#          </tr>#}
-{#          {% if account.partner_endorsement %}#}
-{#          <tr>#}
-{#            {% blocktrans count hearts=account.partner_endorsement.weight %}#}
-{#            <td>{{ partner }} endorsement of you</td>#}
-{#            {% plural %}#}
-{#                {{ partner }} endorsement of you#}
-{#            {% endblocktrans %}#}
-{#            <td>{% blocktrans count hearts=account.partner_endorsement.weight %}#}
-{#				{{ hearts }} heart#}
-{#			{% plural %}#}
-{#				{{ hearts }} hearts#}
-{#			{% endblocktrans %}</td>#}
-{#          </tr>#}
-{#          {% endif %}#}
-{#          {% if account.endorsement %}#}
-{#          <tr>#}
-{#            {% blocktrans count hearts=account.endorsement.weight %}#}
-{#            <td>Your endorsement of {{ partner }}</td>#}
-{#            {% plural %}#}
-{#                <td>Your endorsement of {{ partner }}</td>#}
-{#            {% endblocktrans %}#}
-{#            <td>{% blocktrans count hearts=account.endorsement.weight %}#}
-{#				{{ hearts }} heart#}
-{#			{% plural %}#}
-{#				{{ hearts }} hearts#}
-{#			{% endblocktrans %}</td>#}
-{#          </tr>#}
-{#        {% endif %}#}
-{#        </tbody>#}
-{#      </table>#}
-{#    {% endif %}#}
-{#    </div>#}
-{#  </div>#}
-{#</section>#}
-
 {#{% if request.profile %}#}
 {#<!-- our transcation history -->#}
 {#<section class="container-fluid">#}
