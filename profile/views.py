@@ -272,7 +272,8 @@ def profile(request, username):
     else:
         template = 'profile.html'
         if request.profile:
-            my_endorsement = request.profile.endorsement_for(profile)
+            profile_endorsements_made = profile.endorsements_made.all()
+            profile_endorsements_received = profile.endorsements_received.all()
             account = profile.account(request.profile)
     return locals(), template
 
