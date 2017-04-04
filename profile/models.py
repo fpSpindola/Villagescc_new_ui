@@ -182,6 +182,7 @@ post_save.connect(Profile.post_save, sender=Profile,
 post_delete.connect(Profile.post_delete, sender=Profile,
                     dispatch_uid='profile.models')
 
+
 class Settings(models.Model):
     "Profile settings."
     profile = models.OneToOneField(Profile, related_name='settings')

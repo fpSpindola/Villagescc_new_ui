@@ -5,6 +5,7 @@ from django import forms
 # Import App Model
 from listings.models import Listings
 
+
 # Forms
 class ListingsForms(ModelForm):
     class Meta:

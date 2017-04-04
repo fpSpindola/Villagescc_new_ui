@@ -12,9 +12,14 @@ def add_new_listing(request):
         if 'initial' in request.POST:
             form = ListingsForms()
         else:
-            form = ListingsForms(request.POST)
+            form = ListingsForms(request.POST, request.FILES)
             if form.is_valid():
-                form.save()
+                try:
+                    listing = form.save(commit=False)
+                    listing.user_id = request.profile.user_id
+                    listing.save()
+                except Exception as e:
+                    print(e)
                 return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ListingsForms()

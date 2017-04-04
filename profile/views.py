@@ -249,7 +249,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             messages.info(request, MESSAGES['profile_saved'])
-            return HttpResponseRedirect(profile.get_absolute_url())
+            return HttpResponseRedirect(reverse(my_profile))
     else:
         form = ProfileForm(instance=profile)
     return locals()

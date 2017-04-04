@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<form class="form-horizontal" id="add-posting-modal" action="{% url 'new_posting' %}" method="POST">
+<form class="form-horizontal" id="add-posting-modal" action="{% url 'new_posting' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div id="new-posting-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-posting-modal" aria-hidden="true" style="opacity: 0.9 !important;">
         <div class="modal-dialog">

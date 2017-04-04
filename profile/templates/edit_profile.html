@@ -11,8 +11,9 @@
     html {
         padding: 15px;
     }
-</style>
 
+</style>
+<div style="height: 80px;"></div>
 <h2>{% trans 'Edit My Profile' %}</h2>
 
 <div class="feature">
@@ -24,7 +25,7 @@
 	<p>{% trans 'Your profile data is <strong>public</strong>.' %}</p>
 </div>
 
-<p><a href="{{ form.instance.get_absolute_url }}">
+<p style="padding-left: 90px;"><a href="{% url 'my_profile' %}" class="btn btn-info">
 	{% trans 'View my profile' %}
 </a></p>
 
@@ -35,7 +36,7 @@
 		<tr>
 			<th></th>
 			<td>
-				<input type="submit" value="{% trans 'Save Changes' %}" />
+				<input class="btn btn-submit btn-success" type="submit" value="{% trans 'Save Changes' %}" />
 			</td>
 		</tr>
 	</table>

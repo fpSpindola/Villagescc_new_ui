@@ -111,6 +111,7 @@ class ForgotPasswordForm(forms.Form):
         link.save()
         link.send()
 
+
 class InvitationForm(forms.ModelForm):
     # TODO: Merge with EndorseForm somehow, into a common superclass?
     
@@ -157,6 +158,7 @@ class InvitationForm(forms.ModelForm):
         invitation.save()
         return invitation
 
+
 class RequestInvitationForm(forms.Form):
     name = forms.CharField(required=False)
     email = forms.EmailField(max_length=EmailField.MAX_EMAIL_LENGTH)
@@ -178,16 +180,28 @@ class RequestInvitationForm(forms.Form):
         else:
             send_mail_to_admin(
                 subject, self.sender(), 'request_invitation_email.txt', context)
-    
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('name', 'photo', 'description')
 
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%',
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+            })
+        }
+
     def save(self):
         self.instance.set_updated()
         return super(ProfileForm, self).save()
-        
+
+
 class ContactForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea)
 
@@ -200,7 +214,8 @@ class ContactForm(forms.Form):
         if extra_context:
             context.update(extra_context)
         send_mail(subject, sender, recipient, template, context)
-        
+
+
 class SettingsForm(forms.ModelForm):
     # Email is required.
     email = forms.EmailField(max_length=EmailField.MAX_EMAIL_LENGTH)
@@ -209,6 +224,17 @@ class SettingsForm(forms.ModelForm):
         model = Settings
         fields = ('email', 'endorsement_limited',
                   'send_notifications', 'send_newsletter', 'language')
+
+        widgets = {
+            'email': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%',
+            }),
+            'language': forms.Select(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%',
+            })
+        }
 
     def clean_email(self):
         email = self.cleaned_data['email']

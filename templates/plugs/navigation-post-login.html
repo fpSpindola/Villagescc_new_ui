@@ -92,6 +92,7 @@
                             {% if request.profile %}
                                 <li><a href="{% url 'my_profile' %}">Profile</a></li>
                                 <li><a href="#">Manage Listing</a></li>
+                                <li><a href="{% url 'accounts:edit' %}">Edit Profile</a></li>
                                 <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
                             {% endif %}
                             <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
