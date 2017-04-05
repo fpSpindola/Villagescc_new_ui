@@ -218,7 +218,10 @@ class ContactForm(forms.Form):
 
 class SettingsForm(forms.ModelForm):
     # Email is required.
-    email = forms.EmailField(max_length=EmailField.MAX_EMAIL_LENGTH)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}),
+                             max_length=EmailField.MAX_EMAIL_LENGTH)
+
+    # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Settings
@@ -226,14 +229,10 @@ class SettingsForm(forms.ModelForm):
                   'send_notifications', 'send_newsletter', 'language')
 
         widgets = {
-            'email': forms.TextInput(attrs={
-                'class': 'form-control',
-                'style': 'width: 100%',
-            }),
             'language': forms.Select(attrs={
                 'class': 'form-control',
                 'style': 'width: 100%',
-            })
+            }),
         }
 
     def clean_email(self):

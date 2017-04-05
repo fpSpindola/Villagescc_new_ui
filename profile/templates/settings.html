@@ -7,6 +7,13 @@
 
 {% block content %}
 
+<style>
+html {
+    padding: 15px;
+}
+
+</style>
+
 <div style="height: 90px;"></div>
 
 <h2>{% trans 'Account Settings' %}</h2>
@@ -18,7 +25,7 @@
 		<tr>
 			<th></th>
 			<td>
-				<input type="submit" name="change_settings"
+				<input class="btn btn-submit btn-success" type="submit" name="change_settings"
 					value="{% trans 'Save Settings' %}">
 			</td>
 		</tr>
@@ -35,7 +42,7 @@
 		<tr>
 			<th></th>
 			<td>
-				<input type="submit" name="change_password"
+				<input class="btn btn-danger" type="submit" name="change_password"
 					value="{% trans 'Change Password' %}">
 			</td>
 		</tr>

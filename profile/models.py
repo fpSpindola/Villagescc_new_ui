@@ -249,6 +249,7 @@ class Invitation(models.Model):
 pre_save.connect(Invitation.pre_save, sender=Invitation,
                  dispatch_uid='profile.models')
 
+
 class PasswordResetLink(models.Model):
     profile = models.ForeignKey(Profile)
     code = VarCharField(unique=True)

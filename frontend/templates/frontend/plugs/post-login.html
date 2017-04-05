@@ -1,4 +1,4 @@
-{% load staticfiles profile %}
+{% load staticfiles profile i18n %}
 
 <style>
 .html {
@@ -89,8 +89,8 @@ a:hover { color: #a03c21 }
                     <li><a href="#">Gift</a></li>
                 </ul>
             </div>
-            <span style="padding-left: 5%;"><a href="#"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a></span>
-            <span style="padding-left: 5%;"><a href="#"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
+            <span style="padding-left: 5%;"><a href="{% url 'frontend:home' 'trusted_only' %}"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a></span>
+            <span style="padding-left: 5%;"><a href="{% url 'frontend:home' 'people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
             <span class="distance-range" style="padding-left: 5%;" data-toggle="tooltip" title="Distance from you (in miles)">
             <input
                     id="ex2"
@@ -121,6 +121,7 @@ a:hover { color: #a03c21 }
         <div style="height: 80px;"></div>
 
         <hr>
+        {% if listings %}
         <div class="col-md-9">
             {% for each in listings %}
                 <div class="col-sm-6 col-md-4">
@@ -147,5 +148,79 @@ a:hover { color: #a03c21 }
                 </div>
             {% endfor %}
         </div>
-    </div>
+    {% endif %}
+    {% if people %}
+        <div class="col-md-9">
+        <div class="feed_item_list">
+        {% for each in people %}
+            <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
+                <div class="panel-heading">{{ each }}</div>
+                    <div class="panel-body">
+                        <a href="{{ each.get_absolute_url }}">
+                            <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
+                        </a>
+                        <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
+                        <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
+
+                    </div>
+                <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
+                    <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">
+                        <i class="fa fa-usd" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+        {% empty %}
+            <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+        {% endfor %}
+        </div>
+        </div>
+    {% endif %}
+
+    {% if trusted_only %}
+        <div class="col-md-9">
+        <div class="feed_item_list">
+        {% for each in trusted_only %}
+            <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
+                <div class="panel-heading">{{ each }}</div>
+                    <div class="panel-body">
+                        <a href="{{ each.get_absolute_url }}">
+                            <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
+                        </a>
+                        <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
+                        <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
+
+                    </div>
+                <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
+                    <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">
+                        <i class="fa fa-usd" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+        {% empty %}
+            <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+        {% endfor %}
+        </div>
+        </div>
+    {% endif %}
+
+</div>
+{% if remaining_count %}
+	<p><a href="?{{ next_page_param_str }}">
+		{% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+	</a></p>
+{% endif %}
 </section>
