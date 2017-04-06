@@ -8,7 +8,8 @@ from django.db.models.signals import post_save, pre_save, post_delete
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
-
+from django.contrib.gis.db.models import GeoManager
+from django.db.models import Q
 from general.models import VarCharField, EmailField
 from geo.models import Location
 import ripple.api as ripple
@@ -21,12 +22,43 @@ from django.utils.translation import ugettext_lazy as _
 CODE_LENGTH = 20
 CODE_CHARS = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
+TRUSTED_SUBQUERY = (
+    "feed_feeditem.poster_id in "
+    "(select to_profile_id from profile_profile_trusted_profiles "
+    "    where from_profile_id = %s)")
+
+
+class QueryManager(GeoManager):
+
+    def _trusted_profiles_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=None,
+                                up_to_date=None):
+        query = self.get_queryset().order_by('-date')
+        if up_to_date:
+            query = query.filter(date__lt=up_to_date)
+        if profile:
+            query = query.extra(
+                select={'trusted': TRUSTED_SUBQUERY},
+                select_params=[profile.id])
+        if trusted_only and profile:
+            query = query.extra(where=[TRUSTED_SUBQUERY], params=[profile.id])
+        if location and radius:
+            query = query.filter(
+                # TODO: Bounding box query might be faster?
+                Q(location__point__dwithin=(location.point, radius)) |
+                Q(location__isnull=True))
+        if tsearch:
+            query = query.extra(
+                where=["tsearch @@ plainto_tsquery(%s)"],
+                params=[tsearch])
+        return query
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     name = VarCharField(_("Name"), blank=True)
     location = models.ForeignKey(Location, null=True, blank=True)
     photo = models.ImageField(_("Photo"),
-        upload_to='user/%Y/%m', max_length=256, blank=True)
+                              upload_to='user/%Y/%m', max_length=256, blank=True)
     description = models.TextField(_("Description"), blank=True)
 
     created = models.DateTimeField(auto_now_add=True)

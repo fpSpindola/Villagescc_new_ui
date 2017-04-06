@@ -43,13 +43,14 @@ function init_feed_items() {
 
 function init_feed_filter_form() {
 	/* Make form submit on change. */
-	$('.feed_filter_form #id_radius').change(function() {
+	$('#id_radius').change(function() {
 		$(this).closest('form').submit();
 	});
-	$('.feed_filter_form #id_trusted').change(function() {
+	$('#id_trusted').change(function() {
+		debugger;
 		$(this).closest('form').submit();
 	});
-	$('.feed_filter_form #id_clear').click(function() {
+	$('#id_clear').click(function() {
 		$('.feed_filter_form #id_q').val('');
 		$(this).closest('form').submit();
 	});
