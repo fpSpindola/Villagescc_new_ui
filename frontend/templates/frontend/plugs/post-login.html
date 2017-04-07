@@ -75,36 +75,38 @@ a:hover { color: #a03c21 }
         </div>
         <div class="col-md-6" style="width: 55%;">
         {% if listings %}
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
-                <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
-                    <span class="caret"></span>
-                </button>
-            <!-- Given for loop to construct all -->
-                <ul class="dropdown-menu">
-                    <li><a href="#">Offer</a></li>
-                    <li><a href="#">Request</a></li>
-                    <li><a href="#">Teach</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Learn</a></li>
-                    <li><a href="#">Gift</a></li>
-                </ul>
-            </div>
-        {% endif %}
             <div class="">
                 <form class="inline_form nav" action="" method="get"><ul>
-                    <li class="first">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
+                        <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
+                            <span class="caret"></span>
+                        </button>
+                        <!-- Given for loop to construct all -->
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Offer</a></li>
+                            <li><a href="#">Request</a></li>
+                            <li><a href="#">Teach</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Learn</a></li>
+                            <li><a href="#">Gift</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if  %}
+                    <span class="">
                         {{ form.q }}
                         <a id="id_clear" href="javascript:void(0)"
-                        >{% trans 'Clear' %}</a></li>
+                        >{% trans 'Clear' %}</a></span>
                     <li>{{ form.radius }}</li>
                     {% if request.profile %}
                         <li><label>{{ form.trusted }}
                             <img src="{% static 'img/heart_icon.png' %}"
                                  alt="{% trans 'Heart icon = trusted user' %}">
                             {% trans 'Trusted only' %}</label></li>
-                        <span style="padding-left: 5%;"><a href="{% url 'frontend:home_people' 'people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
-                    {% endif %}
+                        {% endif %}
+                        <span style="padding-left: 5%;"><a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
+
                 </ul></form>
             </div>
 

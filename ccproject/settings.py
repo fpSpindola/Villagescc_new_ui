@@ -70,7 +70,11 @@ INSTALLED_APPS = [
     'admin',
     'about',
     'listings',
+
+    # Ripple
+    'account',
     'accounts',
+    'payment',
 
     # 'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
