@@ -74,6 +74,7 @@ a:hover { color: #a03c21 }
             <br>
         </div>
         <div class="col-md-6" style="width: 55%;">
+        {% if listings %}
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
                 <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
@@ -89,21 +90,38 @@ a:hover { color: #a03c21 }
                     <li><a href="#">Gift</a></li>
                 </ul>
             </div>
-            <span class="{% block feed_people_class %}{% endblock %}" style="padding-left: 5%;"><a href="{% url 'frontend:home' %}?{{ url_param_str }}"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a></span>
-            <span style="padding-left: 5%;"><a href="{% url 'frontend:home_people' 'people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
-            <span class="distance-range" style="padding-left: 5%;" data-toggle="tooltip" title="Distance from you (in miles)">
-            <input
-                    id="ex2"
-                    type="text"
-                    class="span2"
-                    value=""
-                    data-slider-min="1000"
-                    data-slider-max="50000"
-                    data-slider-step="4"
-                    data-slider-value="[1000,5000]"
-                    data-slider-handle="square"/>
-            <button type="button" class="btn btn-warning" name="button" style="float: right;">update distance</button>
-            </span>
+        {% endif %}
+            <div class="">
+                <form class="inline_form nav" action="" method="get"><ul>
+                    <li class="first">
+                        {{ form.q }}
+                        <a id="id_clear" href="javascript:void(0)"
+                        >{% trans 'Clear' %}</a></li>
+                    <li>{{ form.radius }}</li>
+                    {% if request.profile %}
+                        <li><label>{{ form.trusted }}
+                            <img src="{% static 'img/heart_icon.png' %}"
+                                 alt="{% trans 'Heart icon = trusted user' %}">
+                            {% trans 'Trusted only' %}</label></li>
+                        <span style="padding-left: 5%;"><a href="{% url 'frontend:home_people' 'people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
+                    {% endif %}
+                </ul></form>
+            </div>
+
+{#            <span class="{% block feed_people_class %}{% endblock %}" style="padding-left: 5%;"><a href="{% url 'frontend:home' %}?{{ url_param_str }}"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a></span>#}
+{#            <span class="distance-range" style="padding-left: 5%;" data-toggle="tooltip" title="Distance from you (in miles)">#}
+{#            <input#}
+{#                    id="ex2"#}
+{#                    type="text"#}
+{#                    class="span2"#}
+{#                    value=""#}
+{#                    data-slider-min="1000"#}
+{#                    data-slider-max="50000"#}
+{#                    data-slider-step="4"#}
+{#                    data-slider-value="[1000,5000]"#}
+{#                    data-slider-handle="square"/>#}
+{#            <button type="button" class="btn btn-warning" name="button" style="float: right;">update distance</button>#}
+{#            </span>#}
         </div>
 
         <div class="col-md-3" style="float: right;">

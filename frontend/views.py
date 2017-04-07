@@ -49,14 +49,28 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             url_params['d'] = next_page_date.strftime(DATE_FORMAT)
         next_page_param_str = url_params.urlencode()
 
+        categories_list = Categories.objects.all()
+        item_sub_categories = SubCategories.objects.all().filter(categories=1)
+        services_sub_categories = SubCategories.objects.all().filter(categories=2)
+        rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+        housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+
         context = locals()
         context.update(extra_context or {})
         return render(request, 'frontend/home.html', {'url_params': url_params, 'feed_items': feed_items,
-                                             'next_page_date': next_page_date, 'context': context, 'form': form,
-                                             'poster': poster, 'do_filter': do_filter, 'remaining_count': remaining_count,
-                                             'item_type': item_type, 'template': template, 'url_param_str': url_param_str,
-                                             'next_page_param_str': next_page_param_str, 'extra_context': extra_context,
-                                             'recipient': recipient})
+                                                      'next_page_date': next_page_date, 'context': context,
+                                                      'form': form, 'poster': poster, 'do_filter': do_filter,
+                                                      'remaining_count': remaining_count,
+                                                      'item_type': item_type, 'template': template,
+                                                      'url_param_str': url_param_str,
+                                                      'next_page_param_str': next_page_param_str,
+                                                      'extra_context': extra_context,
+                                                      'recipient': recipient,
+                                                      'item_sub_categories': item_sub_categories,
+                                                      'services_sub_categories': services_sub_categories,
+                                                      'rideshare_sub_categories': rideshare_sub_categories,
+                                                      'housing_sub_categories': housing_sub_categories,
+                                                      'categories': categories_list})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)
