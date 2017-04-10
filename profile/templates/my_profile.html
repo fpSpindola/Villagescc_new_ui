@@ -18,7 +18,7 @@
     border: 1px hidden #999;
 }
 .thumbnail{
-    width : 255px;
+    width : 270px;
     height: 250px;
     overflow: auto;
 }
@@ -48,10 +48,10 @@
 
     <div class="col-md-4" style="text-align: center;">
       <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
-      <p class="profile-star-rating">
-        <th>{% trans 'Reputation: ' %}</th>
-			<td>{% reputation profile request.profile %}</td>
-      </p>
+{#      <p class="profile-star-rating">#}
+{#        <th>{% trans 'Reputation: ' %}</th>#}
+{#			<td>{% reputation profile request.profile %}</td>#}
+{#      </p>#}
     </div>
   </div>
 </section>
@@ -69,9 +69,9 @@
                         <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
                         <p class="thumbnail-info"></p>
-                        <div class="caption">
-                            <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                            <p>{{ each.title }}</p>
+                        <div class="caption" style="height: 60px;">
+                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
+                            <p>&nbsp{{ each.title }}</p>
                         </div>
                     </div>
                 </div>

@@ -73,11 +73,11 @@ a:hover { color: #a03c21 }
             </nav>
             <br>
         </div>
-        <div class="col-md-6" style="width: 55%;">
-        {% if listings %}
+        <div class="col-md-6">
             <div class="">
                 <form class="inline_form nav" action="" method="get"><ul>
                     <div class="btn-group">
+                        {% if listings %}
                         <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
                         <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
                             <span class="caret"></span>
@@ -93,17 +93,20 @@ a:hover { color: #a03c21 }
                         </ul>
                     </div>
                 {% endif %}
-                {% if  %}
-                    <span class="">
+                {% if not listings %}
+                    <div class="input-group" style="align-content: center; width: 60%;">
                         {{ form.q }}
-                        <a id="id_clear" href="javascript:void(0)"
-                        >{% trans 'Clear' %}</a></span>
-                    <li>{{ form.radius }}</li>
-                    {% if request.profile %}
-                        <li><label>{{ form.trusted }}
+                        <span class="input-group-addon" id="">
+			                <a id="id_clear" href="javascript:void(0)">{% trans 'Clear' %}</a>
+                        </span>
+                    </div>
+                {% endif %}
+                    <span>{{ form.radius }}</span>
+                    {% if request.profile and not listings %}
+                        <span><label>{{ form.trusted }}
                             <img src="{% static 'img/heart_icon.png' %}"
                                  alt="{% trans 'Heart icon = trusted user' %}">
-                            {% trans 'Trusted only' %}</label></li>
+                            {% trans 'Trusted only' %}</label></span>
                         {% endif %}
                         <span style="padding-left: 5%;"><a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
 
@@ -138,9 +141,10 @@ a:hover { color: #a03c21 }
             </button>
         </div>
 
-        <div style="height: 80px;"></div>
+      <div style="height: 80px;"></div>
 
         <hr>
+
         {% if feed_items %}
         <div class="col-md-9">
             <div class="feed_item_list">
@@ -167,13 +171,12 @@ a:hover { color: #a03c21 }
                         </button>
                     </div>
                 </div>
-
-            {% empty %}
+                {% empty %}
                 <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
             {% endfor %}
             </div>
-        </div>
         {% endif %}
+
 
         {% if listings %}
         <div class="col-md-9">
@@ -187,7 +190,7 @@ a:hover { color: #a03c21 }
                             <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
                             <p>&nbsp;{{ each.title }}</p>
                             <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
-                                <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Check your relationships">
+                                <button id="add_endorsement" type="button" class="btn btn-default btn-danger" data-toggle="modal" data-target="#new-endorsement-modal" title="Endorse this person">
                                     <i class="fa fa-heart" aria-hidden="true"></i>
                                 </button>
                                 <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Check your payments">
@@ -201,75 +204,8 @@ a:hover { color: #a03c21 }
                     </div>
                 </div>
             {% endfor %}
+        {% endif %}
         </div>
-    {% endif %}
-    {% if people %}
-        <div class="col-md-9">
-        <div class="feed_item_list">
-        {% for each in people %}
-            <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
-                <div class="panel-heading">{{ each }}</div>
-                    <div class="panel-body">
-                        <a href="{{ each.get_absolute_url }}">
-                            <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
-                        </a>
-                        <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
-                        <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
-
-                    </div>
-                <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
-                    <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">
-                        <i class="fa fa-heart" aria-hidden="true"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">
-                        <i class="fa fa-usd" aria-hidden="true"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-        {% empty %}
-            <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
-        {% endfor %}
-        </div>
-        </div>
-    {% endif %}
-
-    {% if trusted_only %}
-        <div class="col-md-9">
-        <div class="feed_item_list">
-        {% for each in trusted_only %}
-            <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
-                <div class="panel-heading">{{ each }}</div>
-                    <div class="panel-body">
-                        <a href="{{ each.get_absolute_url }}">
-                            <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
-                        </a>
-                        <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
-                        <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
-
-                    </div>
-                <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
-                    <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">
-                        <i class="fa fa-heart" aria-hidden="true"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">
-                        <i class="fa fa-usd" aria-hidden="true"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-        {% empty %}
-            <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
-        {% endfor %}
-        </div>
-        </div>
-    {% endif %}
 
 </div>
 {% if remaining_count %}
@@ -277,4 +213,5 @@ a:hover { color: #a03c21 }
 		{% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
 	</a></p>
 {% endif %}
+    </div>
 </section>
