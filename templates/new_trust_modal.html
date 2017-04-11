@@ -1,0 +1,92 @@
+<!-- MODAL de cadastro de target na tela de analise de paginas -->
+<form class="form-horizontal" id="new-trust-form" action="#new-trust" method="POST">
+    {% csrf_token %}
+    <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="myModalLabel">Target Register</h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="target-name" id="lb-target-name">Target Name</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="target-name-modal" name="target-name" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="correct_url_modal" id="lb-correct-url">Correct Url</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="correct-url-modal" name="correct-url" type="text">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="add-target-modal" class=" btn btn-success gradient save-button">
+                            <i class="fa fa-check"></i>Save Target
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div id="msg"></div>
+                </div>
+
+                <script>
+                    $("#add-target-form").submit(function(e){
+                        var formObj = $(this);
+                        var formURL = formObj.attr("action");
+                        var formData = new FormData(this);
+                        var message_status = $('#message_status');
+                        var error_message = $('#error_message');
+                        var save = $("#add-target-modal");
+                        $.ajax({
+                            url:'{% url 'add_target' %}',
+                            type:'POST',
+                            data: {
+                                'target_name': $('#target-name-modal').val(),
+                                'correct_url': $('#correct-url-modal').val()
+                            },
+                            cache: false,
+                            beforeSend: function (xhr) {
+                                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                save.prop('disabled', true);
+                            },
+                            complete: function () {
+                                save.prop('disabled', false);
+                            },
+                            success: function(resp){
+                                debugger;
+                                $.each(resp, function (key, value) {
+                                    $("#id_target").append("<option value='"+value.name+"'>"+value.name+"</option>");
+                                });
+                                $("#target-name-modal").val('');
+                                $("#correct-url-modal").val('');
+                                $('#msg').html(resp).fadeIn('slow');
+                                $('#msg').html("Target inserted successfully").fadeIn('slow');
+                                $('#msg').delay(2500).fadeOut('slow');
+                            },
+                            error: function (resp){
+                                console.log(resp);
+                                var errors = JSON.parse(resp.responseText);
+                                var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +
+                                        "<br/><ul>";
+                                for (var error in errors) {
+                                    errorMsg += "<li>";
+                                    for (var e in errors[error]) {
+                                        errorMsg += errors[error][e] + " ";
+                                    }
+                                    errorMsg += "</li>";
+                                }
+                                errorMsg += "</ul>";
+                                error_message.removeAttr('style');
+                                error_message.html(errorMsg);
+                            }
+                        });
+                        e.preventDefault();
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</form>
