@@ -14,8 +14,10 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 # Forms
 from listings.forms import ListingsForms
 from feed.forms import FeedFilterForm, DATE_FORMAT
-
+from relate.forms import Endorsement, EndorseForm
 # models
+
+from relate.models import Endorsement
 from profile.models import Profile
 from listings.models import Listings
 from categories.models import Categories, SubCategories
@@ -29,9 +31,11 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
     url: /home
     """
     # POST Request
+    endorsement = None
     if item_type:
         form = FeedFilterForm(request.GET, request.profile, request.location, item_type,
                               poster, recipient, do_filter)
+        trust_form = EndorseForm(instance=endorsement)
         if form.is_valid():
             feed_items, remaining_count = form.get_results()
             if do_filter:
@@ -70,7 +74,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                                                       'services_sub_categories': services_sub_categories,
                                                       'rideshare_sub_categories': rideshare_sub_categories,
                                                       'housing_sub_categories': housing_sub_categories,
-                                                      'categories': categories_list})
+                                                      'categories': categories_list, 'trust_form': trust_form})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)
@@ -92,6 +96,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         if type_filter:
             listings = Listings.objects.all().filter(subcategories__sub_categories_text=type_filter)
         else:
+            trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
             listings = Listings.objects.all()
         form = ListingsForms()
         categories_list = Categories.objects.all()
@@ -105,4 +110,4 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories,
             'listings': listings, 'people': people, 'form': form,
-            'categories': categories_list, 'trusted_only': trusted_only})
+            'categories': categories_list, 'trusted_only': trusted_only, 'trust_form': trust_form})

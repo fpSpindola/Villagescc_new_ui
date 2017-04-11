@@ -12,6 +12,7 @@ from feed.models import FeedItem
 ROUTED = 'routed'
 DIRECT = 'direct'
 
+
 class EndorseForm(forms.ModelForm):
     MESSAGES = {
         'over_weight': _("Please ensure this number is below %d.")
