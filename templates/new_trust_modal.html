@@ -6,25 +6,24 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title" id="myModalLabel">Target Register</h4>
+                    <h4 class="modal-title" id="myModalLabel">Trust this person</h4>
                 </div>
                 <div id="modaltext" class="modal-body">
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="target-name" id="lb-target-name">Target Name</label>
-                        <div class="col-sm-7">
-                            <input class="form-control" id="target-name-modal" name="target-name" type="text">
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="input-group">
+                            <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
+                            {{ trust_form.weight }}
+                        </div>
+                        <div class="input-group">
+                            <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
+                            {{ trust_form.text}}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="correct_url_modal" id="lb-correct-url">Correct Url</label>
-                        <div class="col-sm-7">
-                            <input class="form-control" id="correct-url-modal" name="correct-url" type="text">
-                        </div>
-                    </div>
+                </div>
                     <div class="modal-footer">
-                        <button type="submit" id="add-target-modal" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Save Target
+                        <button type="submit" id="new-trust-modal" class=" btn btn-success gradient save-button">
+                            <i class="fa fa-check"></i>Save Trust
                         </button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
@@ -86,7 +85,7 @@
 {#                        e.preventDefault();#}
 {#                    });#}
 {#                </script>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</form>#}
+            </div>
+        </div>
+    </div>
+</form>

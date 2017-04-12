@@ -14,7 +14,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 # Forms
 from listings.forms import ListingsForms
 from feed.forms import FeedFilterForm, DATE_FORMAT
-from relate.forms import Endorsement, EndorseForm
+from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 # models
 
 from relate.models import Endorsement
@@ -97,6 +97,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             listings = Listings.objects.all().filter(subcategories__sub_categories_text=type_filter)
         else:
             trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+            payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
             listings = Listings.objects.all()
         form = ListingsForms()
         categories_list = Categories.objects.all()
@@ -110,4 +111,6 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories,
             'listings': listings, 'people': people, 'form': form,
-            'categories': categories_list, 'trusted_only': trusted_only, 'trust_form': trust_form})
+            'categories': categories_list, 'trusted_only': trusted_only,
+            'trust_form': trust_form,
+            'payment_form': payment_form})

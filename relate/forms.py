@@ -27,8 +27,9 @@ class EndorseForm(forms.ModelForm):
         self.recipient = kwargs.pop('recipient')
         super(EndorseForm, self).__init__(*args, **kwargs)
         self.fields['weight'].widget = (
-            forms.TextInput(attrs={'class': 'int spinner'}))
+            forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
         self.fields['weight'].min_value = 1
+        self.fields['text'].widget = (forms.Textarea(attrs={'class': 'form-control'}))
 
     @property
     def max_weight(self):
@@ -58,22 +59,23 @@ class EndorseForm(forms.ModelForm):
 class AcknowledgementForm(forms.Form):
     ripple = forms.ChoiceField(
         label=_("Send"),
-        choices=((ROUTED, _("Trusted acknowledgement")),
-                 (DIRECT, _("Direct acknowledgement"))),
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'style': 'float: left;'}),
+        choices=((ROUTED, _("Trusted payment")),
+                 (DIRECT, _("Direct payment"))),
         initial=ROUTED)
     amount = forms.DecimalField(
         label=_("Hours"),
         max_digits=PRECISION, decimal_places=SCALE,
-        min_value=D('0.' + '0' * (SCALE - 1) + '1'))
+        min_value=D('0.' + '0' * (SCALE - 1) + '1'),
+        widget=forms.NumberInput(attrs={'class': 'form-control'}))
     memo = forms.CharField(
         label=_("Testimonial"),
         required=False,
-        widget=forms.Textarea)
+        widget=forms.Textarea(attrs={'class': 'form-control'}))
 
     ERRORS = {
         'max_ripple': _("This is higher than the maximum possible routed "
-                        "acknowledgement amount."),
+                        "payment amount."),
     }
     
     def __init__(self, *args, **kwargs):
