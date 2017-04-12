@@ -11,16 +11,16 @@
                 <div id="modaltext" class="modal-body">
                  <div class="form-group">
                     <div class="container-fluid">
+                    <label for="{{ payment_form.ripple.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.ripple.label }}</label>
                         <div>
-                            <label for="{{ payment_form.ripple.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.ripple.label }}</label>
                             {{ payment_form.ripple }}
                         </div>
+                    <label for="{{ payment_form.amount.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.amount.label }}</label>
                         <div class="input-group">
-                            <label for="{{ payment_form.amount.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.amount.label }}</label>
                             {{ payment_form.amount}}
                         </div>
+                    <label for="{{ payment_form.memo.label }}" class="control-label input-group">{{ payment_form.memo.label }}</label>
                         <div class="input-group">
-                            <label for="{{ payment_form.memo.label }}" class="control-label input-group">{{ payment_form.memo.label }}</label>
                             {{ payment_form.memo}}
                         </div>
                     </div>

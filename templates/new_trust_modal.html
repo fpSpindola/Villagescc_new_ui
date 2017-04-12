@@ -1,6 +1,7 @@
 <!-- MODAL de cadastro de target na tela de analise de paginas -->
-<form class="form-horizontal" id="new-trust-form" action="#new-trust" method="POST">
+<form class="form-horizontal" id="new-trust-form" action="" method="POST">
     {% csrf_token %}
+    <div id="profile-id-info" hidden></div>
     <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -11,12 +12,12 @@
                 <div id="modaltext" class="modal-body">
                 <div class="form-group">
                     <div class="container-fluid">
+                        <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
                         <div class="input-group">
-                            <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
                             {{ trust_form.weight }}
                         </div>
+                        <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
                         <div class="input-group">
-                            <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
                             {{ trust_form.text}}
                         </div>
                     </div>
@@ -29,62 +30,61 @@
                     </div>
                     <div id="msg"></div>
                 </div>
+                <script>
+                    $("#trust-modal-submit").click(function (e) {
+                        debugger;
+                        var profile_username = $(this).attr('data-profile-username');
+                        console.log(profile_username);
 
-{#                <script>#}
-{#                    $("#add-target-form").submit(function(e){#}
-{#                        var formObj = $(this);#}
-{#                        var formURL = formObj.attr("action");#}
-{#                        var formData = new FormData(this);#}
-{#                        var message_status = $('#message_status');#}
-{#                        var error_message = $('#error_message');#}
-{#                        var save = $("#add-target-modal");#}
-{#                        $.ajax({#}
-{#                            url:'{% url 'add_target' %}',#}
-{#                            type:'POST',#}
-{#                            data: {#}
-{#                                'target_name': $('#target-name-modal').val(),#}
-{#                                'correct_url': $('#correct-url-modal').val()#}
-{#                            },#}
-{#                            cache: false,#}
-{#                            beforeSend: function (xhr) {#}
-{#                                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();#}
-{#                                xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
-{#                                save.prop('disabled', true);#}
-{#                            },#}
-{#                            complete: function () {#}
-{#                                save.prop('disabled', false);#}
-{#                            },#}
-{#                            success: function(resp){#}
-{#                                debugger;#}
-{#                                $.each(resp, function (key, value) {#}
-{#                                    $("#id_target").append("<option value='"+value.name+"'>"+value.name+"</option>");#}
-{#                                });#}
-{#                                $("#target-name-modal").val('');#}
-{#                                $("#correct-url-modal").val('');#}
-{#                                $('#msg').html(resp).fadeIn('slow');#}
-{#                                $('#msg').html("Target inserted successfully").fadeIn('slow');#}
-{#                                $('#msg').delay(2500).fadeOut('slow');#}
-{#                            },#}
-{#                            error: function (resp){#}
-{#                                console.log(resp);#}
-{#                                var errors = JSON.parse(resp.responseText);#}
-{#                                var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +#}
-{#                                        "<br/><ul>";#}
-{#                                for (var error in errors) {#}
-{#                                    errorMsg += "<li>";#}
-{#                                    for (var e in errors[error]) {#}
-{#                                        errorMsg += errors[error][e] + " ";#}
-{#                                    }#}
-{#                                    errorMsg += "</li>";#}
-{#                                }#}
-{#                                errorMsg += "</ul>";#}
-{#                                error_message.removeAttr('style');#}
-{#                                error_message.html(errorMsg);#}
-{#                            }#}
-{#                        });#}
-{#                        e.preventDefault();#}
-{#                    });#}
-{#                </script>#}
+
+                    $("#new-trust-form").submit(function(e) {
+                        debugger;
+                        console.log(profile_username);
+                        $.ajax({
+                            url: '/relate/endorse/',
+                            type: 'POST',
+                            data: {
+                                'profile_username': profile_username
+                            },
+                            beforeSend: function (xhr) {
+                                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                                save.prop('disabled', true);
+                            },
+                            complete: function () {
+                                save.prop('disabled', false);
+                            },
+                            success: function(resp){
+                                $.each(resp, function (key, value) {
+                                });
+                                $('#msg').html(resp).fadeIn();
+                                $('#msg').html("Target inserted successfully").fadeIn();
+                                setTimeout(function () {
+                                    $('#msg').delay(2500).fadeOut();
+                                    $('#modal-close').click();
+                                },3000);
+                            },
+                            error: function (resp){
+                                console.log(resp);
+                                var errors = JSON.parse(resp.responseText);
+                                var errorMsg = "<strong>Sorry, it was not possible to perform the operation:" +
+                                        "<br/><ul>";
+                                for (var error in errors) {
+                                    errorMsg += "<li>";
+                                    for (var e in errors[error]) {
+                                        errorMsg += errors[error][e] + " ";
+                                    }
+                                    errorMsg += "</li>";
+                                }
+                                errorMsg += "</ul>";
+                                error_message.removeAttr('style');
+                                error_message.html(errorMsg);
+                            }
+                        });
+                        e.preventDefault();
+                    });
+                            });
+                </script>
             </div>
         </div>
     </div>

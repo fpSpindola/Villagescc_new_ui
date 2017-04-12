@@ -27,7 +27,7 @@ class EndorseForm(forms.ModelForm):
         self.recipient = kwargs.pop('recipient')
         super(EndorseForm, self).__init__(*args, **kwargs)
         self.fields['weight'].widget = (
-            forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
+            forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
         self.fields['weight'].min_value = 1
         self.fields['text'].widget = (forms.Textarea(attrs={'class': 'form-control'}))
 

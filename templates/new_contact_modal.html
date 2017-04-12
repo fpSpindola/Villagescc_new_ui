@@ -10,23 +10,15 @@
                 <div id="modaltext" class="modal-body">
                  <div class="form-group">
                     <div class="container-fluid">
+                        <strong>Message:</strong>
                         <div>
-                            <label for="{{ payment_form.ripple.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.ripple.label }}</label>
-                            {{ payment_form.ripple }}
-                        </div>
-                        <div class="input-group">
-                            <label for="{{ payment_form.amount.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.amount.label }}</label>
-                            {{ payment_form.amount}}
-                        </div>
-                        <div class="input-group">
-                            <label for="{{ payment_form.memo.label }}" class="control-label input-group">{{ payment_form.memo.label }}</label>
-                            {{ payment_form.memo}}
+                            {{ contact_form.message }}
                         </div>
                     </div>
                 </div>
                     <div class="modal-footer">
                         <button type="submit" id="new-payment-modal" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Save payment
+                            <i class="fa fa-check"></i>Send contact
                         </button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>

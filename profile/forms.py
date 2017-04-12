@@ -203,7 +203,7 @@ class ProfileForm(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
+    message = forms.CharField(widget=forms.Textarea(attrs={'style': 'width: 570px;'}))
 
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):
