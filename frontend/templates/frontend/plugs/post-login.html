@@ -190,7 +190,7 @@ a:hover { color: #a03c21 }
                             <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
                             <p>&nbsp;{{ each.title }}</p>
                             <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
-                                <button id="trust-modal-submit" type="button" class="btn btn-default btn-danger" data-toggle="modal" data-target="#new-trust-modal" title="Endorse this person" data-profile-username="{{ each.user.profile.username }}">
+                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-heart" aria-hidden="true"></i>
                                 </button>
                                 <button type="button" class="btn btn-default btn-success" data-toggle="modal" data-target="#new-payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
@@ -218,4 +218,13 @@ a:hover { color: #a03c21 }
 {% include  'new_trust_modal.html' %}
 {% include 'new_payment_modal.html' %}
 {% include 'new_contact_modal.html' %}
+
+<script>
+    $(".trust-modal").click(function (e) {
+        var profile_username = $(this).attr('data-profile-username');
+        $("#new-trust-modal").modal("show");
+        console.log(profile_username);
+        $("#profile-username").val(profile_username)
+    });
+</script>
 

@@ -1,7 +1,7 @@
 <!-- MODAL de cadastro de target na tela de analise de paginas -->
-<form class="form-horizontal" id="new-trust-form" action="" method="POST">
+<form class="form-horizontal" id="new-trust-form" method="POST">
     {% csrf_token %}
-    <div id="profile-id-info" hidden></div>
+    <input type="text" id="profile-username" hidden>
     <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -23,69 +23,56 @@
                     </div>
                 </div>
                     <div class="modal-footer">
-                        <button type="submit" id="new-trust-modal" class=" btn btn-success gradient save-button">
+                        <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
                             <i class="fa fa-check"></i>Save Trust
                         </button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                     <div id="msg"></div>
                 </div>
-                <script>
-                    $("#trust-modal-submit").click(function (e) {
-                        debugger;
-                        var profile_username = $(this).attr('data-profile-username');
-                        console.log(profile_username);
 
-
-                    $("#new-trust-form").submit(function(e) {
-                        debugger;
-                        console.log(profile_username);
-                        $.ajax({
-                            url: '/relate/endorse/',
-                            type: 'POST',
-                            data: {
-                                'profile_username': profile_username
-                            },
-                            beforeSend: function (xhr) {
-                                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
-                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                                save.prop('disabled', true);
-                            },
-                            complete: function () {
-                                save.prop('disabled', false);
-                            },
-                            success: function(resp){
-                                $.each(resp, function (key, value) {
-                                });
-                                $('#msg').html(resp).fadeIn();
-                                $('#msg').html("Target inserted successfully").fadeIn();
-                                setTimeout(function () {
-                                    $('#msg').delay(2500).fadeOut();
-                                    $('#modal-close').click();
-                                },3000);
-                            },
-                            error: function (resp){
-                                console.log(resp);
-                                var errors = JSON.parse(resp.responseText);
-                                var errorMsg = "<strong>Sorry, it was not possible to perform the operation:" +
-                                        "<br/><ul>";
-                                for (var error in errors) {
-                                    errorMsg += "<li>";
-                                    for (var e in errors[error]) {
-                                        errorMsg += errors[error][e] + " ";
-                                    }
-                                    errorMsg += "</li>";
-                                }
-                                errorMsg += "</ul>";
-                                error_message.removeAttr('style');
-                                error_message.html(errorMsg);
-                            }
-                        });
-                        e.preventDefault();
-                    });
-                            });
-                </script>
             </div>
         </div>
     </div>
 </form>
+
+<script>
+    $("#save-trust").click(function(e) {
+        var profile_username = $("#profile-username").val();
+        var url = 'relate/endorse/'+profile_username;
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                'profile_username': profile_username
+            },
+            success: function(resp){
+                $.each(resp, function (key, value) {
+                });
+                $('#msg').html(resp).fadeIn();
+                $('#msg').html("Successfully trusted").fadeIn();
+                setTimeout(function () {
+                    $('#msg').delay(2500).fadeOut();
+                    $('#modal-close').click();
+                },3000);
+            },
+            error: function (resp){
+                console.log(resp);
+                var errors = JSON.parse(resp.responseText);
+                var errorMsg = "<strong>Sorry, it was not possible to perform the operation:" +
+                    "<br/><ul>";
+                for (var error in errors) {
+                    errorMsg += "<li>";
+                    for (var e in errors[error]) {
+                        errorMsg += errors[error][e] + " ";
+                    }
+                    errorMsg += "</li>";
+                }
+                errorMsg += "</ul>";
+                error_message.removeAttr('style');
+                error_message.html(errorMsg);
+            }
+        });
+    });
+</script>
