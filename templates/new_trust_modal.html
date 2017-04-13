@@ -37,7 +37,7 @@
 </form>
 
 <script>
-    $("#save-trust").click(function(e) {
+    $("#new-trust-form").submit(function(e) {
         var profile_username = $("#profile-username").val();
         var url = 'relate/endorse/'+profile_username;
         console.log(url);
@@ -59,19 +59,8 @@
             },
             error: function (resp){
                 console.log(resp);
-                var errors = JSON.parse(resp.responseText);
                 var errorMsg = "<strong>Sorry, it was not possible to perform the operation:" +
                     "<br/><ul>";
-                for (var error in errors) {
-                    errorMsg += "<li>";
-                    for (var e in errors[error]) {
-                        errorMsg += errors[error][e] + " ";
-                    }
-                    errorMsg += "</li>";
-                }
-                errorMsg += "</ul>";
-                error_message.removeAttr('style');
-                error_message.html(errorMsg);
             }
         });
     });
