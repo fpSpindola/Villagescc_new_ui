@@ -8,6 +8,7 @@ from ripple.api import RipplePayment
 urlpatterns = patterns(
     'relate.views',
     url(r'^endorse/([^/]+)/$', 'endorse_user', name='endorse_user'),
+    url(r'^trust/([^/]+)/$/', 'trust_user', name='trust_user'),
     url(r'^endorsements/$', login_required(feed),
         dict(item_type=Endorsement, template='endorsements.html',
              do_filter=True),

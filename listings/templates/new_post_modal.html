@@ -12,24 +12,52 @@
                         <label for="{{ field.label }}" class="col-sm-3 control-label {% if field.erros %}error{% endif %}" style="padding-top: 7px;">{{ field.label }}</label>
                         <div class="col-sm-8 {% if field.error %}error{% endif %}">
                             {{ form.as_p }}
-                                {% if field.errors %}
-                                    {% for error in field.errors %}
-                                        <div class="alert alert-error">{{ error }}</div>
-                                    {% endfor %}
-                                {% endif %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-error">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
-                <div class="clearfix"></div>
+                    <div class="clearfix"></div>
                 </div>
-                    <div class="modal-footer">
-                        <button type="submit" id="add-target-modal" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Save Posting
-                        </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                    <div id="msg"></div>
+                <div class="modal-footer">
+                    <button type="submit" id="add-target-modal" class=" btn btn-success gradient save-button">
+                        <i class="fa fa-check"></i>Save Posting
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
+                <div id="msg"></div>
             </div>
         </div>
     </div>
 </form>
+
+<script>
+
+    var posting_modal = $();
+    var posting_form = $('#add-posting-modal');
+
+    $('#add-posting-modal').submit(function (e) {
+        $.ajax({
+            url: '{% url 'new_posting' %}',
+            type: 'POST',
+            data: {
+                listing_type: $('#id_listing_type').val(),
+                id_title: $('#id_title').val(),
+                id_price: $('#id_price').val(),
+                id_subcategories: $('#id_subcategories').val(), csrfmiddlewaretoken:"{{ csrf_token }}"},
+            success: function (data) {
+                if (data == '') {
+                    posting_form.submit();
+
+                }
+                else {
+                    $('')
+                }
+            }
+
+        })
+    })
+
+</script>

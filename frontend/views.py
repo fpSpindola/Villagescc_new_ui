@@ -24,6 +24,48 @@ from listings.models import Listings
 from categories.models import Categories, SubCategories
 
 
+def listing_type_filter(request, listing_type):
+    """
+    :param request:
+    :param category_type:
+    :return:
+    """
+    listing_type_objects = Listings.objects.all().filter(listing_type=listing_type)
+    form = ListingsForms()
+    categories_list = Categories.objects.all()
+    item_sub_categories = SubCategories.objects.all().filter(categories=1)
+    services_sub_categories = SubCategories.objects.all().filter(categories=2)
+    rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+    housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+    return render(request, 'frontend/home.html', {'form': form, 'listings': listing_type_objects,
+                                                  'item_sub_categories': item_sub_categories,
+                                                  'services_sub_categories': services_sub_categories,
+                                                  'rideshare_sub_categories': rideshare_sub_categories,
+                                                  'housing_sub_categories': housing_sub_categories,
+                                                  'categories': categories_list})
+
+
+def categories_filter(request, category_type):
+    """
+    :param request:
+    :param category_type:
+    :return:
+    """
+    listing_type_objects = Listings.objects.all().filter(subcategories__categories__categories_text=category_type)
+    form = ListingsForms()
+    categories_list = Categories.objects.all()
+    item_sub_categories = SubCategories.objects.all().filter(categories=1)
+    services_sub_categories = SubCategories.objects.all().filter(categories=2)
+    rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
+    housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+    return render(request, 'frontend/home.html', {'form': form, 'listings': listing_type_objects,
+                                                  'item_sub_categories': item_sub_categories,
+                                                  'services_sub_categories': services_sub_categories,
+                                                  'rideshare_sub_categories': rideshare_sub_categories,
+                                                  'housing_sub_categories': housing_sub_categories,
+                                                  'categories': categories_list})
+
+
 def home(request, type_filter=None, item_type=None, template='frontend/home.html', poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
@@ -36,7 +78,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
     if item_type:
         form = FeedFilterForm(request.GET, request.profile, request.location, item_type,
                               poster, recipient, do_filter)
-        trust_form = EndorseForm(instance=endorsement)
+        trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         if form.is_valid():
             feed_items, remaining_count = form.get_results()
             if do_filter:
@@ -75,7 +117,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                                                       'services_sub_categories': services_sub_categories,
                                                       'rideshare_sub_categories': rideshare_sub_categories,
                                                       'housing_sub_categories': housing_sub_categories,
-                                                      'categories': categories_list, 'trust_form': trust_form})
+                                                      'categories': categories_list})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)
@@ -88,11 +130,6 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         people = None
         trusted_only = None
         # GET Request
-        if type_filter == 'people':
-            people = Profile.objects.all().order_by('-created')[:100]
-
-        if type_filter == 'trusted':
-            trusted_only = request.profile.trusted_profiles.all().order_by('-created')
 
         if type_filter:
             listings = Listings.objects.all().filter(subcategories__sub_categories_text=type_filter)
@@ -113,5 +150,4 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories,
             'listings': listings, 'people': people, 'form': form,
-            'categories': categories_list, 'trusted_only': trusted_only,
-            'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form})
+            'categories': categories_list, 'trusted_only': trusted_only, 'trust_form': trust_form})

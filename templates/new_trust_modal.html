@@ -37,9 +37,13 @@
 </form>
 
 <script>
+
+</script>
+
+<script>
     $("#new-trust-form").submit(function(e) {
         var profile_username = $("#profile-username").val();
-        var url = 'relate/endorse/'+profile_username;
+        var url = '/relate/endorse/'+profile_username+'/';
         console.log(url);
         $.ajax({
             url: url,
@@ -48,19 +52,12 @@
                 'profile_username': profile_username
             },
             success: function(resp){
-                $.each(resp, function (key, value) {
-                });
-                $('#msg').html(resp).fadeIn();
-                $('#msg').html("Successfully trusted").fadeIn();
-                setTimeout(function () {
-                    $('#msg').delay(2500).fadeOut();
-                    $('#modal-close').click();
-                },3000);
+                console.log('Sucesso!');
+                alert('Success!')
             },
             error: function (resp){
                 console.log(resp);
-                var errorMsg = "<strong>Sorry, it was not possible to perform the operation:" +
-                    "<br/><ul>";
+                console.log("Error");
             }
         });
     });

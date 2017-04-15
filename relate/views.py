@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib import messages
 
 from general.util import render
+from django.shortcuts import render as django_render
 import ripple.api as ripple
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm
@@ -19,8 +21,39 @@ MESSAGES = {
     'acknowledgement_sent': _("Acknowledgement sent."),
 }
 
-@login_required
-@render()
+
+def trust_user(request, recipient_username):
+    if request.method == 'POST' and request.is_ajax():
+        recipient = get_object_or_404(Profile, user__username=recipient_username)
+        if recipient == request.profile:
+            raise Http404()
+        try:
+            endorsement = Endorsement.objects.get(
+                endorser=request.profile, recipient=recipient)
+        except Endorsement.DoesNotExist:
+            endorsement = None
+        if request.method == 'POST':
+            if 'delete' in request.POST and endorsement:
+                endorsement.delete()
+                messages.info(request, MESSAGES['endorsement_deleted'])
+                return HttpResponseRedirect(
+                    endorsement.recipient.get_absolute_url())
+            form = EndorseForm(request.POST, instance=endorsement,
+                               endorser=request.profile, recipient=recipient)
+            if form.is_valid():
+                is_new = endorsement is None
+                endorsement = form.save()
+                if is_new:
+                    send_endorsement_notification(endorsement)
+                messages.info(request, MESSAGES['endorsement_saved'])
+                return HttpResponseRedirect(endorsement.get_absolute_url())
+        else:
+            form = EndorseForm(instance=endorsement, endorser=request.profile,
+                               recipient=recipient)
+        profile = recipient  # For profile_base.html.
+        return JsonResponse({'result': 'success'})
+
+
 def endorse_user(request, recipient_username):
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
@@ -49,7 +82,9 @@ def endorse_user(request, recipient_username):
         form = EndorseForm(instance=endorsement, endorser=request.profile,
                            recipient=recipient)
     profile = recipient  # For profile_base.html.
-    return locals()
+    # return JsonResponse({'result': 'success'})
+    return django_render(request, 'frontend/home.html', {'form': form})
+
 
 
 def send_endorsement_notification(endorsement):

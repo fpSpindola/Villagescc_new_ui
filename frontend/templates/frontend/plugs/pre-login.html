@@ -1,144 +1,42 @@
-{% load staticfiles profile %}
-{% load i18n %}
-<!-- Jumbotron should be hide after the user logged in -->
+{% load staticfiles profile i18n %}
+
 <style>
-    @import url(http://fonts.googleapis.com/css?family=Roboto:400,900);
+.html {
+    padding-left: 15px;
+    padding-right: 15px;
+}
 
+h1 { color: #ff4411; font-size: 20px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
+p { font-family: 'Inder', sans-serif; line-height: 28px; margin-bottom: 15px; color: #666; }
+a { color: #ff4411; transition: .5s; -moz-transition: .5s; -webkit-transition: .5s; -o-transition: .5s; }
+a:hover { color: #a03c21 }
 
-    .module {
-        background:
-                linear-gradient(
-                        rgba(0, 0, 0, 0.6),
-                        rgba(0, 0, 0, 0.6)
-                ),
-                url({% static 'images/cover.jpg' %});
-        background-size: 100% 100%;
-        width: 100%;
-        height: 45vh;
-        margin: 0 0 0 0;
-        position: relative;
-        float: left;
-    }
+.meta-info p { font-family: 'Fenix', serif; font-style: italic; color: #666; font-size: 16px; }
 
-    .top h2 {
-        color: white;
-        margin: 0;
-        padding: 20px;
-    }
+.thumbnail{
+    width : 300px;
+    height: 260px;
+    overflow: auto;
+}
 
-    .lr p {
-        font-family: 'Roboto', sans-serif;
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        color: white;
-        margin: 0;
-    }
-
-    .mid h2 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 900;
-        color: white;
-        text-transform: uppercase;
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        font-size: 2rem;
-        transform: translate(-50%, -50%);
-    }
-
-    .cap p {
-        padding: 20px;
-        color: white;
-        font: 12px Monaco, Mono-Space;
-        margin: 0;
-    }
-
-    body,html {
-        height: 100%;
-
-    }
-    html {
-        margin: 0;
-    }
-    .thumbnail{
-        width : 300px;
-        height: 250px;
-        overflow: auto;
-    }
-
-    .thumbnail .listing {
-        width: 100%;
-        height: 150px;
-        display: block;
-    }
+.thumbnail .listing {
+    width: 100%;
+    height: 150px;
+    display: block;
+}
 </style>
-<br><br><br><br>
 
-
-{#<!-- Content should be construct with section -->#}
-<section class="container-fluid" id="home-sub-menu">
-    <div class="row">
-        <div class="module mid">
-            <h2>Villages.cc Marketplace</h2>
-        </div>
-
-        <br style="clear: both;">
-    </div>
-</section>
-<hr>
-<script type="text/javascript"
-        src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
-{#	{% static 'geo.js' %}#}
-<script type="text/javascript">
-    {#		{% include "locator.js" %}#}
-</script>
+<div style="height: 100px;"></div>
 
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
-        <div class="col-md-6">
-            <!-- Split button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-lg">All listing types</button>
-                <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Offer</a></li>
-                    <li><a href="#">Request</a></li>
-                    <li><a href="#">Teach</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Learn</a></li>
-                    <li><a href="#">Gift</a></li>
-                    <li><a href="#">Goal</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-default btn-lg btn-20 btn-last btn-non-active  pull-right">
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
-            </button>
-            <button type="button" class="btn btn-default btn-lg btn-20 btn-second btn-non-active pull-right">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
-            </button>
-            <button type="button" class="btn btn-default btn-lg btn-20 btn-first btn-active pull-right">
-                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
-            </button>
-        </div>
-    </div>
-</section>
-
-<section class="container-fluid" id="show-home-item">
-    <div class="row">
-        <div class="col-md-3">
-            <p>ALL CATEGORIES</p>
+        <div class="col-md-2">
+            <p><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></p>
             <nav class="sidebar">
                 <ul class="nav sidenav">
                     {% for each in categories %}
-                        {% if each.categories_text == 'ITEMS' %}
-                            <li><a href="#items">{{ each.categories_text }}</a>
+                        {% if each.categories_text == 'PRODUCTS' %}
+                            <li><a href="{% url 'frontend:category_type' 'PRODUCTS' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in item_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -146,7 +44,7 @@
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'SERVICES' %}
-                            <li><a href="#services">{{ each.categories_text }}</a>
+                            <li><a href="{% url 'frontend:category_type' 'SERVICES' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in services_sub_categories %}
                                         <li><a href="#"></a></li>
@@ -154,15 +52,15 @@
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'RIDESHARE' %}
-                            <li><a href="#rideshare">{{ each.categories_text }}</a>
+                            <li><a href="{% url 'frontend:category_type' 'RIDESHARE' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in rideshare_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
-                        {% elif each.categories_text == 'HOUSING/ACCOMODATION' %}
-                            <li><a href="#housing">{{ each.categories_text }}</a>
+                        {% elif each.categories_text == 'HOUSING' %}
+                            <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in housing_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -174,49 +72,129 @@
                 </ul>
             </nav>
             <br>
-            <h3>Distance</h3>
-            <br>
-            <input
-                    id="ex2"
-                    type="text"
-                    class="span2"
-                    value=""
-                    data-slider-min="10"
-                    data-slider-max="1000"
-                    data-slider-step="5"
-                    data-slider-value="[250,450]"
-                    data-slider-handle="square"/>
-            <br><br>
-            <button type="button" class="btn btn-warning" name="button">Update view</button>
         </div>
-        <hr>
-        <div class="col-md-9">
+        <div class="col-md-6">
+            <div class="">
+                <form class="inline_form nav" action="" method="get"><ul>
+                    <div class="btn-group">
+                        {% if listings %}
+                        <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
+                        <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
+                            <span class="caret"></span>
+                        </button>
+                        <!-- Given for loop to construct all -->
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'frontend:listing_type' 'OF' %}">Offer</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'RQ' %}">Request</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'TC' %}">Teach</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{% url 'frontend:listing_type' 'LR' %}">Learn</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'GT' %}">Gift</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if not listings %}
+                    <div class="input-group" style="align-content: center; width: 350%;">
+                        {{ form.q }}
+                    </div>
+                    <span>{{ form.radius }}</span>
+                {% endif %}
+                        <span style="padding-left: 5%; width: 22px;">
+                            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                        </span>
 
-            <!-- Given for loop to construct all -->
+                </ul></form>
+            </div>
+
+{#            <span class="{% block feed_people_class %}{% endblock %}" style="padding-left: 5%;"><a href="{% url 'frontend:home' %}?{{ url_param_str }}"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a></span>#}
+{#            <span class="distance-range" style="padding-left: 5%;" data-toggle="tooltip" title="Distance from you (in miles)">#}
+{#            <input#}
+{#                    id="ex2"#}
+{#                    type="text"#}
+{#                    class="span2"#}
+{#                    value=""#}
+{#                    data-slider-min="1000"#}
+{#                    data-slider-max="50000"#}
+{#                    data-slider-step="4"#}
+{#                    data-slider-value="[1000,5000]"#}
+{#                    data-slider-handle="square"/>#}
+{#            <button type="button" class="btn btn-warning" name="button" style="float: right;">update distance</button>#}
+{#            </span>#}
+        </div>
+
+        <div class="col-md-3" style="float: right;">
+            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
+            </button>
+            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
+            </button>
+            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">
+                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
+            </button>
+        </div>
+
+      <div style="height: 80px;"></div>
+
+        <hr>
+
+        {% if feed_items %}
+        <div class="col-md-9">
+            <div class="feed_item_list">
+            {% for each in feed_items %}
+                <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
+                    <div class="panel-heading">{{ each }}</div>
+                        <div class="panel-body">
+                            <a href="{{ each.get_absolute_url }}">
+                                <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
+                            </a>
+                            <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
+                            <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
+
+                        </div>
+                    <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
+                        <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+                <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+            {% endfor %}
+            </div>
+
+        {% elif listings %}
+        <div class="col-md-9">
             {% for each in listings %}
-                <div class="col-sm-6 col-md-4">
+                <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-6 col-md-4">
                     <div class="thumbnail">
                         <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
                         <p class="thumbnail-info"></p>
-                        <div class="caption">
-                            <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                            <p>{{ each.title }}</p>
+                        <div class="caption" style="height: 60px;">
+                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
+                            <p>&nbsp;{{ each.title }}</p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+        {% else %}
+            <div class="col-md-9">
+                <strong>There is nothing to show</strong>
+            </div>
+        {% endif %}
         </div>
+</div>
+{% if remaining_count %}
+	<p><a href="?{{ next_page_param_str }}">
+		{% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+	</a></p>
+{% endif %}
     </div>
-    {##}
-    {#        <ul>#}
-    {#          {% if not request.profile %}#}
-    {#              <li><a href="{% url 'feed' %}"#}
-    {#              >{% trans 'Browse Marketplace' %}</a></li>#}
-    {#          {% endif %}#}
-    {#          <li class="{% block nav_location_class %}{% endblock %}">#}
-    {#              <a href="{% url 'locator' %}?next={{ request.path }}"#}
-    {#              >{{ request.location|default:_('Location') }}</a></li>#}
-    {#      </ul>#}
-    {#  </div>#}
 </section>

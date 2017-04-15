@@ -36,7 +36,7 @@ a:hover { color: #a03c21 }
                 <ul class="nav sidenav">
                     {% for each in categories %}
                         {% if each.categories_text == 'PRODUCTS' %}
-                            <li><a href="#items">{{ each.categories_text }}</a>
+                            <li><a href="{% url 'frontend:category_type' 'PRODUCTS' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in item_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -44,7 +44,7 @@ a:hover { color: #a03c21 }
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'SERVICES' %}
-                            <li><a href="#services">{{ each.categories_text }}</a>
+                            <li><a href="{% url 'frontend:category_type' 'SERVICES' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in services_sub_categories %}
                                         <li><a href="#"></a></li>
@@ -52,7 +52,7 @@ a:hover { color: #a03c21 }
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'RIDESHARE' %}
-                            <li><a href="#rideshare">{{ each.categories_text }}</a>
+                            <li><a href="{% url 'frontend:category_type' 'RIDESHARE' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in rideshare_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -60,7 +60,7 @@ a:hover { color: #a03c21 }
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'HOUSING' %}
-                            <li><a href="#housing">{{ each.categories_text }}</a>
+                            <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">{{ each.categories_text }}</a>
                                 <ul class="nav">
                                     {% for each_sub_category in housing_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -84,31 +84,28 @@ a:hover { color: #a03c21 }
                         </button>
                         <!-- Given for loop to construct all -->
                         <ul class="dropdown-menu">
-                            <li><a href="#">Offer</a></li>
-                            <li><a href="#">Request</a></li>
-                            <li><a href="#">Teach</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'OF' %}">Offer</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'RQ' %}">Request</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'TC' %}">Teach</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">Learn</a></li>
-                            <li><a href="#">Gift</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'LR' %}">Learn</a></li>
+                            <li><a href="{% url 'frontend:listing_type' 'GT' %}">Gift</a></li>
                         </ul>
                     </div>
                 {% endif %}
                 {% if not listings %}
-                    <div class="input-group" style="align-content: center; width: 60%;">
+                    <div class="input-group" style="align-content: center; width: 250%;">
                         {{ form.q }}
-                        <span class="input-group-addon" id="">
-			                <a id="id_clear" href="javascript:void(0)">{% trans 'Clear' %}</a>
-                        </span>
                     </div>
-                {% endif %}
                     <span>{{ form.radius }}</span>
-                    {% if request.profile and not listings %}
                         <span><label>{{ form.trusted }}
                             <img src="{% static 'img/heart_icon.png' %}"
                                  alt="{% trans 'Heart icon = trusted user' %}">
                             {% trans 'Trusted only' %}</label></span>
-                        {% endif %}
-                        <span style="padding-left: 5%;"><a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a></span>
+                {% endif %}
+                        <span style="padding-left: 5%; width: 22px;">
+                            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                        </span>
 
                 </ul></form>
             </div>
@@ -175,10 +172,8 @@ a:hover { color: #a03c21 }
                 <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
             {% endfor %}
             </div>
-        {% endif %}
 
-
-        {% if listings %}
+        {% elif listings %}
         <div class="col-md-9">
             {% for each in listings %}
                 <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-6 col-md-4">
@@ -204,6 +199,10 @@ a:hover { color: #a03c21 }
                     </div>
                 </div>
             {% endfor %}
+        {% else %}
+            <div class="col-md-9">
+                <strong>There is nothing to show</strong>
+            </div>
         {% endif %}
         </div>
 </div>
@@ -215,7 +214,74 @@ a:hover { color: #a03c21 }
     </div>
 </section>
 
-{% include  'new_trust_modal.html' %}
+<!-- Trust Modal -->
+<form class="form-horizontal" id="new-trust-form" method="POST">
+    {% csrf_token %}
+    <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <input type="text" id="profile-username" hidden>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="myModalLabel">Trust this person</h4>
+                </div>
+                <div id="modaltext" class="modal-body">
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
+                            <div class="input-group">
+                                {{ trust_form.weight }}
+                            </div>
+                            <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
+                            <div class="input-group">
+                                {{ trust_form.text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
+                            <i class="fa fa-check"></i>Save Trust
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div id="msg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#save-trust").click(function(e) {
+        var profile_username = $("#profile-username").val();
+        var url = 'relate/endorse/'+profile_username+'/';
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                'profile_username': profile_username
+            },
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(resp){
+                console.log('Sucesso!');
+                alert('Success!');
+                $('#msg').html(resp).fadeIn('slow');
+                $('#msg').html("Target inserted successfully").fadeIn('slow');
+                $('#msg').delay(2500).fadeOut('slow');
+            },
+            error: function (resp){
+                console.log(resp);
+            }
+        });
+        e.preventDefault();
+    });
+</script>
+
+{#{% include  'new_trust_modal.html' %}#}
 {% include 'new_payment_modal.html' %}
 {% include 'new_contact_modal.html' %}
 
