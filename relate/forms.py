@@ -17,6 +17,10 @@ class EndorseForm(forms.ModelForm):
     MESSAGES = {
         'over_weight': _("Please ensure this number is below %d.")
     }
+
+    weight = forms.IntegerField(label='Weight:', required=True, min_value=1, widget=forms.NumberInput(attrs={
+        'class': 'form-control', 'style': 'width: 82%'
+    }))
     
     class Meta:
         model = Endorsement
@@ -26,10 +30,7 @@ class EndorseForm(forms.ModelForm):
         self.endorser = kwargs.pop('endorser')
         self.recipient = kwargs.pop('recipient')
         super(EndorseForm, self).__init__(*args, **kwargs)
-        self.fields['weight'].widget = (
-            forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
-        self.fields['weight'].min_value = 1
-        self.fields['text'].widget = (forms.Textarea(attrs={'class': 'form-control'}))
+        self.fields['text'].widget = (forms.Textarea(attrs={'class': 'form-control', 'style': 'width: 570px; height: 215px;'}))
 
     @property
     def max_weight(self):

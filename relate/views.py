@@ -1,9 +1,12 @@
+import json
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib import messages
+from django.http import JsonResponse
 
 from general.util import render
 from django.shortcuts import render as django_render
@@ -55,6 +58,7 @@ def trust_user(request, recipient_username):
 
 
 def endorse_user(request, recipient_username):
+    data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
         raise Http404()
@@ -77,7 +81,14 @@ def endorse_user(request, recipient_username):
             if is_new:
                 send_endorsement_notification(endorsement)
             messages.info(request, MESSAGES['endorsement_saved'])
-            return HttpResponseRedirect(endorsement.get_absolute_url())
+            data['recipient'] = recipient_username
+            data['stat'] = 'ok'
+            return JsonResponse({'data': data})
+        else:
+            data['stat'] = 'error'
+            data['errors'] = form.errors
+            return JsonResponse({'data': data})
+
     else:
         form = EndorseForm(instance=endorsement, endorser=request.profile,
                            recipient=recipient)

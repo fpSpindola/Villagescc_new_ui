@@ -229,22 +229,24 @@ a:hover { color: #a03c21 }
                     <div class="form-group">
                         <div class="container-fluid">
                             <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
+                            {{ trust_form.weight.errors }}
                             <div class="input-group">
                                 {{ trust_form.weight }}
                             </div>
                             <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
+                            {{ trust_form.text.errors }}
                             <div class="input-group">
                                 {{ trust_form.text}}
                             </div>
                         </div>
                     </div>
+                    <div id="msg"></div>
                     <div class="modal-footer">
                         <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
                             <i class="fa fa-check"></i>Save Trust
                         </button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
-                    <div id="msg"></div>
                 </div>
             </div>
         </div>
@@ -259,22 +261,33 @@ a:hover { color: #a03c21 }
         $.ajax({
             url: url,
             type: 'POST',
-            data: {
-                'profile_username': profile_username
-            },
+            data: $('#new-trust-form').serialize(),
+            cache: false,
             beforeSend: function (xhr) {
                 var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
-            success: function(resp){
-                console.log('Sucesso!');
-                alert('Success!');
-                $('#msg').html(resp).fadeIn('slow');
-                $('#msg').html("Target inserted successfully").fadeIn('slow');
-                $('#msg').delay(2500).fadeOut('slow');
+            success: function(data){
+                debugger;
+                if(data['data']['stat'] == 'ok'){
+                    var recipient = data['data']['recipient'];
+                    $('#msg').html(data).fadeIn('slow');
+                    $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
+                    $('#msg').delay(2500).fadeOut('slow');
+                }
+                else if(data['data']['stat'] == 'error'){
+                    debugger;
+                    if('weight' in data['data']['errors']) {
+                        $('#msg').html(data).fadeIn('slow');
+                        var error = data["data"]["errors"]["weight"];
+                        $('#msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
+                        $('#msg').delay(2500).fadeOut('slow');
+                    }
+                }
             },
             error: function (resp){
-                console.log(resp);
+                debugger;
+                console.log('Error ' + resp);
             }
         });
         e.preventDefault();
