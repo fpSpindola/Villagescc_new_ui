@@ -1,4 +1,4 @@
-{% load staticfiles profile i18n %}
+{% load staticfiles profile relate i18n %}
 
 <style>
 .html {
@@ -188,7 +188,7 @@ a:hover { color: #a03c21 }
                                 <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-heart" aria-hidden="true"></i>
                                 </button>
-                                <button type="button" class="btn btn-default btn-success" data-toggle="modal" data-target="#new-payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-money" aria-hidden="true"></i>
                                 </button>
                                 <button id="contact-modal-submit" type="button" class="btn btn-default btn-primary" data-toggle="modal" data-target="#contact-modal" data-profile-username="{{ each.user.profile.username }}">
@@ -214,87 +214,9 @@ a:hover { color: #a03c21 }
     </div>
 </section>
 
-<!-- Trust Modal -->
-<form class="form-horizontal" id="new-trust-form" method="POST">
-    {% csrf_token %}
-    <div id="new-trust-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <input type="text" id="profile-username" hidden>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title" id="myModalLabel">Trust this person</h4>
-                </div>
-                <div id="modaltext" class="modal-body">
-                    <div class="form-group">
-                        <div class="container-fluid">
-                            <label for="{{ trust_form.weight.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.weight.label }}</label>
-                            {{ trust_form.weight.errors }}
-                            <div class="input-group">
-                                {{ trust_form.weight }}
-                            </div>
-                            <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
-                            {{ trust_form.text.errors }}
-                            <div class="input-group">
-                                {{ trust_form.text}}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="msg"></div>
-                    <div class="modal-footer">
-                        <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Save Trust
-                        </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
 
-<script>
-    $("#save-trust").click(function(e) {
-        var profile_username = $("#profile-username").val();
-        var url = 'relate/endorse/'+profile_username+'/';
-        console.log(url);
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: $('#new-trust-form').serialize(),
-            cache: false,
-            beforeSend: function (xhr) {
-                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-            success: function(data){
-                debugger;
-                if(data['data']['stat'] == 'ok'){
-                    var recipient = data['data']['recipient'];
-                    $('#msg').html(data).fadeIn('slow');
-                    $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
-                    $('#msg').delay(2500).fadeOut('slow');
-                }
-                else if(data['data']['stat'] == 'error'){
-                    debugger;
-                    if('weight' in data['data']['errors']) {
-                        $('#msg').html(data).fadeIn('slow');
-                        var error = data["data"]["errors"]["weight"];
-                        $('#msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
-                        $('#msg').delay(2500).fadeOut('slow');
-                    }
-                }
-            },
-            error: function (resp){
-                debugger;
-                console.log('Error ' + resp);
-            }
-        });
-        e.preventDefault();
-    });
-</script>
 
-{#{% include  'new_trust_modal.html' %}#}
+{% include  'new_trust_modal.html' %}
 {% include 'new_payment_modal.html' %}
 {% include 'new_contact_modal.html' %}
 
@@ -305,5 +227,35 @@ a:hover { color: #a03c21 }
         console.log(profile_username);
         $("#profile-username").val(profile_username)
     });
+
+    $(".payment-modal").click(function (e) {
+        var profile_username = $(this).attr('data-profile-username');
+        var ack_type = "direct";
+        $("#new-payment-modal").modal("show");
+        $("#profile-username").val(profile_username);
+        var url = '/relate/acknowledge_ajax/'+profile_username;
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                console.log(data);
+                debugger;
+                if(!data['data']['can_ripple']) {
+                    $('label[for="id_ripple_0"]').closest('li').hide();
+                    $('#id_ripple_1').attr('checked', true);
+                    $('.ripple-hours').html("There are no available paths through the trust network to , so you can only send direct acknowledgement.")
+                }else {
+                    $('#id_ripple_0').attr('checked', true);
+                    $('.ripple-hours').html("You can send a trusted acknowledgement of up to" + data['data']['max_amount'] + "hour or a direct acknowledgement of any amount.")
+                }
+            },
+
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+        e.preventDefault();
+    })
 </script>
 

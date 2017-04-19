@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
-
+from django.core import serializers
 from general.util import render
 from django.shortcuts import render as django_render
 import ripple.api as ripple
@@ -96,6 +96,16 @@ def endorse_user(request, recipient_username):
     # return JsonResponse({'result': 'success'})
     return django_render(request, 'frontend/home.html', {'form': form})
 
+
+def acknowledge_user_ajax(request, recipient_username):
+    data = {}
+    recipient = get_object_or_404(Profile, user__username=recipient_username)
+    max_amount = ripple.max_payment(request.profile, recipient)
+    can_ripple = max_amount > 0
+    data['can_riple'] = can_ripple
+    data['max_amount'] = max_amount
+    data['recipient'] = recipient_username
+    return JsonResponse({'data': data})
 
 
 def send_endorsement_notification(endorsement):

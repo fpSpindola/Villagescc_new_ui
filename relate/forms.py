@@ -61,8 +61,8 @@ class AcknowledgementForm(forms.Form):
     ripple = forms.ChoiceField(
         label=_("Send"),
         widget=forms.RadioSelect(attrs={'style': 'float: left;'}),
-        choices=((ROUTED, _("Trusted payment")),
-                 (DIRECT, _("Direct payment"))),
+        choices=((ROUTED, _(" Trusted payment")),
+                 (DIRECT, _(" Direct payment"))),
         initial=ROUTED)
     amount = forms.DecimalField(
         label=_("Hours"),

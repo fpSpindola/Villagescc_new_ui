@@ -1,95 +1,113 @@
-<!-- MODAL de cadastro de target na tela de analise de paginas -->
+{% load relate %}
+<!-- Trust Modal -->
 <form class="form-horizontal" id="new-payment-form" method="POST">
     {% csrf_token %}
     <div id="new-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <input type="text" id="profile-username" hidden>
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" id="payment-modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
                     <h4 class="modal-title" id="myModalLabel">Pay this person</h4>
                 </div>
                 <div id="modaltext" class="modal-body">
-                 <div class="form-group">
-                    <div class="container-fluid">
-                    <label for="{{ payment_form.ripple.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.ripple.label }}</label>
-                        <div>
-                            {{ payment_form.ripple }}
-                        </div>
-                    <label for="{{ payment_form.amount.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ payment_form.amount.label }}</label>
-                        <div class="input-group">
-                            {{ payment_form.amount}}
-                        </div>
-                    <label for="{{ payment_form.memo.label }}" class="control-label input-group">{{ payment_form.memo.label }}</label>
-                        <div class="input-group">
-                            {{ payment_form.memo}}
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="ripple-hours">
+
+                            </div>
+
+{#                            {% if can_ripple %}#}
+{#                            <p>#}
+{#                                {% blocktrans count hours=max_amount %}#}
+{#                                    You can send a trusted acknowledgement of up to {{ hours }} hour,#}
+{#                                    or a direct acknowledgement of any amount.#}
+{#                                {% plural %}#}
+{#                                    You can send a trusted acknowledgement of up to {{ hours }} hours,#}
+{#                                    or a direct acknowledgement of any amount.#}
+{#                                {% endblocktrans %}#}
+{#                            </p>#}
+{#                            {% else %}#}
+{#                            <p>{% blocktrans %}There are no available paths through the trust#}
+{#                                network to {{ recipient }}, so you can only send direct#}
+{#                                acknowledgement.{% endblocktrans %}</p>#}
+{#                            {% endif %}#}
+                            {{ payment_form }}
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div id="msg"></div>
                     <div class="modal-footer">
-                        <button type="submit" id="new-payment-modal" class=" btn btn-success gradient save-button">
-                            <i class="fa fa-check"></i>Save payment
+                        <button type="submit" id="save-payment"
+                                class=" btn btn-success gradient save-button"
+                                onclick="return confirm(confirm_text());">
+                            <i class="fa fa-check"></i>Save Trust
                         </button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
-                    <div id="msg"></div>
                 </div>
-
-{#                <script>#}
-{#                    $("#add-target-form").submit(function(e){#}
-{#                        var formObj = $(this);#}
-{#                        var formURL = formObj.attr("action");#}
-{#                        var formData = new FormData(this);#}
-{#                        var message_status = $('#message_status');#}
-{#                        var error_message = $('#error_message');#}
-{#                        var save = $("#add-target-modal");#}
-{#                        $.ajax({#}
-{#                            url:'{% url 'add_target' %}',#}
-{#                            type:'POST',#}
-{#                            data: {#}
-{#                                'target_name': $('#target-name-modal').val(),#}
-{#                                'correct_url': $('#correct-url-modal').val()#}
-{#                            },#}
-{#                            cache: false,#}
-{#                            beforeSend: function (xhr) {#}
-{#                                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();#}
-{#                                xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
-{#                                save.prop('disabled', true);#}
-{#                            },#}
-{#                            complete: function () {#}
-{#                                save.prop('disabled', false);#}
-{#                            },#}
-{#                            success: function(resp){#}
-{#                                debugger;#}
-{#                                $.each(resp, function (key, value) {#}
-{#                                    $("#id_target").append("<option value='"+value.name+"'>"+value.name+"</option>");#}
-{#                                });#}
-{#                                $("#target-name-modal").val('');#}
-{#                                $("#correct-url-modal").val('');#}
-{#                                $('#msg').html(resp).fadeIn('slow');#}
-{#                                $('#msg').html("Target inserted successfully").fadeIn('slow');#}
-{#                                $('#msg').delay(2500).fadeOut('slow');#}
-{#                            },#}
-{#                            error: function (resp){#}
-{#                                console.log(resp);#}
-{#                                var errors = JSON.parse(resp.responseText);#}
-{#                                var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +#}
-{#                                        "<br/><ul>";#}
-{#                                for (var error in errors) {#}
-{#                                    errorMsg += "<li>";#}
-{#                                    for (var e in errors[error]) {#}
-{#                                        errorMsg += errors[error][e] + " ";#}
-{#                                    }#}
-{#                                    errorMsg += "</li>";#}
-{#                                }#}
-{#                                errorMsg += "</ul>";#}
-{#                                error_message.removeAttr('style');#}
-{#                                error_message.html(errorMsg);#}
-{#                            }#}
-{#                        });#}
-{#                        e.preventDefault();#}
-{#                    });#}
-{#                </script>#}
             </div>
         </div>
     </div>
 </form>
+
+<script>
+{#    function confirm_text() {#}
+{#		var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};#}
+{#		var hours = $("#id_amount").val();#}
+{#		var ack_type = "direct";#}
+{#		if (can_ripple) {#}
+{#			var ripple = ($("input:radio[name=ripple]:checked").val() ==#}
+{#							"routed");#}
+{#			if (ripple) {#}
+{#				ack_type = "trusted";#}
+{#			}#}
+{#		}#}
+{#		if (!hours) hours = 0;#}
+{#		var q = "{% trans 'Send a direct acknowledgement of' %} " +#}
+{#				hours + " {% trans 'h' %}?";#}
+{#		if (ack_type=="trusted")#}
+{#			q = "{% trans 'Send a trusted acknowledgement of' %} " +#}
+{#				hours + " {% trans 'h' %}?";#}
+{#		return q;#}
+{#	}#}
+
+    $("#save-payment").click(function(e) {
+        var profile_username = $("#profile-username").val();
+        var url = 'relate/acknowledge/'+profile_username+'/';
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $('#new-trust-form').serialize(),
+            cache: false,
+            beforeSend: function (xhr) {
+                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(data){
+                debugger;
+                if(data['data']['stat'] == 'ok'){
+                    var recipient = data['data']['recipient'];
+                    $('#msg').html(data).fadeIn('slow');
+                    $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
+                    $('#msg').delay(2500).fadeOut('slow');
+                }
+                else if(data['data']['stat'] == 'error'){
+                    debugger;
+                    if('weight' in data['data']['errors']) {
+                        $('#msg').html(data).fadeIn('slow');
+                        var error = data["data"]["errors"]["weight"];
+                        $('#msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
+                        $('#msg').delay(2500).fadeOut('slow');
+                    }
+                }
+            },
+            error: function (resp){
+                debugger;
+                console.log('Error ' + resp);
+            }
+        });
+        e.preventDefault();
+    });
+</script>

@@ -17,6 +17,7 @@ urlpatterns = patterns(
     url(r'^relationships/$', 'relationships', name='relationships'),
     url(r'^relationships/([^/]+)/$', 'relationship', name='relationship'),
     url(r'^acknowledge/([^/]+)/$', 'acknowledge_user', name='acknowledge_user'),
+    url(r'^acknowledge_ajax/([^/]+)/$', 'acknowledge_user_ajax', name='acknowledge_user_ajax'),
     url(r'^acknowledgements/$', login_required(feed),
         dict(item_type=RipplePayment, template='acknowledgements.html',
              do_filter=True),
