@@ -102,7 +102,7 @@ def acknowledge_user_ajax(request, recipient_username):
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     max_amount = ripple.max_payment(request.profile, recipient)
     can_ripple = max_amount > 0
-    data['can_riple'] = can_ripple
+    data['can_ripple'] = can_ripple
     data['max_amount'] = max_amount
     data['recipient'] = recipient_username
     return JsonResponse({'data': data})
@@ -145,6 +145,28 @@ def relationship(request, partner_username):
 @login_required
 @render()
 def acknowledge_user(request, recipient_username):
+    recipient = get_object_or_404(Profile, user__username=recipient_username)
+    if recipient == request.profile:
+        raise Http404
+    # TODO: Don't recompute max_amount on form submit?  Cache, or put in form
+    # as hidden field?
+    max_amount = ripple.max_payment(request.profile, recipient)
+    if request.method == 'POST':
+        form = AcknowledgementForm(request.POST, max_ripple=max_amount)
+        if form.is_valid():
+            acknowledgement = form.send_acknowledgement(
+                request.profile, recipient)
+            send_acknowledgement_notification(acknowledgement)
+            messages.info(request, MESSAGES['acknowledgement_sent'])
+            return HttpResponseRedirect(acknowledgement.get_absolute_url())
+    else:
+        form = AcknowledgementForm(max_ripple=max_amount, initial=request.GET)
+    can_ripple = max_amount > 0
+    profile = recipient  # For profile_base.html.
+    return locals()
+
+
+def pay_user_ajax(request, recipient_username):
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
         raise Http404

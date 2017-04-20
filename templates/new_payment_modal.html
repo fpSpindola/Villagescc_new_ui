@@ -8,30 +8,15 @@
             <div class="modal-content" id="payment-modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title" id="myModalLabel">Pay this person</h4>
+                    <h4 class="modal-title" id="payment-modal-title">Pay this person</h4>
                 </div>
                 <div id="modaltext" class="modal-body">
                     <div class="form-group">
                         <div class="container-fluid">
-                            <div class="ripple-hours">
-
+                            <div class="alert alert-info ripple-hours">
                             </div>
-
-{#                            {% if can_ripple %}#}
-{#                            <p>#}
-{#                                {% blocktrans count hours=max_amount %}#}
-{#                                    You can send a trusted acknowledgement of up to {{ hours }} hour,#}
-{#                                    or a direct acknowledgement of any amount.#}
-{#                                {% plural %}#}
-{#                                    You can send a trusted acknowledgement of up to {{ hours }} hours,#}
-{#                                    or a direct acknowledgement of any amount.#}
-{#                                {% endblocktrans %}#}
-{#                            </p>#}
-{#                            {% else %}#}
-{#                            <p>{% blocktrans %}There are no available paths through the trust#}
-{#                                network to {{ recipient }}, so you can only send direct#}
-{#                                acknowledgement.{% endblocktrans %}</p>#}
-{#                            {% endif %}#}
+                            <br>
+                            <br>
                             {{ payment_form }}
                             </div>
                         </div>
@@ -48,38 +33,37 @@
                 </div>
             </div>
         </div>
-    </div>
 </form>
 
 <script>
-{#    function confirm_text() {#}
-{#		var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};#}
-{#		var hours = $("#id_amount").val();#}
-{#		var ack_type = "direct";#}
-{#		if (can_ripple) {#}
-{#			var ripple = ($("input:radio[name=ripple]:checked").val() ==#}
-{#							"routed");#}
-{#			if (ripple) {#}
-{#				ack_type = "trusted";#}
-{#			}#}
-{#		}#}
-{#		if (!hours) hours = 0;#}
-{#		var q = "{% trans 'Send a direct acknowledgement of' %} " +#}
-{#				hours + " {% trans 'h' %}?";#}
-{#		if (ack_type=="trusted")#}
-{#			q = "{% trans 'Send a trusted acknowledgement of' %} " +#}
-{#				hours + " {% trans 'h' %}?";#}
-{#		return q;#}
-{#	}#}
+    function confirm_text() {
+		var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};
+		var hours = $("#id_amount").val();
+		var ack_type = "direct";
+		if (can_ripple) {
+			var ripple = ($("input:radio[name=ripple]:checked").val() ==
+							"routed");
+			if (ripple) {
+				ack_type = "trusted";
+			}
+		}
+		if (!hours) hours = 0;
+		var q = "Send a direct acknowledgement of " +
+				hours + "h ?";
+		if (ack_type=="trusted")
+			q = "Send a trusted acknowledgement of " +
+				hours + " h? ";
+		return q;
+	}
 
     $("#save-payment").click(function(e) {
         var profile_username = $("#profile-username").val();
-        var url = 'relate/acknowledge/'+profile_username+'/';
+        var url = 'relate/pay/'+profile_username+'/';
         console.log(url);
         $.ajax({
             url: url,
             type: 'POST',
-            data: $('#new-trust-form').serialize(),
+            data: $('#new-payment-form').serialize(),
             cache: false,
             beforeSend: function (xhr) {
                 var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();

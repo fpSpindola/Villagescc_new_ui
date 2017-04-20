@@ -143,4 +143,4 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'housing_sub_categories': housing_sub_categories,
             'listings': listings, 'people': people, 'form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
-            'trust_form': trust_form, 'payment_form':payment_form})
+            'trust_form': trust_form, 'payment_form':payment_form, 'contact_form': contact_form})

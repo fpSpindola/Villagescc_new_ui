@@ -24,6 +24,17 @@ a:hover { color: #a03c21 }
     height: 150px;
     display: block;
 }
+
+#spin-modal i {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fa-refresh {
+    color: #4ed1ff;
+}
 </style>
 
 <div style="height: 100px;"></div>
@@ -191,7 +202,7 @@ a:hover { color: #a03c21 }
                                 <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-money" aria-hidden="true"></i>
                                 </button>
-                                <button id="contact-modal-submit" type="button" class="btn btn-default btn-primary" data-toggle="modal" data-target="#contact-modal" data-profile-username="{{ each.user.profile.username }}">
+                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -214,6 +225,10 @@ a:hover { color: #a03c21 }
     </div>
 </section>
 
+<div id="spin-modal" class="collapse">
+    <i class="fa fa-refresh fa-spin fa-4x"></i>
+</div>
+
 
 
 {% include  'new_trust_modal.html' %}
@@ -222,16 +237,19 @@ a:hover { color: #a03c21 }
 
 <script>
     $(".trust-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
+        $("#profile-username").val(profile_username);
+        $('.trust-modal-title').text('Trust '+profile_username);
+        $('#spin-modal').fadeOut();
         $("#new-trust-modal").modal("show");
-        console.log(profile_username);
-        $("#profile-username").val(profile_username)
+
     });
 
     $(".payment-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
-        var ack_type = "direct";
-        $("#new-payment-modal").modal("show");
+        $('#payment-modal-title').text('Pay '+profile_username);
         $("#profile-username").val(profile_username);
         var url = '/relate/acknowledge_ajax/'+profile_username;
         console.log(url);
@@ -245,17 +263,29 @@ a:hover { color: #a03c21 }
                 if(!data['data']['can_ripple']) {
                     $('label[for="id_ripple_0"]').closest('li').hide();
                     $('#id_ripple_1').attr('checked', true);
-                    $('.ripple-hours').html("There are no available paths through the trust network to , so you can only send direct acknowledgement.")
+                    $('.ripple-hours').html("There are no available paths through the trust network to <strong>"+data['data']['recipient']+"</strong>, so you can only send direct acknowledgement.")
                 }else {
                     $('#id_ripple_0').attr('checked', true);
-                    $('.ripple-hours').html("You can send a trusted acknowledgement of up to" + data['data']['max_amount'] + "hour or a direct acknowledgement of any amount.")
+                    debugger;
+                    $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
                 }
+                $('#spin-modal').fadeOut();
+                $("#new-payment-modal").modal("show");
             },
 
             error: function (jqXHR, textStatus, errorThrown) {
             }
         });
         e.preventDefault();
-    })
+    });
+
+    $(".contact-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
+        var profile_username = $(this).attr('data-profile-username');
+        $("#profile-username").val(profile_username);
+        $('#contact-modal-title').text('Contact '+profile_username);
+        $('#spin-modal').fadeOut();
+        $("#new-contact-modal").modal("show");
+    });
 </script>
 

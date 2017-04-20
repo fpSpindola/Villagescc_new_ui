@@ -288,7 +288,7 @@ def max_payment(payer, recipient):
 @accept_profiles
 def pay(payer, recipient, amount, memo, routed):
     """
-    Performs payment_raja.  Routed=False just creates an entry on account between
+    Performs payment.  Routed=False just creates an entry on account between
     payer and recipient, and creates the account with limits=0 if it does not
     already exist.
     """

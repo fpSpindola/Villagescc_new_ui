@@ -52,8 +52,7 @@ class FlowGraph(object):
             return amounts
 
     def max_flow(self):
-        if (self.recipient.alias not in self.graph.nodes() or
-            self.payer.alias not in self.graph.nodes()):
+        if self.recipient.alias not in self.graph.nodes() or self.payer.alias not in self.graph.nodes():
             return 0
         try:
             amount = nx.max_flow(
