@@ -21,6 +21,8 @@ class EndorseForm(forms.ModelForm):
     weight = forms.IntegerField(label='Weight:', required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control', 'style': 'width: 82%'
     }))
+    anonymous = forms.BooleanField(label='Anonynous trust', required=False,
+                                   widget=forms.CheckboxInput())
     
     class Meta:
         model = Endorsement
