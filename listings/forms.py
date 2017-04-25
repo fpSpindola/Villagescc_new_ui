@@ -20,6 +20,9 @@ class ListingsForms(ModelForm):
                 'class': 'form-control',
                 'style': 'width: 100%',
             }),
+            'description': forms.Textarea(attrs={
+                'style': 'width: 570px;'
+            }),
             'price': NumberInput(attrs={
                 'class': 'form-control',
                 'style': 'width: 100%',

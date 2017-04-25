@@ -9,8 +9,18 @@
             <div id="modaltext" class="modal-body">
                 <div class="form-group">
                     <div class="container-fluid">
-
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <a href="#" class="thumbnail">
+                                    <img class="img-rounded listing-img" src="" alt="...">
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                    <h4>Price: <span id="label-price" class="label label-default"></span></h4>
+                    <hr>
+                    <h4>Seller name: <span id="label-profile-name" class="label label-default"></span></h4>
+                    <h4>Location: <a href="{% url 'locator' %}" id="profile-location" data-toggle="tooltip" title=""><i class="fa fa-location-arrow"></i></a></h4>
                 </div>
                 <div id="msg"></div>
                 <div class="modal-footer">

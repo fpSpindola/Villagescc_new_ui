@@ -4,19 +4,18 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
-from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
-from django.core import serializers
 from general.util import render
 from django.shortcuts import render as django_render
 import ripple.api as ripple
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm
 from relate.models import Endorsement
-from feed.models import FeedItem
+from listings.models import Listings
 from general.mail import send_notification
 from django.utils.translation import ugettext as _
+
 
 MESSAGES = {
     'endorsement_saved': _("Endorsement saved."),
@@ -25,36 +24,20 @@ MESSAGES = {
 }
 
 
-def trust_user(request, recipient_username):
-    if request.method == 'POST' and request.is_ajax():
-        recipient = get_object_or_404(Profile, user__username=recipient_username)
-        if recipient == request.profile:
-            raise Http404()
-        try:
-            endorsement = Endorsement.objects.get(
-                endorser=request.profile, recipient=recipient)
-        except Endorsement.DoesNotExist:
-            endorsement = None
-        if request.method == 'POST':
-            if 'delete' in request.POST and endorsement:
-                endorsement.delete()
-                messages.info(request, MESSAGES['endorsement_deleted'])
-                return HttpResponseRedirect(
-                    endorsement.recipient.get_absolute_url())
-            form = EndorseForm(request.POST, instance=endorsement,
-                               endorser=request.profile, recipient=recipient)
-            if form.is_valid():
-                is_new = endorsement is None
-                endorsement = form.save()
-                if is_new:
-                    send_endorsement_notification(endorsement)
-                messages.info(request, MESSAGES['endorsement_saved'])
-                return HttpResponseRedirect(endorsement.get_absolute_url())
-        else:
-            form = EndorseForm(instance=endorsement, endorser=request.profile,
-                               recipient=recipient)
-        profile = recipient  # For profile_base.html.
-        return JsonResponse({'result': 'success'})
+def get_listing_info(request, listing_id):
+    data = {}
+    try:
+        listing = get_object_or_404(Listings, id=listing_id)
+        data["listing_title"] = listing.title
+        data["listing_price"] = listing.price
+        data["listing_photo"] = listing.photo.name
+        data["profile_name"] = listing.user.profile.name
+        data["profile_location"] = listing.user.profile.location.full_name()
+        data["stat"] = "ok"
+    except Exception as e:
+        data["stat"] = "error"
+        data["error"] = e
+    return JsonResponse({'data': data})
 
 
 def trust_ajax(request, recipient_username):
