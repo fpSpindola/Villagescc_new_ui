@@ -91,6 +91,9 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         services_sub_categories = SubCategories.objects.all().filter(categories=2)
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
         housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+        trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+        payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+        contact_form = ContactForm()
 
         context = locals()
         context.update(extra_context or {})
@@ -107,7 +110,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                                                       'services_sub_categories': services_sub_categories,
                                                       'rideshare_sub_categories': rideshare_sub_categories,
                                                       'housing_sub_categories': housing_sub_categories,
-                                                      'categories': categories_list})
+                                                      'categories': categories_list, 'trust_form': trust_form,
+                                                      'payment_form': payment_form, 'contact_form': contact_form})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)

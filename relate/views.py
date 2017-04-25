@@ -57,11 +57,23 @@ def trust_user(request, recipient_username):
         return JsonResponse({'result': 'success'})
 
 
+def trust_ajax(request, recipient_username):
+    data = {}
+    recipient = get_object_or_404(Profile, user__username=recipient_username)
+    if recipient == request.profile:
+        data['stat'] = 'You cannot send a trust to yourself'
+        return JsonResponse({'data': data})
+    else:
+        data['stat'] = "ok"
+        return JsonResponse({'data': data})
+
+
 def endorse_user(request, recipient_username):
     data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
-        raise Http404()
+        data['error'] = 'Logged profile and recipient are the same'
+        return JsonResponse({'data': data})
     try:
         endorsement = Endorsement.objects.get(
             endorser=request.profile, recipient=recipient)
@@ -100,12 +112,17 @@ def endorse_user(request, recipient_username):
 def acknowledge_user_ajax(request, recipient_username):
     data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
-    max_amount = ripple.max_payment(request.profile, recipient)
-    can_ripple = max_amount > 0
-    data['can_ripple'] = can_ripple
-    data['max_amount'] = max_amount
-    data['recipient'] = recipient_username
-    return JsonResponse({'data': data})
+    if recipient == request.profile:
+        data['stat'] = 'You cannot send a payment to yourself'
+        return JsonResponse({'data': data})
+    else:
+        max_amount = ripple.max_payment(request.profile, recipient)
+        can_ripple = max_amount > 0
+        data['stat'] = 'ok'
+        data['can_ripple'] = can_ripple
+        data['max_amount'] = max_amount
+        data['recipient'] = recipient_username
+        return JsonResponse({'data': data})
 
 
 def send_endorsement_notification(endorsement):
@@ -187,12 +204,14 @@ def pay_user_ajax(request, recipient_username):
     profile = recipient  # For profile_base.html.
     return locals()
 
+
 def send_acknowledgement_notification(acknowledgement):
     subject = _("%s has acknowledged you on Villages.cc") % (
         acknowledgement.payer)
     send_notification(subject, acknowledgement.payer, acknowledgement.recipient,
                       'acknowledgement_notification_email.txt',
                       {'acknowledgement': acknowledgement})
+
 
 @login_required
 @render()

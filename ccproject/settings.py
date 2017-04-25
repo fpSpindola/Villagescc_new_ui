@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'admin',
     'about',
     'listings',
+    'tags',
 
     # Ripple
     'account',

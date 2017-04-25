@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from profile.models import Profile
 import ripple.api as ripple
 
+
 class EndorsementManager(models.Manager):
     def rebuild_trust_network(self):
         "Clear out all Profile.trusted_profiles and recreate from scratch."
