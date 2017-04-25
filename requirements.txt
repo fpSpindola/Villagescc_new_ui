@@ -1,4 +1,6 @@
-
-# requirements file at the root of the repo
-
--r requirements/development.txt
+Django==1.8
+psycopg2==2.6.2
+sqlalchemy
+IPy
+networkx
+Pillow
