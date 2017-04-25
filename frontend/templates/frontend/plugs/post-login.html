@@ -187,7 +187,7 @@ a:hover { color: #a03c21 }
         {% elif listings %}
         <div class="col-md-9">
             {% for each in listings %}
-                <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-6 col-md-4">
+                <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-6 col-md-4 listing-modal" data-listing-id="{{ each.id }}">
                     <div class="thumbnail">
                         <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
@@ -230,12 +230,21 @@ a:hover { color: #a03c21 }
 </div>
 
 
-
+{% include 'listing_modal.html' %}
 {% include  'new_trust_modal.html' %}
 {% include 'new_payment_modal.html' %}
 {% include 'new_contact_modal.html' %}
 
 <script>
+    $(".listing-modal").click(function (e) {
+        $('#spin-modal').fadeIn();
+        var listing_id = $(this).attr('data-listing-id');
+        $("#listing-id").val(listing_id);
+        $('#spin-modal').fadeOut();
+        $("#listing-modal").modal("show");
+    });
+
+
     $(".trust-modal").click(function (e) {
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
