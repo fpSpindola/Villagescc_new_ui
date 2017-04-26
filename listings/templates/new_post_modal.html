@@ -1,4 +1,4 @@
-<form class="form-horizontal" id="add-posting-modal" action="{% url 'new_listing' %}" method="POST" enctype="multipart/form-data">
+<form class="form-horizontal" id="add-posting-form" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div id="new-posting-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-posting-modal" aria-hidden="true" style="opacity: 0.9 !important;">
         <div class="modal-dialog">
@@ -20,16 +20,64 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
+                    <div id="message_status" class="" style="display: none;"></div>
+                    <div id="error_message" class="alert alert-error" style="display: none;"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" id="add-target-modal" class=" btn btn-success gradient save-button">
+                    <button type="submit" id="add-listing" class=" btn btn-success gradient save-button">
                         <i class="fa fa-check"></i>Save Posting
                     </button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
                 <div id="msg"></div>
 
-            <script
+            <script>
+                $('#add-posting-form').submit(function (e) {
+                    debugger;
+                    var formObj = $(this);
+                    var formUrl = formObj.attr("action");
+                    var formData = new FormData(this);
+                    var add_listing = $('#add-listng');
+                    var message_status = $('#message_status');
+                    var error_message = $('#error_message');
+                    $.ajax({
+                        url: formUrl,
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        beforeSend: function () {
+                            add_listing.prop('disabled', true);
+                        },
+                        complete: function () {
+                            add_listing.prop('disabled', false);
+                        },
+                        success: function (data) {
+                            debugger;
+                            message_status.removeAttr('style');
+                            error_message.attr('style', 'display: none;');
+                            message_status.html('&bullet; The listing was added');
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            var errors = JSON.parse(data.responseText);
+                            var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +
+                                    "<br/><ul>";
+                            for (var error in errors) {
+                                errorMsg += "<li>";
+                                for (var e in errors[error]) {
+                                    errorMsg += errors[error][e] + " ";
+                                }
+                                errorMsg += "</li>";
+                            }
+                            errorMsg += "</ul>";
+                            error_message.removeAttr('style');
+                            message_status.attr('style', 'display: none;');
+                            error_message.html(errorMsg);
+                        }
+                    });
+                    e.preventDefault();
+                });
+            </script>
             </div>
         </div>
     </div>

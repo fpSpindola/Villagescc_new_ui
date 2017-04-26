@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from listings.models import Listings
 from django.core.urlresolvers import reverse
 from listings.forms import ListingsForms
@@ -22,7 +22,8 @@ def add_new_listing(request):
                 return HttpResponseRedirect(reverse('frontend:home'))
     else:
         form = ListingsForms()
-    return render(request, 'frontend/home.html', {'form': form})
+    return JsonResponse({'data': 'ok'})
+    # return render(request, 'frontend/home.html', {'form': form})
 
 
 def listing_details(request, listing_id):
