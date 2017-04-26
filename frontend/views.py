@@ -124,13 +124,12 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         people = None
         trusted_only = None
         # GET Request
-
+        trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+        payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+        contact_form = ContactForm()
         if type_filter:
             listings = Listings.objects.all().filter(subcategories__sub_categories_text=type_filter)
         else:
-            trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
-            payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
-            contact_form = ContactForm()
             listings = Listings.objects.all()
         form = ListingsForms()
         # can_ripple = max_amount > 0
@@ -147,4 +146,4 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'housing_sub_categories': housing_sub_categories,
             'listings': listings, 'people': people, 'form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
-            'trust_form': trust_form, 'payment_form':payment_form, 'contact_form': contact_form})
+            'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form})

@@ -49,8 +49,12 @@
     <div class="col-md-4" style="text-align: center;">
       <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
       <p class="profile-star-rating">
-        <th>{% trans 'Reputation' %}</th>
-			<td>{% reputation profile request.profile %}</td>
+        <th>{% trans 'Reputation:' %}</th>
+            {% if request.profile.reputation %}
+			    <td>{% reputation profile request.profile %}</td>
+            {% else %}
+                <td>No reputation</td>
+            {% endif %}
       </p>
       <div class="btn-group btn-group-lg" role="group" aria-label="...">
         <button type="button" class="btn btn-default btn-warning">

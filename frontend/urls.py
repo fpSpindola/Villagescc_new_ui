@@ -1,6 +1,5 @@
 from django.conf.urls import url
 
-# frontend views import
 from frontend import views as frontend_views
 from accounts import views as accounts_views
 from profile.models import Profile

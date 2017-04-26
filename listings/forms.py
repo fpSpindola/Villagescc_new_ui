@@ -10,7 +10,7 @@ from listings.models import Listings
 class ListingsForms(ModelForm):
     class Meta:
         model = Listings
-        fields = ['listing_type', 'title', 'price', 'subcategories', 'photo']
+        fields = ['listing_type', 'title', 'description', 'price', 'subcategories', 'photo']
         widgets = {
             'listing_type': Select(attrs={
                 'class': 'form-control',
@@ -21,7 +21,7 @@ class ListingsForms(ModelForm):
                 'style': 'width: 100%',
             }),
             'description': forms.Textarea(attrs={
-                'style': 'width: 570px;'
+                'class': 'form-control',
             }),
             'price': NumberInput(attrs={
                 'class': 'form-control',

@@ -74,7 +74,6 @@ INSTALLED_APPS = [
 
     # Ripple
     'account',
-    'accounts',
     'payment',
 
     # 'accounts.apps.AccountsConfig',

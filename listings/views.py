@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from listings.models import Listings
@@ -24,3 +23,14 @@ def add_new_listing(request):
     else:
         form = ListingsForms()
     return render(request, 'frontend/home.html', {'form': form})
+
+
+def listing_details(request, listing_id):
+    listing = Listings.objects.filter(id=listing_id)
+    if listing:
+        messages.add_message(request, messages.SUCCESS, 'Listing overview found!')
+        return render(request, 'listing_details.html', {'listing': listing})
+    else:
+        messages.add_message(request, messages.ERROR, 'An error ocurred when trying to retrieve the listing info')
+        return render(request, 'listing_details.html')
+
