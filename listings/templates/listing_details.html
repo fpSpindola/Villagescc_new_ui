@@ -1,0 +1,31 @@
+{% extends "home_base.html" %}
+
+{% block title %}{{ profile }}{% endblock %}
+
+{% block nav_info_class %}selected{% endblock %}
+
+{% block content %}
+
+{% load profile relate humanize feed%}
+{% load staticfiles %}
+{% load i18n %}
+
+
+<div class="container-fluid" id="profile-container-fluid">
+    <div class="jumbotron" id="profile-jumbotron">
+        <h2>{{ listing.title }}</h2>
+    </div>
+</div>
+
+<section class="container-fluid" id="listing-info">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="inside-listing-info">
+        <p>{{ listing.title }}</p>
+      </div>
+        <hr>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
