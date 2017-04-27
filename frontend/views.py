@@ -135,12 +135,13 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         # can_ripple = max_amount > 0
         profile = recipient
         categories_list = Categories.objects.all()
+        subcategories = SubCategories.objects.all()
         item_sub_categories = SubCategories.objects.all().filter(categories=1)
         services_sub_categories = SubCategories.objects.all().filter(categories=2)
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
         housing_sub_categories = SubCategories.objects.all().filter(categories=4)
         return render(request, 'frontend/home.html', {
-            'item_sub_categories': item_sub_categories,
+            'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
             'services_sub_categories': services_sub_categories,
             'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories,

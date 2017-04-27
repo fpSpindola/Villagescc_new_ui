@@ -1,84 +1,166 @@
-<form class="form-horizontal" id="add-posting-form" method="POST" enctype="multipart/form-data">
+{#<form class="form-horizontal" id="add-posting-form" method="POST" enctype="multipart/form-data">#}
+{#    {% csrf_token %}#}
+{#    <div id="new-posting-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-posting-modal" aria-hidden="true" style="opacity: 0.9 !important;">#}
+{#        <div class="modal-dialog">#}
+{#            <div class="modal-content">#}
+{#                <div class="modal-header">#}
+{#                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>#}
+{#                    <h4 class="modal-title" id="myModalLabel">New Posting</h4>#}
+{#                </div>#}
+{#                <div id="modaltext" class="modal-body">#}
+{#                    <div class="form-group" id="div_{{ field.auto_id }}">#}
+{#                        <label for="{{ field.label }}" class="col-sm-3 control-label {% if field.erros %}error{% endif %}" style="padding-top: 7px;">{{ field.label }}</label>#}
+{#                        <div class="col-sm-8 {% if field.error %}error{% endif %}">#}
+{#                            {{ form.as_p }}#}
+{#                            {% if field.errors %}#}
+{#                                {% for error in field.errors %}#}
+{#                                    <div class="alert alert-error">{{ error }}</div>#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="clearfix"></div>#}
+{#                    <div id="message_status" class="" style="display: none;"></div>#}
+{#                    <div id="error_message" class="alert alert-error" style="display: none;"></div>#}
+{#                </div>#}
+{#                <div class="modal-footer">#}
+{#                    <button type="submit" id="add-listing" class=" btn btn-success gradient save-button">#}
+{#                        <i class="fa fa-check"></i>Save Posting#}
+{#                    </button>#}
+{#                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>#}
+{#                </div>#}
+{#                <div id="msg"></div>#}
+{##}
+{#            <script>#}
+{#                $('#add-listing').click(function (e) {#}
+{#                    debugger;#}
+{#                    var formObj = $('#add-posting-form');#}
+{#                    var formData = new FormData(formObj);#}
+{#                    var add_listing = $('#add-listng');#}
+{#                    var message_status = $('#message_status');#}
+{#                    var error_message = $('#error_message');#}
+{#                    $.ajax({#}
+{#                        url: {% url 'new_listing' %},#}
+{#                        type: 'POST',#}
+{#                        data: formObj.serialize(),#}
+{#                        cache: false,#}
+{#                        success: function (data) {#}
+{#                            debugger;#}
+{#                            message_status.removeAttr('style');#}
+{#                            error_message.attr('style', 'display: none;');#}
+{#                            message_status.html('&bullet; The listing was added');#}
+{#                        },#}
+{#                        error: function (data) {#}
+{#                            console.log(data);#}
+{#                            var errors = JSON.parse(data.responseText);#}
+{#                            var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +#}
+{#                                    "<br/><ul>";#}
+{#                            for (var error in errors) {#}
+{#                                errorMsg += "<li>";#}
+{#                                for (var e in errors[error]) {#}
+{#                                    errorMsg += errors[error][e] + " ";#}
+{#                                }#}
+{#                                errorMsg += "</li>";#}
+{#                            }#}
+{#                            errorMsg += "</ul>";#}
+{#                            error_message.removeAttr('style');#}
+{#                            message_status.attr('style', 'display: none;');#}
+{#                            error_message.html(errorMsg);#}
+{#                        }#}
+{#                    });#}
+{#                });#}
+{#            </script>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</form>#}
+
+
+<form id="formAddListing">
     {% csrf_token %}
-    <div id="new-posting-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-posting-modal" aria-hidden="true" style="opacity: 0.9 !important;">
-        <div class="modal-dialog">
+    <div class="modal fade" id="addListingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
-                    <h4 class="modal-title" id="myModalLabel">New Posting</h4>
-                </div>
-                <div id="modaltext" class="modal-body">
-                    <div class="form-group" id="div_{{ field.auto_id }}">
-                        <label for="{{ field.label }}" class="col-sm-3 control-label {% if field.erros %}error{% endif %}" style="padding-top: 7px;">{{ field.label }}</label>
-                        <div class="col-sm-8 {% if field.error %}error{% endif %}">
-                            {{ form.as_p }}
-                            {% if field.errors %}
-                                {% for error in field.errors %}
-                                    <div class="alert alert-error">{{ error }}</div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div id="message_status" class="" style="display: none;"></div>
-                    <div id="error_message" class="alert alert-error" style="display: none;"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" id="add-listing" class=" btn btn-success gradient save-button">
-                        <i class="fa fa-check"></i>Save Posting
+                    <h5 class="modal-title" id="addListingModalTitle">Add new listing</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
-                <div id="msg"></div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputListingTypeId">Listing Type</label>
+                            <select class="form-control" id="inputListingTypeId" name="listing_type">
+                                <option disabled selected value></option>
+                                <option value="1">OFFER</option>
+                                <option value="2">REQUEST</option>
+                                <option value="3">TEACH</option>
+                                <option value="4">LEARN</option>
+                                <option value="5">GIFT</option>
+                            </select>
+                            <div class="alert alert-warning collapse" id="error_listing_type"></div>
+                        </div>
+                        <div class="form-group collapse">
+                            <label for="inputTitleId">Title</label>
+                            <input type="text" class="form-control" id="inputTitleId" placeholder="I.e: Orange Juice">
+                            <div class="alert alert-warning collapse" id="error_title"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDescription">Description</label>
+                            <textarea class="form-control" id="inputDescription" rows="3" name="description"></textarea>
+                            <div class="alert alert-warning collapse" id="error_description"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPriceId">Price</label>
+                            <input type="number" class="form-control" id="inputPriceId" value="0" name="price">
+                            <div class="alert alert-warning collapse" id="error_price"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputSubCategoriesId">Sub Category</label>
+                            <select class="form-control" id="inputSubCategoriesId" name="sub_categories">
+                                {% if subcategories %}
+                                    {% for subcategory in subcategories %}
+                                        <option value="{{ subcategory.id }}">{{ subcategory.sub_categories_text }} - {{ subcategory.categories.categories_text }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
 
-            <script>
-                $('#add-posting-form').submit(function (e) {
-                    debugger;
-                    var formObj = $(this);
-                    var formUrl = formObj.attr("action");
-                    var formData = new FormData(this);
-                    var add_listing = $('#add-listng');
-                    var message_status = $('#message_status');
-                    var error_message = $('#error_message');
-                    $.ajax({
-                        url: formUrl,
-                        type: 'POST',
-                        data: formData,
-                        cache: false,
-                        beforeSend: function () {
-                            add_listing.prop('disabled', true);
-                        },
-                        complete: function () {
-                            add_listing.prop('disabled', false);
-                        },
-                        success: function (data) {
-                            debugger;
-                            message_status.removeAttr('style');
-                            error_message.attr('style', 'display: none;');
-                            message_status.html('&bullet; The listing was added');
-                        },
-                        error: function (data) {
-                            console.log(data);
-                            var errors = JSON.parse(data.responseText);
-                            var errorMsg = "<font>Sorry, it was not possible to perform the operation:" +
-                                    "<br/><ul>";
-                            for (var error in errors) {
-                                errorMsg += "<li>";
-                                for (var e in errors[error]) {
-                                    errorMsg += errors[error][e] + " ";
-                                }
-                                errorMsg += "</li>";
-                            }
-                            errorMsg += "</ul>";
-                            error_message.removeAttr('style');
-                            message_status.attr('style', 'display: none;');
-                            error_message.html(errorMsg);
-                        }
-                    });
-                    e.preventDefault();
-                });
-            </script>
+                            <div class="alert alert-warning collapse" id="error_sub_categories"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPhotoId" class="custom-file">Choose picture...
+                                <input type="file" id="inputPhotoId" class="file">
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success pull-right">
+                            <i class="fa fa-plus"></i>Save Listing
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </form>
+
+<script>
+    $('#formAddListing').submit(function (e) {
+        debugger;
+        e.preventDefault();
+        var values = formToJSON($(this));
+        values['description'] = values['description'].split(/\r?\n/);
+        callVillages({
+            url: "{% url 'new_listing' %}",
+            data: JSON.stringify(values),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function () {
+                window.location = "{% url 'new_listing' %}";
+            },
+            error: function (d) {
+                showFormErrors(d['responseJSON']['errors']);
+            }
+        });
+    });
+</script>

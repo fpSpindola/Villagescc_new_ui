@@ -9,14 +9,16 @@
     <title>Villages.cc</title>
     <!-- Bootstrap -->
     <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/tether/css/tether.css' %}">
     <link href="{% static 'stylesheets/main.css' %}" rel="stylesheet">
-
-    <!-- Font-awesome -->
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/custom.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:700" rel="stylesheet">
     <link href="{% static 'content.css' %}" rel="stylesheet">
+
+    <!-- Font-awesome -->
+
     <link rel="apple-touch-icon" sizes="57x57" href="{% static 'images/favicon/apple-icon-57x57.png' %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static 'images/favicon/apple-icon-60x60.png' %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static 'images/favicon/apple-icon-72x72.png' %}">
@@ -30,7 +32,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicon/favicon-96x96.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -46,6 +47,10 @@
     <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'assets/highcharts.js' %}"></script>
+    <script src="{% static 'assets/nprogress/nprogress.js' %}"></script>
+    <script src="{% static 'assets/tether/js/tether.min.js' %}"></script>
     <script src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script src="{% static 'common.js' %}"></script>
     <script src="{% static 'geo.js' %}"></script>
@@ -61,7 +66,11 @@
 
 </head>
 <body>
-<div class="container-fluid">
+<div class="inner-flex-container">
+    {% include 'messages.html' %}
+    {% include 'templates.html' %}
+
+    <header id="top-header">
     <div class="row">
         <div class="col-sm-12" style="padding: 0">
             <!-- Main Navigation -->
@@ -69,9 +78,9 @@
             <!-- 1. if user not logged in comes from pre-login  -->
             <!-- 2. lf user logged in comes from post-login -->
 
-            {% block content %}
-            {% endblock content %}
-
+            <section>
+            {% block content %}{% endblock content %}
+            </section>
             {% if request.user.is_authenticated %}
                 {% include 'plugs/navigation-post-login.html' %}
             {% else %}
@@ -97,6 +106,7 @@
             </script>
         </div>
     </div>
+    </header>
 </div>
 </body>
 </html>

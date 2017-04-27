@@ -4,3 +4,4 @@ sqlalchemy
 IPy
 networkx
 Pillow
+marshmallow

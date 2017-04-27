@@ -1,12 +1,15 @@
+import json
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from listings.models import Listings
 from django.core.urlresolvers import reverse
 from listings.forms import ListingsForms
+from .schemas import SubmitListingSchema
 
 
 def add_new_listing(request):
+    data = {}
     if request.method == 'POST':
         if 'initial' in request.POST:
             form = ListingsForms()
@@ -20,10 +23,27 @@ def add_new_listing(request):
                 except Exception as e:
                     print(e)
                 return HttpResponseRedirect(reverse('frontend:home'))
+            else:
+                data["errors"] = form.errors
+                return JsonResponse({'data'})
     else:
         form = ListingsForms()
     return JsonResponse({'data': 'ok'})
-    # return render(request, 'frontend/home.html', {'form': form})
+
+
+def submit_listing_api(request):
+    values = json.loads(request.body.decode('UTF-8'))
+    schema = SubmitListingSchema()
+    data, errors = schema.load(values)
+    if not errors:
+        listing = ListingsForms()
+        listing.title = data['title']
+        listing.listing_type = data['listing_type']
+        listing.description = data['description']
+        listing.price = data['price']
+        listing.subcategories = data['subcategories']
+        return JsonResponse({'msg': 'Successfully added listing'})
+    return JsonResponse({'errors': errors}, status=400)
 
 
 def listing_details(request, listing_id):
