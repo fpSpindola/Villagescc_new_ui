@@ -122,6 +122,7 @@ function showSuccessMessage(message) {
 // Sets CSRFToken on every Ajax call.
 $(document).ajaxSend(
     function (event, xhr, settings) {
+        debugger;
         if (settings.type === 'POST' || settings.type === 'PUT' || settings.type === 'DELETE') {
             function getCookie(name) {
                 var cookieValue = null;
@@ -138,7 +139,7 @@ $(document).ajaxSend(
                 }
                 return cookieValue;
             }
-
+            console.log(settings.url);
             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                 // Only send the token to relative URLs i.e. locally.
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
