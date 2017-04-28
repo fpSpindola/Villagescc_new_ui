@@ -111,7 +111,51 @@ function callVillages(options) {
             showInternalServerError();
         }
     }
+    return $.ajax(options);
+}
+
+function callVillagesCustom(options) {
+
+    // Starting NProgress
     debugger;
+    if (options['beforeSend']) {
+        var originalBeforeSend = options['beforeSend'];
+        options['beforeSend'] = function() {
+            originalBeforeSend();
+            NProgress.start();
+        }
+    } else {
+        options['beforeSend'] = function() {
+            NProgress.start();
+        }
+    }
+
+    // Stopping NProgress.
+    if (options['complete']) {
+        var originalComplete = options['complete'];
+        options['complete'] = function() {
+            originalComplete();
+            NProgress.done();
+        }
+    } else {
+        options['complete'] = function() {
+            NProgress.done();
+        }
+    }
+
+    if (options['error']) {
+        var originalError = options['error'];
+        options['error'] = function(e) {
+            if (e.status === 500) {
+                showInternalServerError();
+            }
+            originalError(e);
+        }
+    } else {
+        options['error'] = function() {
+            showInternalServerError();
+        }
+    }
     return $.ajax(options);
 }
 
@@ -122,7 +166,6 @@ function showSuccessMessage(message) {
 // Sets CSRFToken on every Ajax call.
 $(document).ajaxSend(
     function (event, xhr, settings) {
-        debugger;
         if (settings.type === 'POST' || settings.type === 'PUT' || settings.type === 'DELETE') {
             function getCookie(name) {
                 var cookieValue = null;
@@ -145,4 +188,4 @@ $(document).ajaxSend(
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
         }
-});
+    });

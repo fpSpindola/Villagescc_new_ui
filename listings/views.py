@@ -9,26 +9,21 @@ from .schemas import SubmitListingSchema
 
 
 def add_new_listing(request):
-    data = {}
-    if request.method == 'POST':
-        if 'initial' in request.POST:
-            form = ListingsForms()
-        else:
-            form = ListingsForms(request.POST, request.FILES)
-            if form.is_valid():
-                try:
-                    listing = form.save(commit=False)
-                    listing.user_id = request.profile.user_id
-                    listing.save()
-                except Exception as e:
-                    print(e)
+    schema = SubmitListingSchema()
+    data, errors = schema.load(request.POST)
+    if not errors:
+        form = ListingsForms(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                listing = form.save(commit=False)
+                listing.user_id = request.profile.user_id
+                listing.save()
                 return HttpResponseRedirect(reverse('frontend:home'))
-            else:
-                data["errors"] = form.errors
-                return JsonResponse({'data'})
+            except Exception as e:
+                print(e)
+                return HttpResponseRedirect(reverse('frontend:home'))
     else:
-        form = ListingsForms()
-    return JsonResponse({'data': 'ok'})
+        return JsonResponse({'errors': errors}, status=400)
 
 
 def submit_listing_api(request):

@@ -40,11 +40,11 @@ from django.db.models.signals import post_save, post_delete
 from django.db.models import Q
 from django.conf import settings
 from django.contrib.gis.db.models import GeoManager
+from datetime import datetime
 
 from profile.models import Profile
 from geo.models import Location
 from post.models import Post
-from listings.models import Listings
 from relate.models import Endorsement
 import ripple.api as api
 from general.util import cache_on_object
@@ -52,7 +52,6 @@ from general.util import cache_on_object
 # Classes that can be stored as feed items.
 ITEM_TYPES = {
     Post: 'post',
-    Listings: 'listings',
     Profile: 'profile',
     Endorsement: 'endorsement',
     api.RipplePayment: 'acknowledgement',
@@ -151,7 +150,7 @@ class FeedManager(GeoManager):
     def create_from_item(self, item):
         item_type = ITEM_TYPES[type(item)]
         feed_item = self.create(
-            date=item.date,
+            date=item.date if item.date else datetime.utcnow(),
             poster=item.feed_poster,
             recipient=item.feed_recipient,
             item_type=item_type,
@@ -178,7 +177,6 @@ class FeedItem(models.Model):
         Profile, related_name='received_feed_items', null=True, blank=True)
     item_type = models.CharField(max_length=16, choices=(
             (ITEM_TYPES[Post], 'Post'),
-            (ITEM_TYPES[Listings], 'Listings'),
             (ITEM_TYPES[Profile], 'Profile Update'),
             (ITEM_TYPES[api.RipplePayment], 'Acknowledgement'),
             (ITEM_TYPES[Endorsement], 'Endorsement'),
