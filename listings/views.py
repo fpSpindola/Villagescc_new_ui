@@ -9,21 +9,25 @@ from .schemas import SubmitListingSchema
 
 
 def add_new_listing(request):
-    schema = SubmitListingSchema()
-    data, errors = schema.load(request.POST)
-    if not errors:
-        form = ListingsForms(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                listing = form.save(commit=False)
-                listing.user_id = request.profile.user_id
-                listing.save()
-                return HttpResponseRedirect(reverse('frontend:home'))
-            except Exception as e:
-                print(e)
-                return HttpResponseRedirect(reverse('frontend:home'))
+    if request.method == 'POST':
+        schema = SubmitListingSchema()
+        data, errors = schema.load(request.POST)
+        if not errors:
+            form = ListingsForms(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    listing = form.save(commit=False)
+                    listing.user_id = request.profile.user_id
+                    listing.save()
+                    return JsonResponse({'msg': 'Success!'})
+                except Exception as e:
+                    print(e)
+                    return HttpResponseRedirect(reverse('frontend:home'))
+        else:
+            return JsonResponse({'errors': errors}, status=400)
     else:
-        return JsonResponse({'errors': errors}, status=400)
+        form = ListingsForms()
+    return render(request, 'frontend/home.html', {'form': form})
 
 
 def submit_listing_api(request):

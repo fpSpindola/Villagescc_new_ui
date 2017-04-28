@@ -33,25 +33,24 @@
 
 <script>
     $('#add-posting-modal').submit(function (e) {
+        e.preventDefault();
+        debugger;
+        var postData = new FormData($('#add-posting-modal')[0]);
         $.ajax({
             url: '{% url 'new_listing' %}',
             type: 'POST',
-            data: {
-                listing_type: $('#id_listing_type').val(),
-                title: $('#id_title').val(),
-                price: $('#id_price').val(),
-                description: $('#id_description').val(),
-                subcategories: $('#id_subcategories').val(), csrfmiddlewaretoken:"{{ csrf_token }}"},
+            data: postData,
+            processData: false,
+            contentType: false,
             success: function (data) {
-{#                $('#add-posting-modal').submit();#}
-                console.log('Success');
+                debugger;
+                $('#new-posting-modal').modal("hide");
+                showSuccessMessage('Listing added successfully!')
             },
             error: function (d) {
-                debugger;
                 showFormErrors(d['responseJSON']['errors'])
             }
         });
-        e.preventDefault();
     });
 </script>
 
