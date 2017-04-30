@@ -3,19 +3,19 @@
 
     <div class="page-header col-sm-12">
     {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'success'%}
-                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
-                            <i class="fa fa-check"></i>{{ message }}
-                        </div>
-                    {% else %}
-                        <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
-                            <i class="fa fa-meh-o"></i>{{ message }}
-                        </div>
-                    {% endif %}
-                    <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
-                {% endfor %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-{{ message.tags }} margin-top pointer"{% endif %}>
+                    <i class="fa fa-check"></i>{{ message }}
+                </div>
+            {% else %}
+                <div {% if message.tags %} data-dismiss="alert" class="alert alert-personalized alert-danger pointer"{% endif %}>
+                    <i class="fa fa-meh-o"></i>{{ message }}
+                </div>
             {% endif %}
+            <script> setTimeout(function(){ $(".alert-personalized").fadeOut('slow'); }, 3000); </script>
+        {% endfor %}
+    {% endif %}
         <h2 class="col-sm-7"><i class="fa fa-sign-in"></i>Sign In</h2>
 
         {% if alert_failed %}
@@ -43,20 +43,31 @@
                 </li>
             </ul>
 
-            <div id="div-sign_in">
-                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <div class="form-input">
-                            <label class="col-sm-5 label-input">{{ field.label_tag }}</label>
-                            <div class="">{{ field }}</div>
-                        </div>
-                    {% endfor %}
-                    <div class="col-sm-offset-5" id="div-button">
-                        <button type="submit" class="btn btn-success button-access">Submit</button>
-                    </div>
-                </form>
+            {% for field in form %}
+    {% if field.errors %}
+        <div class="form-group">
+            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+            {{ field }}
+            <div class="alert alert-warning message">
+                {% for error in field.errors %}
+                    {{ error }}
+                {% endfor %}
             </div>
+        </div>
+    {% else %}
+        <div class="form-group">
+            <label for="{{ field.label }}">{{ field.label }}</label>
+            {{ field }}
+        </div>
+    {% endif %}
+{% endfor %}
+{% if not form.is_valid %}
+    <script>
+        setTimeout(function () {
+            $('.message').slideUp("fast");
+        }, 4000);
+    </script>
+{% endif %}
         </div>
 
     <script>

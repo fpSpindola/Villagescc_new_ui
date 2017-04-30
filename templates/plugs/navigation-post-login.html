@@ -70,14 +70,20 @@
                             <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="Post new listing">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </button>
-                            <button type="button" class="btn btn-default btn-primary">
+                            <button id="" type="button" class="btn btn-default btn-danger trust-blank" title="Trust this person">
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn btn-default btn-success payment-blank" title="Check your payments">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn btn-default btn-primary contact-blank" title="Contact the owner">
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </button>
                         </div>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><i class="fa fa-bell fa-2x" aria-hidden="true"></i></a></li>
+                    <li><a href="{% url 'notification_soon' %}"><i class="fa fa-bell fa-2x" aria-hidden="true"></i></a></li>
                     <li>
                         {% if request.user.profile.photo %}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 12px"><img src="{% profile_image_url request.profile '150x200' %}" width=38px height=38px class="img-circle"/></a>

@@ -66,6 +66,7 @@ class Node(models.Model):
         """
         return self._balance_query(TRUSTED_BALANCE_SQL)
 
+
 class AccountManager(models.Manager):
     def create_account(self, node1, node2):
         """

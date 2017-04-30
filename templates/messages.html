@@ -1,15 +1,15 @@
 {% if messages %}
     {% for message in messages %}
         {% if message.level_tag == 'error' %}
-            <div class="messages alert col-lg-10 alert-danger">
+            <div class="messages alert col-lg-12 alert-danger">
             <span class="search-regex"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                         <strong>{{ message }}</strong></span>
         {% elif message.level_tag == 'warning' %}
-            <div class="messages alert col-lg-10 alert-warning">
+            <div class="messages alert col-lg-12 alert-warning">
             <span class="search-regex"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         <strong>{{ message }}</strong></span>
         {% else %}
-            <div class="messages alert col-lg-10 alert-success">
+            <div class="messages alert col-lg-12 alert-success">
             <span class="search-regex"><i class="fa fa-check" aria-hidden="true"></i>
                         <strong>{{ message }}</strong></span>
         {% endif %}

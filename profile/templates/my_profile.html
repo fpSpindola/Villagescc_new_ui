@@ -31,7 +31,7 @@
 </style>
 
 <div class="container-fluid" id="profile-container-fluid">
-  <div class="jumbotron" id="profile-jumbotron">
+  <div class="jumbotron" id="profile-jumbotron" style="background: #53c7c7">
     <h2>{{ profile.name }}</h2>
   </div>
 </div>
@@ -46,13 +46,13 @@
         <hr>
     </div>
 
-    <div class="col-md-4" style="text-align: center;">
-      <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
+{#    <div class="col-md-4" style="text-align: center;">#}
+{#      <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">#}
 {#      <p class="profile-star-rating">#}
 {#        <th>{% trans 'Reputation: ' %}</th>#}
 {#			<td>{% reputation profile request.profile %}</td>#}
 {#      </p>#}
-    </div>
+{#    </div>#}
   </div>
 </section>
 

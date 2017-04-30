@@ -24,22 +24,6 @@ MESSAGES = {
 }
 
 
-def get_listing_info(request, listing_id):
-    data = {}
-    try:
-        listing = get_object_or_404(Listings, id=listing_id)
-        data["listing_title"] = listing.title
-        data["listing_price"] = listing.price
-        data["listing_photo"] = listing.photo.name
-        data["profile_name"] = listing.user.profile.name
-        data["profile_location"] = listing.user.profile.location.full_name()
-        data["stat"] = "ok"
-    except Exception as e:
-        data["stat"] = "error"
-        data["error"] = e
-    return JsonResponse({'data': data})
-
-
 def trust_ajax(request, recipient_username):
     data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)

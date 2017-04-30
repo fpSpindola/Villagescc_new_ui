@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-
 {% block content %}
-
 <!-- Page Switch -->
 <!-- Like navigation we need to swicth page based on the User auth conditions -->
 {% if request.user.is_authenticated %}
@@ -12,4 +10,4 @@
   {% include 'frontend/plugs/pre-login.html' %}
 {% endif %}
 
-{% endblock content %}
+{% endblock %}

@@ -1,4 +1,4 @@
-<div id="listing-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="listing-modal" class="modal fade modal-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <input type="text" id="listing-id" hidden>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -17,10 +17,11 @@
                             </div>
                         </div>
                     </div>
-                    <h4>Price: <span id="label-price" class="label label-default"></span></h4>
+                    <h4>Price: <span id="label-price" class="label label-info"></span></h4>
                     <hr>
-                    <h4>Seller name: <span id="label-profile-name" class="label label-default"></span></h4>
-                    <h4>Location: <a href="{% url 'locator' %}" id="profile-location" data-toggle="tooltip" title=""><i class="fa fa-location-arrow"></i></a></h4>
+                    <h5>Seller name: <span id="label-profile-name" class="label label-info"></span></h5>
+                    <h5>Location: <span class="label label-info"><a href="{% url 'locator' %}" id="profile-location" data-toggle="tooltip" title=""><i class="fa fa-location-arrow"></i></a></span></h5>
+                    <h5>Created At:<span class="label label-info"><a href="#" id="listing-created-at"></a></span></h5>
                 </div>
                 <div id="msg"></div>
                 <div class="modal-footer">

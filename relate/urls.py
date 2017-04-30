@@ -9,7 +9,6 @@ urlpatterns = patterns(
     'relate.views',
     url(r'^endorse/([^/]+)/$', 'endorse_user', name='endorse_user'),
     url(r'^trust_ajax/([^/]+)/$', 'trust_ajax', name='trust_user_ajax'),
-    url(r'^get_listing_info/([^/]+)/$', 'get_listing_info', name='listing_details'),
     url(r'^endorsements/$', login_required(feed),
         dict(item_type=Endorsement, template='endorsements.html',
              do_filter=True),

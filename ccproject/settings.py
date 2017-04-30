@@ -105,6 +105,7 @@ TEMPLATES = [
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
                  os.path.join(BASE_DIR, 'accounts', 'templates'),
                  os.path.join(BASE_DIR, 'accounts', 'sign_in', 'templates'),
+                 os.path.join(BASE_DIR, 'notification', 'templates'),
                  os.path.join(BASE_DIR, 'listings', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -191,6 +192,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 GEOIP_PATH = '/usr/share/GeoIP'
+
+PASSWORD_RESET_LINK_EXPIRY = timedelta(days=7)
 
 LOCATION_COOKIE_NAME = 'location_id'
 LOCATION_COOKIE_AGE = timedelta(days=365)

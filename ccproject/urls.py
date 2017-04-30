@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -32,6 +31,7 @@ from post import urls as post_urls
 from endorsement import urls as endorsement_urls
 from relate import urls as relate_urls
 from listings import urls as listings_urls
+from notification import urls as notification_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^posts/', include(post_urls), name='posts'),
     url(r'^edorsements/', include(endorsement_urls), name='endorsements'),
     url('^relate/', include(relate_urls), name='relate'),
+    url('^notifications/', include(notification_urls), name='notification'),
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

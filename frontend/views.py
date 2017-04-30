@@ -27,7 +27,7 @@ def listing_type_filter(request, listing_type):
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
-    return render(request, 'frontend/home.html', {'form': form, 'listings': listing_type_objects,
+    return render(request, 'frontend/home.html', {'listing_form': form, 'listings': listing_type_objects,
                                                   'item_sub_categories': item_sub_categories,
                                                   'services_sub_categories': services_sub_categories,
                                                   'rideshare_sub_categories': rideshare_sub_categories,
@@ -48,7 +48,7 @@ def categories_filter(request, category_type):
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
     rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
     housing_sub_categories = SubCategories.objects.all().filter(categories=4)
-    return render(request, 'frontend/home.html', {'form': form, 'listings': listing_type_objects,
+    return render(request, 'frontend/home.html', {'listing_form': form, 'listings': listing_type_objects,
                                                   'item_sub_categories': item_sub_categories,
                                                   'services_sub_categories': services_sub_categories,
                                                   'rideshare_sub_categories': rideshare_sub_categories,
@@ -86,6 +86,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             url_params['d'] = next_page_date.strftime(DATE_FORMAT)
         next_page_param_str = url_params.urlencode()
 
+        listing_form = ListingsForms()
         categories_list = Categories.objects.all()
         item_sub_categories = SubCategories.objects.all().filter(categories=1)
         services_sub_categories = SubCategories.objects.all().filter(categories=2)
@@ -99,7 +100,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         context.update(extra_context or {})
         return render(request, 'frontend/home.html', {'url_params': url_params, 'feed_items': feed_items,
                                                       'next_page_date': next_page_date, 'context': context,
-                                                      'form': form, 'poster': poster, 'do_filter': do_filter,
+                                                      'form': form, 'listing_form': listing_form,
+                                                      'poster': poster, 'do_filter': do_filter,
                                                       'remaining_count': remaining_count,
                                                       'item_type': item_type, 'template': template,
                                                       'url_param_str': url_param_str,
@@ -145,6 +147,6 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'services_sub_categories': services_sub_categories,
             'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories,
-            'listings': listings, 'people': people, 'form': form,
+            'listings': listings, 'people': people, 'listing_form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
             'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form})

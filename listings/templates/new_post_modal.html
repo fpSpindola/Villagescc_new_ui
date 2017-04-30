@@ -10,7 +10,7 @@
                 <div id="modaltext" class="modal-body">
                     <div class="form-group">
                     <div class="col-sm-12">
-                        {% for field in form %}
+                        {% for field in listing_form %}
                             <label for="{{ field.auto_id }}">{{ field.label }}</label>
                             {{ field }}
                             <div class="alert alert-warning collapse" id="error_{{ field.name }}"></div>

@@ -29,3 +29,5 @@ class Listings(models.Model):
 
     listing_type = models.CharField(max_length=2, choices=LISTING_TYPE)
     photo = models.ImageField(upload_to='listings', null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)

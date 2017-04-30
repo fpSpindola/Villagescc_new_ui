@@ -114,7 +114,7 @@
                                  alt="{% trans 'Heart icon = trusted user' %}">
                             {% trans 'Trusted only' %}</label></span>
                     {% endif %}
-                    <span style="padding-left: 5%; width: 22px;">
+                    <span>
                             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
                         </span>
 
@@ -139,30 +139,54 @@
         <hr>
 
         {% if feed_items %}
-            <div class="col-md-9">
+            <div class="col-md-10">
             <div class="feed_item_list">
                 {% for each in feed_items %}
                     <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
                         <div class="panel-heading">{{ each }}</div>
                         <div class="panel-body">
                             <a href="{{ each.get_absolute_url }}">
-                                <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
+                                <img src="{% profile_image_url each '150x150' %}" style="height: 70px; width: 100px;">
                             </a>
-                            <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
-                            <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
+                            <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
+                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row top-buffer">
+                                <div class="col-md-2">
+                                    <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ each.location }}
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-2">
+                                    <span><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                                </div>
+                                <div class="col-md-10 pull-left">
+                                    {{ each.overall_balance }} hours
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-2">
+                                    <span><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ each.user.last_login }}
+                                </div>
+                            </div>
+                        </div>
 
-                        </div>
-                        <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
-                            <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                <i class="fa fa-heart" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                <i class="fa fa-money" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                            </button>
-                        </div>
                     </div>
                 {% empty %}
                     <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
@@ -216,7 +240,7 @@
 
 
 {% include 'listing_modal.html' %}
-{% include  'new_trust_modal.html' %}
+{% include 'new_trust_modal.html' %}
 {% include 'new_payment_modal.html' %}
 {% include 'new_contact_modal.html' %}
 {% include 'error-modal.html' %}
@@ -225,18 +249,21 @@
     $(".listing-modal").click(function (e) {
         $('#spin-modal').fadeIn();
         var listing_id = $(this).attr('data-listing-id');
-        var url = '/relate/get_listing_info/'+listing_id;
+        var url = '/get_listing_info/'+listing_id;
         var listing_picture_path = '/media/';
         $.ajax({
             url: url,
             type: 'GET',
             success: function (data) {
                 if(data["data"]["stat"] == "ok"){
+                    $('#listing-id').val(listing_id);
                     $('.listing-modal-title').text(data["data"]["listing_title"]);
                     $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
                     $('#label-price').text(data["data"]["listing_price"]);
                     $('#label-profile-name').text(data["data"]["profile_name"]);
                     $('#profile-location').text(data["data"]["profile_location"]);
+                    $('#listing-created-at').text(data["data"]["created_at"]);
+                    $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
                     $('#spin-modal').fadeOut();
                     $("#listing-modal").modal("show");
                 }
@@ -252,7 +279,6 @@
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
         $("#profile-username").val(profile_username);
-        $('.trust-modal-title').text('Trust '+profile_username);
         var url = '/relate/trust_ajax/'+profile_username;
         $.ajax({
             url: url,
@@ -276,7 +302,6 @@
     $(".payment-modal").click(function (e) {
         $('#spin-modal').fadeIn();
         var profile_username = $(this).attr('data-profile-username');
-        $('#payment-modal-title').text('Pay '+profile_username);
         $("#profile-username").val(profile_username);
         var url = '/relate/acknowledge_ajax/'+profile_username;
         console.log(url);

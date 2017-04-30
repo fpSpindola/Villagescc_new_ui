@@ -21,20 +21,29 @@ ERRORS = {
 
 class RegistrationForm(UserCreationForm):
     # Parent class has username, password1, and password2.
+
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+    password2 = forms.CharField(label="Password confirm", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
     first_name = forms.CharField(
         max_length=100, required=False, label=_("Name"), help_text=_(
-            "Name displayed to other users. You can change this later."))
+            "Name displayed to other users. You can change this later."),
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(
         max_length=100, required=False, label=_("Last name"), help_text=_(
-            "Name displayed to other users. You can change this later."))
+            "Name displayed to other users. You can change this later."),
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(
         max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
-            "The address to receive notifications from Villages."))
+            "The address to receive notifications from Villages."),
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['username'].help_text = _(
             "Desired login name. You cannot change this.")
+        self.fields['username'].widget = forms.TextInput(attrs={'class': 'form-control'})
         self.fields['password1'].help_text = _("Desired password.")
     
     def clean_email(self):

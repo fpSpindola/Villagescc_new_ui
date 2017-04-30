@@ -65,7 +65,7 @@
 
 </head>
 <body>
-<div class="inner-flex-container">
+<div class="container-fluid">
     <header id="top-header">
     <div class="row">
         <div class="col-sm-12" style="padding: 0">
@@ -74,14 +74,12 @@
             <!-- 1. if user not logged in comes from pre-login  -->
             <!-- 2. lf user logged in comes from post-login -->
 
-            <section>
-            {% block content %}{% endblock content %}
-            </section>
             {% if request.user.is_authenticated %}
                 {% include 'plugs/navigation-post-login.html' %}
             {% else %}
                 {% include 'plugs/navigation-pre-login.html' %}
             {% endif %}
+            {% block content %}{% endblock content %}
 
             <!-- Page content -->
 

@@ -14,7 +14,10 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
 from django.shortcuts import render as django_render
+
+from listings.forms import ListingsForms
 from listings.models import Listings
+from accounts.forms import UserForm
 from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
     RequestInvitationForm, ForgotPasswordForm)
@@ -176,10 +179,14 @@ def login(request):
 def forgot_password(request):
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
+        sign_in_form = UserForm()
+        sign_in_form.fields.pop('first_name')
+        sign_in_form.fields.pop('last_name')
+        sign_in_form.fields.pop('email')
         if form.is_valid():
             form.create_reset_link()
             messages.info(request, MESSAGES['password_link_sent'])
-            return redirect(login)
+            return django_render(request, 'accounts/sign_in.html', {'form': sign_in_form})
     else:
         form = ForgotPasswordForm()
     return locals()
@@ -256,12 +263,14 @@ def edit_profile(request):
 
 
 def my_profile(request):
+    form = ListingsForms()
     listings = Listings.objects.filter(user_id=request.profile.user_id)
     endorsements_received = request.profile.endorsements_received.all()
     endorsements_made = request.profile.endorsements_made.all()
     return django_render(request, 'my_profile.html', {'profile': request.profile, 'listings': listings,
                                                       'endorsements_made': endorsements_made,
-                                                      'endorsements_received': endorsements_received})
+                                                      'endorsements_received': endorsements_received,
+                                                      'form': form})
 
 
 @render()
@@ -270,11 +279,16 @@ def profile(request, username):
     if profile == request.profile:
         template = 'my_profile.html'
     else:
+        listing_form = ListingsForms()
         template = 'profile.html'
         if request.profile:
             profile_endorsements_made = profile.endorsements_made.all()
             profile_endorsements_received = profile.endorsements_received.all()
             account = profile.account(request.profile)
+            return django_render(request, 'profile.html',
+                                 {'profile_endorsements_made': profile_endorsements_made,
+                                  'profile_endorsements_received': profile_endorsements_received,
+                                  'account': account, 'listing_form': listing_form, 'profile': profile})
     return locals(), template
 
 

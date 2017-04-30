@@ -55,4 +55,3 @@ function init_feed_filter_form() {
 		$(this).closest('form').submit();
 	});
 }
-

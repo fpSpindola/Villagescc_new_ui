@@ -24,6 +24,7 @@ from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
     RequestInvitationForm, ForgotPasswordForm)
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.exceptions import ObjectDoesNotExist
 
 # Session key to store invite code for later signing up.
 INVITE_CODE_KEY = 'invite_code'
@@ -88,30 +89,35 @@ class SignInUserLogIn(View):
         return django_render(request, 'accounts/sign_in.html', {'form': form})
 
     def post(self, request):
-        if request.POST:
-            username = request.POST['username']
-            password = request.POST['password']
+        form = UserForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
 
-        # Check the user in database or return
-            try:
-                if not '@' in username:
-                    user = User.objects.get(username=username)
-                    user = authenticate(username=username, password=password)
-                else:
-                    user = User.objects.get(email=username)
-                    user = authenticate(username=user.username, password=password)
-                if user:
-                    # Password matching and user found with authenticate
-                    login(request, user)
-                    return HttpResponseRedirect(reverse('frontend:home'))
-                else:
-                    # Password wrong
-                    messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
-                    return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, " User not found")
-                # return django_render(request, 'accounts/sign_in.html', {'form': form})
+        try:
+            if not '@' in username:
+                user = User.objects.get(username=username)
+                user = authenticate(username=username, password=password)
+            else:
+                user = User.objects.get(email=username)
+                user = authenticate(username=user.username, password=password)
+            if user:
+                # Password matching and user found with authenticate
+                login(request, user)
+                return HttpResponseRedirect(reverse('frontend:home'))
+            else:
+                # Password wrong
+                messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
                 return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
+        except ObjectDoesNotExist:
+            form.fields.pop('first_name')
+            form.fields.pop('last_name')
+            form.fields.pop('email')
+            messages.add_message(request, messages.WARNING, 'This user is not registered yet')
+            return django_render(request, 'accounts/sign_in.html', {'form': form})
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, " User not found")
+            # return django_render(request, 'accounts/sign_in.html', {'form': form})
+            return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
 
 
 class SignInUserRegister(View):
@@ -121,9 +127,9 @@ class SignInUserRegister(View):
         if not request.location:
             return HttpResponseRedirect("%s?%s=%s" % (
                 reverse('locator'), REDIRECT_FIELD_NAME, request.path))
-        form = self.form_class(None)
+        form = self.form_class()
         # form.fields.pop('new_password')
-        return django_render(request, 'accounts/sign_in.html', {'form': form})
+        return django_render(request, 'accounts/signup.html', {'form': form})
 
     def post(self, request):
         invitation = get_invitation(request)
@@ -161,7 +167,7 @@ class SignInUserRegister(View):
             if invitation:
                 initial['email'] = invitation.to_email
             form = RegistrationForm(initial=initial)
-        return django_render(request, 'accounts/sign_in.html', {'form': form})
+        return django_render(request, 'accounts/signup.html', {'form': form})
 
 @login_required
 @render()
