@@ -61,7 +61,7 @@ INSTALLED_APPS = [
 
     # Custom apps
     'geo',
-    'tags',
+    # 'tags',
     'profile',
     'post',
     'feed',
