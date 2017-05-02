@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container-fluid" style="height: 110px;"></div>
+
+    <form id="blank-payment-form" action="{% url 'blank_payment_user' %}" method="POST">
+        {% include 'messages.html' %}
+        <div class="container">
+            <div class="row">
+                <span id="max-amount" class="label label-primary pull-right" hidden></span>
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.errors %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                            {{ field }}
+                            <div class="alert alert-warning message">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.auto_id == 'id_recipient' %}
+                                <div class="form-group">
+                                    <label id="label-profile-image" for="profile-image" hidden>Receiver profile picture</label>
+                                    <div><img id="profile-image" src="" class="img-rounded" hidden style="height: 70px; width: 120px;"></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <button type="submit" id="save-payment" class=" btn btn-success gradient save-button">
+                    <i class="fa fa-check"></i> Save</button>
+                <button class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="container">
+        <div class="row">
+            <table class="table-bordered">
+                <thead>
+                <tr>
+                    <th>Payments Summary</th>
+                </tr>
+                </thead>
+                <tbody id="row-payments">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="spin-modal" class="collapse">
+        <i class="fa fa-refresh fa-spin fa-4x"></i>
+    </div>
+
+    <script>
+        $('#id_recipient').on('change', function () {
+            $('#spin-modal').fadeIn();
+            var profile = $('#id_recipient').val();
+            var url = '/relate/get_user_photo/'+profile;
+            var max_amout_span = $('#max-amount');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    debugger;
+                    $('#profile-image').attr("src", data['data']['profile_photo_path']);
+                    $('#profile-image').attr("hidden", false);
+                    data['data']['payment_list'].forEach(function (payments) {
+                        $('<td>'+payments+'</td>').appendTo('#row-payments')
+                    });
+                    max_amout_span.text("Max trusted payment amount: "+data['data']['max_amount']);
+                    max_amout_span.attr("hidden", false);
+                    $('#label-profile-image').attr("hidden", false);
+                    $('#spin-modal').fadeOut();
+                },
+                error: function (data) {
+                    debugger;
+                    console.log(data);
+                }
+            })
+        });
+    </script>
+
+{#<script>#}
+{#    $("#blank-payment-form").submit(function () {#}
+{#        var profile = $('#id_recipient').val();#}
+{#        var url = '/relate/blank_payment/'+profile;#}
+{#        $.ajax({#}
+{#            url: url,#}
+{#            type: 'POST',#}
+{#            data: $("#blank-payment-form").serialize(),#}
+{#            beforeSend: function (xhr) {#}
+{#                var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();#}
+{#                xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
+{#            },#}
+{#            success: function (data) {#}
+{#                debugger;#}
+{#                showSuccessMessage('Payment sent')#}
+{#            },#}
+{#            error: function (data) {#}
+{#                showFormErrors(d['responseJSON']['errors'])#}
+{#            }#}
+{##}
+{#        })#}
+{#    })#}
+{#</script>#}
+
+{% endblock %}

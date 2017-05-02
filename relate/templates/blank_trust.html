@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container-fluid" style="height: 110px;"></div>
+
+    <form action="{% url 'blank_trust_user' %}" method="POST">
+        {% include 'messages.html' %}
+        <div class="container">
+            <div class="row">
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.errors %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                            {{ field }}
+                            <div class="alert alert-warning message">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label for="{{ field.label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.auto_id == 'id_recipient' %}
+                                <div class="form-group">
+                                    <label id="label-profile-image" for="profile-image" hidden>Receiver profile picture</label>
+                                    <div><img id="profile-image" src="" class="img-rounded" hidden style="height: 70px; width: 120px;"></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <button type="submit" id="save-payment" class=" btn btn-success gradient save-button">
+                    <i class="fa fa-check"></i> Save trust</button>
+                <button class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</button>
+
+                <div class="container">
+                    <div class="row">
+                        <table class="data">
+                            <tr title="{% blocktrans %}Sum of all acknowledgements
+				sent and received{% endblocktrans %}">
+                                <th>{% trans 'Overall Balance' %}</th>
+                                <td>
+                                    {% blocktrans count hours=request.profile.overall_balance %}
+                                        {{ hours }} hour
+                                    {% plural %}
+                                        {{ hours }} hours
+                                    {% endblocktrans %}
+                                </td>
+                            </tr>
+                            <tr title="{% blocktrans %}Sum of all *trusted* acknowledgements
+				sent and received{% endblocktrans %}">
+                                <th>{% trans 'Trusted Balance' %}</th>
+                                <td><strong>
+                                    {% blocktrans count hours=request.profile.trusted_balance %}
+                                        {{ hours }} hour
+                                    {% plural %}
+                                        {{ hours }} hours
+                                    {% endblocktrans %}
+                                </strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <table class="data">
+                            <tr>
+                                <th>{% trans 'Name' %}</th>
+                                <th class="number_header">{% trans 'Health' %}</th>
+                                <th class="number_header">{% trans 'Trusts from you' %}</th>
+                                <th class="number_header">{% trans 'Payments from them' %}</th>
+                                <th class="number_header">{% trans 'Payments from you' %}</th>
+                                <th class="number_header">{% trans 'Trusts from them' %}</th>
+                            </tr>
+                            {% for account in accounts %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ account.partner.get_absolute_url }}"
+                                           title="{% blocktrans with user=account.partner %}View Profile for {{ user }}{% endblocktrans %}"
+                                        >{{ account.partner }}</a>
+                                    </td>
+                                    <td class="number">{{ account.health|default:"X" }}</td>
+                                    <td class="number">
+                                        {% if account.endorsement %}
+                                            {{ account.in_limit }}
+                                        {% elif account.parner %}
+                                            0
+                                        {% endif %}
+                                    </td>
+                                    {% if account.partner %}
+                                        <td class="number">
+                                            {{ account.owed_to_you|default_if_none:"" }}</td>
+                                        <td class="number">
+                                           {{ account.owed_to_them|default_if_none:"" }}</td>
+                                        <td class="number">
+                                            {% if account.partner_endorsement %}
+                                                {{ account.out_limit }}
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% if not form.is_valid %}
+                    <script>
+                        setTimeout(function () {
+                            $('.message').slideUp("fast");
+                        }, 4000);
+                    </script>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+    <script>
+        $('#id_recipient').on('change', function () {
+            var profile = $('#id_recipient').val();
+            var url = '/relate/get_user_photo/'+profile;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#profile-image').attr("src", data['data']);
+                    $('#profile-image').attr("hidden", false);
+                    $('#label-profile-image').attr("hidden", false)
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            })
+        });
+    </script>
+{% endblock %}
