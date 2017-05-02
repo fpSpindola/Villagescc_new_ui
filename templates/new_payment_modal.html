@@ -70,7 +70,6 @@
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
             success: function(data){
-                debugger;
                 if(data['data']['stat'] == 'ok'){
                     var recipient = data['data']['recipient'];
                     $('#msg').html(data).fadeIn('slow');
@@ -78,7 +77,6 @@
                     $('#msg').delay(2500).fadeOut('slow');
                 }
                 else if(data['data']['stat'] == 'error'){
-                    debugger;
                     if('weight' in data['data']['errors']) {
                         $('#msg').html(data).fadeIn('slow');
                         var error = data["data"]["errors"]["weight"];
@@ -88,7 +86,6 @@
                 }
             },
             error: function (resp){
-                debugger;
                 console.log('Error ' + resp);
             }
         });

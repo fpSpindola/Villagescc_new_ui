@@ -3,7 +3,7 @@
 
 class RippleRouter(object):
     "Route Ripple models to separate DB."
-    APPS = ('account', 'payment_raja')
+    APPS = ('account', 'payment')
     DB_ALIAS = 'ripple'
     
     def db_for_read(self, model, **hints):

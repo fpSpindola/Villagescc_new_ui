@@ -76,7 +76,7 @@ INSTALLED_APPS = [
     'account',
     'payment',
 
-    # 'accounts.apps.AccountsConfig',
+    'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
     'endorsement.apps.EndorsementConfig',
     'payment_raja.apps.PaymentConfig',
@@ -158,6 +158,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# AUTHENTICATION_BACKENDS = (
+#     'profile.auth_backends.CaseInsensitiveModelBackend',
+# )
+
+SESSIONS_DIRECTORY = os.path.join(BASE_DIR, 'sessions')
+
+# SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_AGE = 43200      # 12 hours in seconds
+# SESSION_FILE_PATH = SESSIONS_DIRECTORY
+# SESSION_COOKIE_SECURE = True
+# LOCATION_COOKIE_NAME = 'location_id'
+# LOCATION_COOKIE_AGE = timedelta(days=365)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

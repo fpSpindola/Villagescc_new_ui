@@ -241,4 +241,19 @@ ul .nav {
 
 .top-buffer { margin-top:10px; }
 
+#spin-modal i {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.label-primary {
+  font-size: small;
+}
+
+.fa-refresh {
+    color: #4ed1ff;
+}
+
 /*# sourceMappingURL=main.css.map */

@@ -534,3 +534,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
+
+    .fa-refresh {
+        color: #4ed1ff;
+    }
