@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 
     # Custom apps
     'geo',
+    'tags',
     'profile',
     'post',
     'feed',
@@ -70,7 +71,6 @@ INSTALLED_APPS = [
     'admin',
     'about',
     'listings',
-    'tags',
 
     # Ripple
     'account',
