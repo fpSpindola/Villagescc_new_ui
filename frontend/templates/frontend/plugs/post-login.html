@@ -67,7 +67,7 @@
                                 <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
                                 <ul class="collapse">
                                     {% for each_sub_category in rideshare_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                        <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>

@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     # Ripple
     'account',
     'payment',
+    'management',
 
     'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig',
@@ -107,6 +108,7 @@ TEMPLATES = [
                  os.path.join(BASE_DIR, 'accounts', 'sign_in', 'templates'),
                  os.path.join(BASE_DIR, 'notification', 'templates'),
                  os.path.join(BASE_DIR, 'listings', 'templates'),
+                 os.path.join(BASE_DIR, 'management', 'templates'),
                  os.path.join(BASE_DIR, 'categories', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -131,7 +133,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'villages',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

@@ -5,7 +5,8 @@
     <div class="container" style="height: 70px;"></div>
 
     <div class="container">
-            <a type="button" href="#" class="btn btn-primary">Add Subcategory</a>
+            <a type="button" href="{% url 'categories:subcategories_manager:add_subcategory' %}" class="btn btn-primary">Add Subcategory</a>
+            <button id="delete" class="btn btn-danger pull-right"><i class="fa fa-exclamation"></i>Delete</button>
             {% if subcategories %}
                 <table class="table">
                     <thead>
@@ -21,7 +22,7 @@
                         <td class="pointer center td-checkbox">
                             <input id="{{ subcategory_info.id }}" type="checkbox" value="{{ subcategory_info.id }}">
                         </td>
-                        <td width="50%"><a href="#" class="pull-left">{{ subcategory_info.sub_categories_text }}</a></td>
+                        <td width="50%"><a href="{% url 'categories:subcategories_manager:edit_subcategory' subcategory_info.id%}" class="pull-left">{{ subcategory_info.sub_categories_text }}</a></td>
                         <td width="50%">{{ subcategory_info.categories.categories_text }}</td>
                     </tr>
                     {% endfor %}

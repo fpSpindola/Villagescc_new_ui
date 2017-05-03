@@ -77,7 +77,7 @@ def get_listing_info(request, listing_id):
         data["listing_photo"] = listing.photo.name
         data["profile_name"] = listing.user.profile.name
         data["profile_location"] = listing.user.profile.location.full_name()
-        data["created_at"] = listing.created.date()
+        data["created_at"] = listing.created.date() if listing.created else None
         data["stat"] = "ok"
     except Exception as e:
         data["stat"] = "error"

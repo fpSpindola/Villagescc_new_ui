@@ -95,6 +95,9 @@
                                 <li><a href="#">Manage Listing</a></li>
                                 <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
                                 <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
+                                {% if request.user.is_staff %}
+                                <li><a href="{% url 'management_urls' %}"></a></li>
+                                {% endif %}
                             {% endif %}
                             <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
                         </ul>

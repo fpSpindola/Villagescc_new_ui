@@ -326,3 +326,7 @@ ul .nav {
     color: inherit !important;
     text-decoration: none !important;
 }
+
+div div div a {
+    font-size: 14px;
+}

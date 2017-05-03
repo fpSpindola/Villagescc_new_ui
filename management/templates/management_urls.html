@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+<div style="height: 60px;"></div>
+<h3 class="page-title container">
+    <a href="{% url 'management_urls' %}">
+        <i class="fa fa-sitemap"></i> Management
+    </a> | Management URLs
+</h3>
+    <hr>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12"><a href="{% url 'categories:categories_manager:manage_categories' %}">
+            <i class="fa fa-tag"></i> Manage Categories</a></div>
+        <div class="col-sm-12"><a href="{% url 'categories:subcategories_manager:manage_categories' %}">
+            <i class="fa fa-tags"></i> Manage Subcategories</a></div>
+    </div>
+</div>
+{% endblock %}
