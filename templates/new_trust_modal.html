@@ -78,6 +78,7 @@
                     $('#msg').html(data).fadeIn('slow');
                     $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
                     $('#msg').delay(2500).fadeOut('slow');
+                    $('.trust-modal').modal('hide');
                 }
                 else if(data['data']['stat'] == 'error'){
                     if('weight' in data['data']['errors']) {

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 # all apps urls import
 from accounts import urls as accounts_urls
 from accounts.sign_in import urls as accounts_signin_urls
@@ -32,6 +33,7 @@ from endorsement import urls as endorsement_urls
 from relate import urls as relate_urls
 from listings import urls as listings_urls
 from notification import urls as notification_urls
+from categories import urls as categories_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -45,6 +47,7 @@ urlpatterns = [
     url(r'^edorsements/', include(endorsement_urls), name='endorsements'),
     url('^relate/', include(relate_urls), name='relate'),
     url('^notifications/', include(notification_urls), name='notification'),
+    url('^categories_manager/', include(categories_urls, namespace='categories')),
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

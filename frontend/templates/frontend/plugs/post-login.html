@@ -28,40 +28,53 @@
 
 <div style="height: 100px;"></div>
 
+
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
         <div class="col-md-2">
-            <p><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></p>
+
             <nav class="sidebar">
-                <ul class="nav sidenav">
+
+                <ul>
+                    <li>
+                        <div><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
+                        <ul class="collapse">
+                            <li></li>
+                        </ul>
+
+
                     {% for each in categories %}
                         {% if each.categories_text == 'PRODUCTS' %}
-                            <li><a href="{% url 'frontend:category_type' 'PRODUCTS' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in item_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'SERVICES' %}
-                            <li><a href="{% url 'frontend:category_type' 'SERVICES' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                                <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in services_sub_categories %}
-                                        <li><a href="#"></a></li>
+                                        <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'RIDESHARE' %}
-                            <li><a href="{% url 'frontend:category_type' 'RIDESHARE' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                                <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in rideshare_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'HOUSING' %}
-                            <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                                <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in housing_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
@@ -111,17 +124,17 @@
             </div>
         </div>
 
-        <div class="col-md-3" style="float: right;">
-            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
-            </button>
-            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
-            </button>
-            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">
-                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
-            </button>
-        </div>
+{#        <div class="col-md-3 hidden-xl-down" style="float: right;">#}
+{#            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">#}
+{#                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
+{#            </button>#}
+{#            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">#}
+{#                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
+{#            </button>#}
+{#            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">#}
+{#                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
+{#            </button>#}
+{#        </div>#}
 
         <div style="height: 80px;"></div>
 
@@ -285,8 +298,6 @@
                 }
             }
         });
-
-
     });
 
     $(".payment-modal").click(function (e) {
@@ -332,6 +343,13 @@
         $('#contact-modal-title').text('Contact '+profile_username);
         $('#spin-modal').fadeOut();
         $("#new-contact-modal").modal("show");
+    });
+</script>
+
+<script>
+    $('.menu-group div').click(function () {
+        var menu = $(this).parent().find('ul');
+        menu.slideToggle();
     });
 </script>
 

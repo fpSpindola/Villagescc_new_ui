@@ -33,11 +33,11 @@
         <div class="access">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li role="active">
-                    <a href="{% url 'sign_in_log_in' %}" id="login">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_log_in' %}" id="login">
                         <h4><i class="fa fa-sign-in margin-right"></i> Login</h4></a>
                 </li>
                 <li role="active">
-                    <a href="{% url 'sign_in_register' %}" id="register">
+                    <a href="{% url 'accounts:sign_in_user:sign_in_register' %}" id="register">
                         <h4><i class="fa fa-user margin-right"></i> Register</h4>
                     </a>
                 </li>

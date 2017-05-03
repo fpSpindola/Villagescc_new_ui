@@ -107,7 +107,7 @@ class SignInUserLogIn(View):
             else:
                 # Password wrong
                 messages.add_message(request, messages.ERROR, 'Username or Password is wrong')
-                return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
+                return HttpResponseRedirect(reverse('accounts:sign_in_user:sign_in_log_in'))
         except ObjectDoesNotExist:
             form.fields.pop('first_name')
             form.fields.pop('last_name')
@@ -117,7 +117,7 @@ class SignInUserLogIn(View):
         except Exception as e:
             messages.add_message(request, messages.ERROR, " User not found")
             # return django_render(request, 'accounts/sign_in.html', {'form': form})
-            return HttpResponseRedirect(reverse('accounts:sign_in_log_in'))
+            return HttpResponseRedirect(reverse('accounts:sign_in_user:sign_in_log_in'))
 
 
 class SignInUserRegister(View):
@@ -158,7 +158,7 @@ class SignInUserRegister(View):
                 # Notifications.
                 send_registration_email(profile)
                 messages.info(request, MESSAGES['registration_done'])
-                return django_render(request, 'profile.html')
+                return HttpResponseRedirect(reverse('frontend:home'))
             # else:
             #     messages.add_message(request, messages.ERROR, 'An error occurred, please contact an administrator.')
             #     return django_render(request, 'accounts/sign_in.html', {'form': form})

@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^forgot/$', profile_views.forgot_password, name='forgot_password'),
     url(r'^resetpass/([^/]+)/$', profile_views.reset_password, name='reset_password'),
     url(r'^my_profile/$', account_views.my_profile, name='my_profile'),
-    url(r'^profiles/edit/$', profile_views.edit_profile, name='edit_profile'),
     url(r'^profiles/$', feed,
         dict(item_type=Profile, template='profiles.html', do_filter=True),
         name='profiles'),
@@ -27,10 +26,8 @@ urlpatterns = [
     url(r'^request_invitation/$', profile_views.request_invitation,
         name='request_invitation'),
     url(r'^share/$', profile_views.share, name='share'),
-    url(r'^edit/$', profile_views.edit_profile, name='edit'),
     url(r'^settings/$', profile_views.edit_settings, name='settings'),
     url(r'^login/$', account_views.login_view, name='login'),
-    url(r'^signup/$', account_views.signup_view, name='signup'),
     url(r'^logout/$', account_views.logout_view, name='logout'),
-    url(r'^sign_in/', include(accounts.sign_in.urls), name='sign_in_user')
+    url(r'^sign_in/', include(accounts.sign_in.urls, namespace='sign_in_user'))
 ]

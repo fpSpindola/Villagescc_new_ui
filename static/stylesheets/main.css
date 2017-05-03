@@ -256,4 +256,73 @@ ul .nav {
     color: #4ed1ff;
 }
 
-/*# sourceMappingURL=main.css.map */
+.sidebar {
+    flex: 1 230px;
+    background: rgba(144, 199, 255, 0);
+    font-family: "Lato", serif;
+}
+
+.sidebar header img {
+    float: left;
+    position: relative;
+    top: 2px;
+    left: 4px;
+}
+
+.sidebar header span {
+    float: left;
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+
+.sidebar ul {
+    padding: 0;
+}
+
+.sidebar ul li {
+    width: 100%;
+    color: #000000;
+    list-style: none;
+    cursor: pointer;
+}
+
+.sidebar ul li div {
+    padding: 12px 20px;
+}
+
+.sidebar ul li ul {
+    font-size: 14px;
+}
+
+.sidebar li ul li a {
+    width: 100%;
+    color: white;
+    padding: 10px !important;
+    list-style: none;
+    /*border-top: solid 1px #3C4F5E;*/
+    cursor: pointer;
+}
+
+.sidebar ul li .fa {
+    float: left;
+    position: relative;
+    right: 10px;
+    color: #8DCEE2;
+    font-size: 22px;
+}
+
+.sidebar ul li div:hover, .sidebar ul li ul li:hover {
+    background: #ff9f26;
+}
+
+.sidebar ul li:last-child {
+    /*border-bottom: solid 1px #3C4F5E;*/
+}
+
+.sidebar a, .sidebar a:hover, .sidebar a:active {
+    /*display: block;*/
+    width: 100%;
+    color: inherit !important;
+    text-decoration: none !important;
+}

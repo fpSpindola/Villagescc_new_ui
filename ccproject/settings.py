@@ -106,7 +106,8 @@ TEMPLATES = [
                  os.path.join(BASE_DIR, 'accounts', 'templates'),
                  os.path.join(BASE_DIR, 'accounts', 'sign_in', 'templates'),
                  os.path.join(BASE_DIR, 'notification', 'templates'),
-                 os.path.join(BASE_DIR, 'listings', 'templates')],
+                 os.path.join(BASE_DIR, 'listings', 'templates'),
+                 os.path.join(BASE_DIR, 'categories', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

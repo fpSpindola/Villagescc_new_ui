@@ -42,15 +42,14 @@
                     <li>
                         <a href="{% url 'locator' %}" data-toggle="tooltip" title="{{request.location}}"><i class="fa fa-location-arrow"></i>&nbsp&nbsp{{ request.location|truncatechars:"42" }}</a>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown visible-xs hidden-xl-up">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'feed' %}">All</a></li>
-                            <li><a href="{% url 'accounts:profiles' %}?{{ url_param_str }}">People</a></li>
-                            <li><a href="{% url 'posts' %}?{{ url_param_str }}">Posts</a></li>
+                            <li><a href="{% url 'frontend:category_type' 'PRODUCTS' %}">Products</a></li>
+                            <li><a href="{% url 'frontend:category_type' 'SERVICES' %}">Services</a></li>
+                            <li><a href="{% url 'frontend:category_type' 'RIDESHARE' %}">Rideshare</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="{% url 'endorsements' %}">Trust</a></li>
-                            <li><a href="{% url 'acknowledgements' %}">Pay Forward</a></li>
+                            <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">Housing</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -94,7 +93,7 @@
                             {% if request.profile %}
                                 <li><a href="{% url 'my_profile' %}">Profile</a></li>
                                 <li><a href="#">Manage Listing</a></li>
-                                <li><a href="{% url 'accounts:edit' %}">Edit Profile</a></li>
+                                <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
                                 <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
                             {% endif %}
                             <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
