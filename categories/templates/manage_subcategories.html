@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container" style="height: 70px;"></div>
+
+    <div class="container">
+            <a type="button" href="#" class="btn btn-primary">Add Subcategory</a>
+            {% if subcategories %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Subcategory</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for subcategory_info in subcategories %}
+                    <tr>
+                        <td class="pointer center td-checkbox">
+                            <input id="{{ subcategory_info.id }}" type="checkbox" value="{{ subcategory_info.id }}">
+                        </td>
+                        <td width="50%"><a href="#" class="pull-left">{{ subcategory_info.sub_categories_text }}</a></td>
+                        <td width="50%">{{ subcategory_info.categories.categories_text }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Sorry, we did not find any subcategories.
+            {% endif %}
+        </div>
+{% endblock %}

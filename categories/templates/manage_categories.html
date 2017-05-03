@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container" style="height: 70px;"></div>
+
+    <div class="container">
+            <a type="button" href="#" class="btn btn-primary">Add Category</a>
+            {% if categories %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for category_info in categories %}
+                    <tr>
+                        <td class="pointer center td-checkbox">
+                            <input id="{{ category_info.id }}" type="checkbox" value="{{ category_info.id }}">
+                        </td>
+                        <td width="100%"><a href="#" class="pull-left">{{ category_info.categories_text }}</a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Sorry, we did not find any families.
+            {% endif %}
+        </div>
+{% endblock %}
