@@ -42,12 +42,12 @@ class EndorseForm(forms.ModelForm):
             max_weight += self.instance.weight
         return max_weight
         
-    def clean_weight(self):
-        weight = self.cleaned_data['weight']
-        if self.endorser.endorsement_limited and weight > self.max_weight:
-            raise forms.ValidationError(
-                self.MESSAGES['over_weight'] % self.max_weight)
-        return weight
+    # def clean_weight(self):
+    #     weight = self.cleaned_data['weight']
+    #     if self.endorser.endorsement_limited and weight > self.max_weight:
+    #         raise forms.ValidationError(
+    #             self.MESSAGES['over_weight'] % self.max_weight)
+    #     return weight
     
     def save(self):
         endorsement = super(EndorseForm, self).save(commit=False)

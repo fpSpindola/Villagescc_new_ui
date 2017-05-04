@@ -30,11 +30,18 @@ def trust_ajax(request, recipient_username):
     data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
-        data['stat'] = 'You cannot send a trust to yourself'
+        data['stat'] = 'error'
+        data['error_message'] = 'You cannot send a trust to yourself'
         return JsonResponse({'data': data})
-    else:
+    try:
+        endorsement = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
+        data['weight'] = endorsement.weight
+        data['text'] = endorsement.text
+        data['recipient'] = recipient_username
+        data['stat'] = 'existing'
+    except Endorsement.DoesNotExist:
         data['stat'] = "ok"
-        return JsonResponse({'data': data})
+    return JsonResponse({'data': data})
 
 
 def endorse_user(request, recipient_username):
@@ -74,7 +81,6 @@ def endorse_user(request, recipient_username):
         form = EndorseForm(instance=endorsement, endorser=request.profile,
                            recipient=recipient)
     profile = recipient  # For profile_base.html.
-    # return JsonResponse({'result': 'success'})
     return django_render(request, 'frontend/home.html', {'form': form})
 
 

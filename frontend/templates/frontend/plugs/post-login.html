@@ -105,8 +105,8 @@
                             {% trans 'Trusted only' %}</label></span>
                     {% endif %}
                     <span>
-                            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
-                        </span>
+                        <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                    </span>
 
                 </ul></form>
             </div>
@@ -124,13 +124,8 @@
 {#            </button>#}
 {#        </div>#}
 
-        <div style="height: 80px;"></div>
-
-        <hr>
-
         {% if feed_items %}
             <div class="col-md-10">
-            <div class="feed_item_list">
                 {% for each in feed_items %}
                     <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
                         <div class="panel-heading">{{ each }}</div>
@@ -215,7 +210,6 @@
             </div>
         {% endif %}
         </div>
-        </div>
         {% if remaining_count %}
             <p><a href="?{{ next_page_param_str }}">
                 {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
@@ -276,12 +270,19 @@
             url: url,
             type: 'GET',
             success: function (data) {
-                if(data["data"]["stat"] != "ok"){
-                    $('#error-modal-alert').text(data["data"]["stat"]);
+                if(data["data"]["stat"] == "error"){
+                    $('#error-modal-alert').text(data["data"]["error_message"]);
                     $('#spin-modal').fadeOut();
                     $('#error-modal').modal("show");
                 }
                 else if(data["data"]["stat"] == "ok"){
+                    $('#spin-modal').fadeOut();
+                    $('.trust-modal-title').text('Trust ' +profile_username);
+                    $("#new-trust-modal").modal("show");
+                }
+                else if(data["data"]["stat"] == "existing"){
+                    $('#id_weight').val(data['data']['weight']);
+                    $('#id_text').val(data['data']['text']);
                     $('#spin-modal').fadeOut();
                     $('.trust-modal-title').text('Trust ' +profile_username);
                     $("#new-trust-modal").modal("show");

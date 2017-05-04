@@ -38,6 +38,8 @@ class RegistrationForm(UserCreationForm):
         max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
             "The address to receive notifications from Villages."),
         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    terms_of_service = forms.BooleanField(label='I agree with terms of service', required=True,
+                                          widget=forms.CheckboxInput(attrs={'class': 'form-control', 'style': 'width: auto; box-shadow:none;'}))
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)

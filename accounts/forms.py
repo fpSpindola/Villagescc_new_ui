@@ -7,8 +7,11 @@ from profile.models import Profile
 
 # Forms
 
+
 class RegisterForm(ModelForm):
     """ Signup form """
+    terms_of_service = forms.BooleanField(label='I agree with terms of service', required=True,
+                                          widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         # Overriding form to set email is required because User email is optional

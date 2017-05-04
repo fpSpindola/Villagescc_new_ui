@@ -73,12 +73,14 @@
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
             success: function(data){
+                debugger;
                 if(data['data']['stat'] == 'ok'){
                     var recipient = data['data']['recipient'];
                     $('#msg').html(data).fadeIn('slow');
                     $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
                     $('#msg').delay(2500).fadeOut('slow');
-                    $('.trust-modal').modal('hide');
+                    $('#new-trust-modal').modal('hide');
+                    location.reload();
                 }
                 else if(data['data']['stat'] == 'error'){
                     if('weight' in data['data']['errors']) {
@@ -90,10 +92,10 @@
                 }
             },
             error: function (resp){
-                $('#msg').html(data).fadeIn('slow');
-                console.log('Error ' + resp);
-                $('#msg').html("<strong><p> An error ocurred. Please verify</p></strong>").fadeIn('slow');
-                $('#msg').delay(2500).fadeOut('slow');
+                debugger;
+                if(resp.status === 500) {
+                    showInternalServerError();
+                }
             }
         });
         e.preventDefault();
