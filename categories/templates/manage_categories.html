@@ -2,9 +2,6 @@
 {% load i18n %}
 
 {% block content %}
-
-    <div class="container" style="height: 70px;"></div>
-
     <div class="container">
             <a type="button" href="{% url 'categories:categories_manager:add_category' %}" class="btn btn-primary">Add Category</a>
             <button id="delete" class="btn btn-danger pull-right"><i class="fa fa-exclamation"></i>Delete</button>
@@ -67,7 +64,7 @@
                     });
                 }
             } else {
-                alert('Please select a product first.')
+                alert('Please select a category first.')
             }
 
             $(this).html(original_value);

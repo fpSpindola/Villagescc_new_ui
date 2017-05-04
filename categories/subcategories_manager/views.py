@@ -61,10 +61,10 @@ def edit_subcategory(request, category_id):
 @transaction.atomic
 def delete_subcategory(request):
     if request.method == 'POST' and request.is_ajax():
-        categories_to_remove = SubCategories.objects.filter(id__in=[",".join(request.POST.getlist('ids[]'))])
+        subcategories_to_remove = SubCategories.objects.filter(id__in=[",".join(request.POST.getlist('ids[]'))])
         try:
-            for category in categories_to_remove:
-                SubCategories.objects.filter(id=category.id).delete()
+            for subcategory in subcategories_to_remove:
+                SubCategories.objects.filter(id=subcategory.id).delete()
         except Exception as e:
             messages.add_message(request, messages.ERROR, 'An error occurred, please try again later.')
     return HttpResponseRedirect(reverse('categories:subcategories_manager:manage_subcategories'))

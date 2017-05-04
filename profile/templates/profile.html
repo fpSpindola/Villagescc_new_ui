@@ -1,11 +1,11 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}{{ profile }}{% endblock %}
 
 {% block nav_info_class %}selected{% endblock %}
 
 {% block content %}
-    <div style="height: 60px;"></div>
 {% load profile relate humanize feed%}
 {% load staticfiles %}
 {% load i18n %}
@@ -93,12 +93,12 @@
 {% endif %}
     </div>
   <div class="col-md-3">
-  <p><a href="#"><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</a></p>
+  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>
     {% endblocktrans %}
-  <p><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</a></p>
-  <p><a href="#"><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</a></p>
-  <p><a href="#"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="User location"></i> {{ profile.location.full_name }}</a></p>
-  <p><a href="javascript.void(0)" data-toggle="tooltip" title="Registration date"><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</a></p>
+{#  <p><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</p>#}
+  <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
+  <p><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="User location"></i> {{ profile.location.full_name }}</p>
+  <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
 
   <div class="card">
     <h4>Offerings</h4>
@@ -190,107 +190,44 @@
   </div>
 </section>
 
-{% if request.profile %}
-<!-- our transcation history -->
 <section class="container-fluid">
   <div class="row">
-    <div class="col-md-9">
-      <h3>Our Transaction History</h3>
-      <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <td>11/20/2016</td>
-            <td>-6 hours</td>
-            <td>Good Job painting</td>
-            <td>
-              <p class="profile-star-rating">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td>11/11/2016</td>
-            <td>+ 4 hours</td>
-            <td></td>
-            <td>
-              <p class="profile-star-rating">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td>11/9/2016</td>
-            <td>+10 hours</td>
-            <td></td>
-            <td>
-              <p class="profile-star-rating">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-              </p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<section class="container-fluid">
-  <div class="row">
-    <div class="col-md-9">
       <h3>Endorsed by:</h3>
     {% if profile_endorsements_received %}
       {% for each_endorsement_received in profile_endorsements_received %}
-          <h4></h4>
+          <div class="container-fluid">
           <hr>
           <div class="image">
-            <img class="img-rounded" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
+            <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
           </div>
             <p class="text">Description: {{ each_endorsement_received.text }}</p>
-          <p class="text">From <a href="{{ each_endorsement_received.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.get_absolute_url }}">{{ profile.name }}</a></p>
-          <hr>
+            <p class="text">From <a href="{{ each_endorsement_received.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.get_absolute_url }}">{{ profile.name }}</a></p>
+          </div>
       {% endfor %}
     {% else %}
         <p class="text">No endorsements received yet</p>
     {% endif %}
-
-      <hr>
     </div>
-  </div>
 </section>
 
 <section class="container-fluid">
     <div class="row">
-        <div class="col-md-9">
             <h3>Endorsements made:</h3>
             {% if profile_endorsements_made %}
                 {% for each_endorsement_made in profile_endorsements_made %}
-                    <h4></h4>
-                    <hr>
-                    <div class="image">
-                        <img class="img-rounded" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+                    <div class="container-fluid">
+                        <hr>
+                        <div class="image">
+                            <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+                        </div>
+                        <p class="text">Description: {{ each_endorsement_made.text }}</p>
+                        <p class="text">From <a href="{{ profile.get_absolute_url }}">{{ profile.name }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
                     </div>
-                    <p class="text">Description: {{ each_endorsement_made.text }}</p>
-                    <p class="Media-body">From <a href="{{ profile.get_absolute_url }}">{{ profile.name }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
                 {% endfor %}
-
             {% else %}
                 <p class="text">No endorsements made yet</p>
             {% endif %}
             <hr>
         </div>
-    </div>
 </section>
 {% endblock %}

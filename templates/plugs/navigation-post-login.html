@@ -4,14 +4,11 @@
 
 
 {% include 'new_post_modal.html' %}
-
     <!-- Modal -->
-
 <!-- Fixed navbar -->
-<div class="inner-flex-container">
-    {% include 'messages.html' %}
-    {% include 'templates.html' %}
     <nav class="navbar navbar-default navbar-fixed-top">
+{#    {% include 'messages.html' %}#}
+{#    {% include 'templates.html' %}#}
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -66,8 +63,9 @@
                     </li>
                     <li>
                         <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="...">
-                            <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="Post new listing">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
+
+                            <button id="add-posting" type="button" class="btn btn-default btn-warning" data-toggle="modal" data-target="#new-posting-modal" title="New Post">
+                                <i class="fa fa-plus label-add-post" aria-hidden="true"> New Post</i>
                             </button>
                             <a id="blank-trust-id" type="button" href="{% url 'blank_trust_user' %}" class="btn btn-default btn-danger trust-blank" title="Trust this person">
                                 <i class="fa fa-heart" aria-hidden="true"></i>
@@ -89,14 +87,14 @@
                         {% else %}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 12px"><img src="{% static 'images/logo.png'  %}" width=38px height=38px class="img-circle"/></a>
                         {% endif %}
-                        <ul class="dropdown-menu" style="margin-left: -91px;">
+                        <ul class="dropdown-menu">
                             {% if request.profile %}
                                 <li><a href="{% url 'my_profile' %}">Profile</a></li>
                                 <li><a href="#">Manage Listing</a></li>
                                 <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
                                 <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
                                 {% if request.user.is_staff %}
-                                <li><a href="{% url 'management_urls' %}"></a></li>
+                                <li><a href="{% url 'management_urls' %}">Management</a></li>
                                 {% endif %}
                             {% endif %}
                             <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
@@ -106,4 +104,3 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-</div>

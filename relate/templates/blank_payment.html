@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load profile number %}
 
 {% block content %}
-    <div class="container-fluid" style="height: 110px;"></div>
+    <div class="container-fluid"></div>
 
     <form id="blank-payment-form" action="{% url 'blank_payment_user' %}" method="POST">
         {% include 'messages.html' %}
@@ -42,20 +43,58 @@
         </div>
     </form>
 
-    <div class="container">
-        <div class="row">
-            <table class="table-bordered">
+    {% if received_payments %}
+        <div class="container"><h3>Received payments</h3>
+        <table id="table-received-payments" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Payer</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for received in received_payments %}
+                <tr>
+                    <td width="25%">{{ received.item.payer }}</td>
+                    <td width="25%">{{ received.item.recipient }}</td>
+                    <td width="25%">{{ received.item.amount }}</td>
+                    <td width="25%">{{ received.item.date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        No received payments until now.
+    {% endif %}
+
+    {% if made_payments %}
+        <div class="container"><h3>Made Payments</h3>
+            <table id="tble-made-payments" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th>Payments Summary</th>
+                    <th>Payer</th>
+                    <th>Recipient</th>
+                    <th>Amount</th>
+                    <th>Date</th>
                 </tr>
                 </thead>
-                <tbody id="row-payments">
-
+                <tbody>
+                {% for made in made_payments %}
+                    <tr>
+                        <td width="25%">{{ made.item.payer }}</td>
+                        <td width="25%">{{ made.item.recipient }}</td>
+                        <td width="25%">{{ made.item.amount }}</td>
+                        <td width="25%">{{ made.item.date }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
+            {% else %}
+            No payments made until now.
         </div>
-    </div>
+    {% endif %}
 
     <div id="spin-modal" class="collapse">
         <i class="fa fa-refresh fa-spin fa-4x"></i>

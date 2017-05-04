@@ -25,43 +25,48 @@ a:hover { color: #a03c21 }
     display: block;
 }
 </style>
-
-<div style="height: 100px;"></div>
-
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
         <div class="col-md-2">
-            <p><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></p>
             <nav class="sidebar">
-                <ul class="nav sidenav">
+                <ul>
+                    <li>
+                        <div><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
+                        <ul class="collapse">
+                            <li></li>
+                        </ul>
                     {% for each in categories %}
                         {% if each.categories_text == 'PRODUCTS' %}
-                            <li><a href="{% url 'frontend:category_type' 'PRODUCTS' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in item_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'SERVICES' %}
-                            <li><a href="{% url 'frontend:category_type' 'SERVICES' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                                <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in services_sub_categories %}
-                                        <li><a href="#"></a></li>
+                                        <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'RIDESHARE' %}
-                            <li><a href="{% url 'frontend:category_type' 'RIDESHARE' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                                <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in rideshare_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
+                                        <li><a href="{% url 'frontend:home' each_sub_category.sub_categories_text %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% elif each.categories_text == 'HOUSING' %}
-                            <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">{{ each.categories_text }}</a>
-                                <ul class="nav">
+                            <li class="menu-group">
+                                <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
+                                <ul class="collapse">
                                     {% for each_sub_category in housing_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
@@ -78,61 +83,54 @@ a:hover { color: #a03c21 }
                 <form class="inline_form nav" action="" method="get"><ul>
                     <div class="btn-group">
                         {% if listings %}
-                        <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
-                        <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
-                            <span class="caret"></span>
-                        </button>
-                        <!-- Given for loop to construct all -->
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'frontend:listing_type' 'OF' %}">Offer</a></li>
-                            <li><a href="{% url 'frontend:listing_type' 'RQ' %}">Request</a></li>
-                            <li><a href="{% url 'frontend:listing_type' 'TC' %}">Teach</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="{% url 'frontend:listing_type' 'LR' %}">Learn</a></li>
-                            <li><a href="{% url 'frontend:listing_type' 'GT' %}">Gift</a></li>
-                        </ul>
-                    </div>
-                {% endif %}
-                {% if not listings %}
-                    <div class="input-group" style="align-content: center; width: 350%;">
-                        {{ form.q }}
-                    </div>
-                    <span>{{ form.radius }}</span>
-                {% endif %}
-                        <span>
+                            <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
+                            <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
+                                <span class="caret"></span>
+                            </button>
+                            <!-- Given for loop to construct all -->
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'frontend:listing_type' 'OF' %}">Offer</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'RQ' %}">Request</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'TC' %}">Teach</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{% url 'frontend:listing_type' 'LR' %}">Learn</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'GT' %}">Gift</a></li>
+                            </ul>
+                            </div>
+                        {% endif %}
+                    {% if not listings %}
+                        <div class="input-group" style="align-content: center; width: 250%;">
+                            {{ form.q }}
+                        </div>
+                        <span>{{ form.radius }}</span>
+                        <span><label>{{ form.trusted }}
+                            <img src="{% static 'img/heart_icon.png' %}"
+                                 alt="{% trans 'Heart icon = trusted user' %}">
+                            {% trans 'Trusted only' %}</label></span>
+                    {% endif %}
+                    <span>
+                        {% if item_type %}
+                            <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Listings only</a>
+                        {% else %}
                             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
-                        </span>
+                        {% endif %}
+                    </span>
 
                 </ul></form>
             </div>
-
-{#            <span class="{% block feed_people_class %}{% endblock %}" style="padding-left: 5%;"><a href="{% url 'frontend:home' %}?{{ url_param_str }}"><img src="{% static 'img/heart_icon.png' %}" height="22" width="22">&nbsp Trusted only</a></span>#}
-{#            <span class="distance-range" style="padding-left: 5%;" data-toggle="tooltip" title="Distance from you (in miles)">#}
-{#            <input#}
-{#                    id="ex2"#}
-{#                    type="text"#}
-{#                    class="span2"#}
-{#                    value=""#}
-{#                    data-slider-min="1000"#}
-{#                    data-slider-max="50000"#}
-{#                    data-slider-step="4"#}
-{#                    data-slider-value="[1000,5000]"#}
-{#                    data-slider-handle="square"/>#}
-{#            <button type="button" class="btn btn-warning" name="button" style="float: right;">update distance</button>#}
-{#            </span>#}
         </div>
 
-        <div class="col-md-3" style="float: right;">
-            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
-            </button>
-            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List
-            </button>
-            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">
-                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid
-            </button>
-        </div>
+{#        <div class="col-md-3" style="float: right;">#}
+{#            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">#}
+{#                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
+{#            </button>#}
+{#            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">#}
+{#                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
+{#            </button>#}
+{#            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">#}
+{#                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
+{#            </button>#}
+{#        </div>#}
 
       <div style="height: 80px;"></div>
 
@@ -145,23 +143,23 @@ a:hover { color: #a03c21 }
                 <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
                     <div class="panel-heading">{{ each }}</div>
                         <div class="panel-body">
-                            <a href="{{ each.get_absolute_url }}">
+{#                            <a href="#">#}
                                 <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
-                            </a>
+{#                            </a>#}
                             <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
                             <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
 
                         </div>
                     <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
-                        <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">
-                            <i class="fa fa-heart" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">
-                            <i class="fa fa-money" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                        </button>
+{#                        <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">#}
+{#                            <i class="fa fa-heart" aria-hidden="true"></i>#}
+{#                        </button>#}
+{#                        <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">#}
+{#                            <i class="fa fa-money" aria-hidden="true"></i>#}
+{#                        </button>#}
+{#                        <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">#}
+{#                            <i class="fa fa-envelope" aria-hidden="true"></i>#}
+{#                        </button>#}
                     </div>
                 </div>
                 {% empty %}
@@ -178,7 +176,7 @@ a:hover { color: #a03c21 }
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
                         <p class="thumbnail-info"></p>
                         <div class="caption" style="height: 60px;">
-                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
+                            <a href="#" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
                             <p>&nbsp;{{ each.title }}</p>
                         </div>
                     </div>

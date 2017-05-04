@@ -133,7 +133,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'villages',
         'USER': 'postgres',
-        'PASSWORD': 'teste123!'
+        'PASSWORD': 'test123!'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
