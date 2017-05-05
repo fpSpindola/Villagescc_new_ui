@@ -1,9 +1,8 @@
 from decimal import Decimal as D
-
 from django import forms
 from django.core import validators
+from dal import autocomplete
 from django.utils.translation import ugettext_lazy as _
-
 from relate.models import Endorsement
 from ripple import PRECISION, SCALE
 import ripple.api as ripple
@@ -109,8 +108,8 @@ class AcknowledgementForm(forms.Form):
 class BlankTrust(forms.ModelForm):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.values('user__username'),
-                                          label='Choose the trust receiver', required=True,
-                                          widget=forms.Select(attrs={'class': 'form-control'}))
+                                       label='Choose the trust receiver', required=True,
+                                       widget=forms.Select(attrs={'class': 'form-control'}))
 
     weight = forms.IntegerField(label='Weight', required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control'}))
@@ -156,8 +155,8 @@ class BlankTrust(forms.ModelForm):
 class BlankPaymentForm(forms.Form):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
-                                       label='Choose the trust receiver', required=True,
-                                       widget=forms.Select(attrs={'class': 'form-control'}))
+                                  widget=autocomplete.Select2ListChoiceField(url='recipient_autocomplete')
+                               )
 
     ripple = forms.ChoiceField(
         label=_("Send"),

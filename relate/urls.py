@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
-
+from relate.views import RecipientAutocomplete
 from feed.views import feed
 from relate.models import Endorsement
 from ripple.api import RipplePayment

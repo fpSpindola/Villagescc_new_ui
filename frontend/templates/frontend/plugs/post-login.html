@@ -166,7 +166,7 @@
                         <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.listing_type }} | {{ each.price }}</p>
                         <p class="thumbnail-info"></p>
-                        <div class="caption" style="height: 125px;">
+                        <div class="caption" style="height: 115px;">
                             <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
                             <p style="padding-left: 70px;">{{ each.title }}</p>
                             <br>

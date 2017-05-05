@@ -332,3 +332,11 @@ div div div a {
 .label-add-post {
     font-family: "Lato", serif;
 }
+
+ul {
+    list-style-type: none;
+}
+
+#id_ripple {
+    padding: 0;
+}

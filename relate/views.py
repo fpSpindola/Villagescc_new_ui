@@ -1,4 +1,6 @@
 import json
+
+from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -221,6 +223,7 @@ def get_user_photo(request, profile_id):
     payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile_id).all()
     recipient = get_object_or_404(Profile, id=profile_id)
     max_amount = ripple.max_payment(request.profile, recipient)
+    can_ripple = max_amount > 0
     if payment_list:
         for each_payment in payment_list:
             payments.append('{0} paid {1} in {2}'.format(each_payment.poster.name, each_payment.recipient.name, each_payment.date.date()))
@@ -228,6 +231,8 @@ def get_user_photo(request, profile_id):
     data['profile_photo_path'] = profile_photo_path
     data['payment_list'] = payments
     data['max_amount'] = max_amount
+    data['can_ripple'] = can_ripple
+    data['recipient'] = recipient.name
     return JsonResponse({'data': data})
 
 
@@ -315,3 +320,14 @@ def send_payment_notification(payment):
     send_notification(subject, payment.payer, payment.recipient,
                       'acknowledgement_notification_email.txt',
                       {'acknowledgement': payment})
+
+
+class RecipientAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Profile.objects.none()
+
+        qs = Profile.objects.all()
+        if self.q:
+            qs = qs.filter(name_istartswith=self.q)
+        return qs

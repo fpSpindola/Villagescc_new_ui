@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% load i18n %}
 {% load profile number %}
 
 {% block content %}
+    {% include 'autcom' %}
     <div class="container-fluid"></div>
-
     <form id="blank-payment-form" action="{% url 'blank_payment_user' %}" method="POST">
         {% include 'messages.html' %}
         <div class="container">
             <div class="row">
                 <span id="max-amount" class="label label-primary pull-right" hidden></span>
                 {% csrf_token %}
+                <div class="alert alert-info ripple-hours" hidden>
+                </div>
                 {% for field in form %}
                     {% if field.errors %}
                         <div class="form-group">
@@ -66,7 +69,10 @@
             </tbody>
         </table>
     {% else %}
-        No received payments until now.
+        <br>
+        <div class="container" style="padding: 0;">
+        <p>No received payments until now.</p>
+        </div>
     {% endif %}
 
     {% if made_payments %}
@@ -92,13 +98,16 @@
                 </tbody>
             </table>
             {% else %}
-            No payments made until now.
+            <div class="container" style="padding: 0;">
+            <p>No payments made until now.</p>
+            </div>
         </div>
     {% endif %}
 
     <div id="spin-modal" class="collapse">
         <i class="fa fa-refresh fa-spin fa-4x"></i>
     </div>
+</div>
 
     <script>
         $('#id_recipient').on('change', function () {
@@ -110,7 +119,6 @@
                 url: url,
                 type: 'GET',
                 success: function (data) {
-                    debugger;
                     $('#profile-image').attr("src", data['data']['profile_photo_path']);
                     $('#profile-image').attr("hidden", false);
                     data['data']['payment_list'].forEach(function (payments) {
@@ -119,11 +127,23 @@
                     max_amout_span.text("Max trusted payment amount: "+data['data']['max_amount']);
                     max_amout_span.attr("hidden", false);
                     $('#label-profile-image').attr("hidden", false);
+                    if(!data['data']['can_ripple']) {
+                        $('label[for="id_ripple_0"]').closest('li').hide();
+                        $('#id_ripple_1').attr('checked', true);
+                        $('.ripple-hours').html("There are no available paths through the trust network to <strong>" + data['data']['recipient'] + "</strong>, so you can only send direct acknowledgement.")
+                        $('.ripple-hours').attr("hidden", false);
+                    }else if(data['data']['can_ripple']){
+                        $('#id_ripple_0').attr('checked', true);
+                        $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
+                        $('.ripple-hours').attr("hidden", false);
+                    }
                     $('#spin-modal').fadeOut();
                 },
                 error: function (data) {
-                    debugger;
-                    console.log(data);
+                    if(data.status === 500){
+                        showInternalServerError();
+                        console.log(data);
+                    }
                 }
             })
         });
