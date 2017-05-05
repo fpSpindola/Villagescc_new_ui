@@ -21,7 +21,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="msg"></div>
+                    <div class="alert alert-warning collapse" id="payment-msg"></div>
                     <div class="modal-footer">
                         <button type="submit" id="save-payment"
                                 class=" btn btn-success gradient save-button"
@@ -57,6 +57,7 @@
 	}
 
     $("#save-payment").click(function(e) {
+        $("#save-payment").attr("disabled", true);
         var profile_username = $("#profile-username").val();
         var url = 'relate/pay/'+profile_username+'/';
         console.log(url);
@@ -72,18 +73,20 @@
             success: function(data){
                 if(data['data']['stat'] == 'ok'){
                     var recipient = data['data']['recipient'];
-                    $('#msg').html(data).fadeIn('slow');
-                    $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
-                    $('#msg').delay(2500).fadeOut('slow');
+                    $('#payment-msg').html(data).fadeIn('slow');
+                    $('#payment-msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
+                    $('#payment-msg').delay(2500).fadeOut('slow');
+                    $("#save-payment").attr("disabled", false);
                     $('#new-payment-modal').hide()
 
                 }
                 else if(data['data']['stat'] == 'error'){
                     if('weight' in data['data']['errors']) {
-                        $('#msg').html(data).fadeIn('slow');
+                        $('#payment-msg').html(data).fadeIn('slow');
                         var error = data["data"]["errors"]["weight"];
-                        $('#msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
-                        $('#msg').delay(2500).fadeOut('slow');
+                        $('#payment-msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
+                        $('#payment-msg').delay(2500).fadeOut('slow');
+                        $("#save-payment").attr("disabled", false);
                     }
                 }
             },

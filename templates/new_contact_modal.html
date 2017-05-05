@@ -17,7 +17,7 @@
                     </div>
                 </div>
                     <div class="modal-footer">
-                        <button type="submit" id="new-payment-modal" class=" btn btn-success gradient save-button">
+                        <button type="submit" id="send-contact" class=" btn btn-success gradient save-button">
                             <i class="fa fa-check"></i>Send contact
                         </button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -28,3 +28,10 @@
         </div>
     </div>
 </form>
+
+<script>
+    var send_contact = $("#send-contact");
+    send_contact.click(function (e) {
+        $(this.attr("disabled", true))
+    });
+</script>

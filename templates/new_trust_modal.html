@@ -36,16 +36,18 @@
                             <div class="input-group">
                                 {{ trust_form.weight }}
                             </div>
+                            <div class="alert alert-warning collapse" id="error_id_weight"></div>
                             <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
                             {{ trust_form.text.errors }}
                             <div class="input-group">
                                 {{ trust_form.text}}
                             </div>
+                            <div class="alert alert-warning collapse" id="error_id_text"></div>
                             <label for="{{ trust_form.anonymous.label }}" class="align-check-label {% if field.errors %}error{% endif %}"><div class="align-check-input">{{ trust_form.anonymous }}</div>{{ trust_form.anonymous.label }}</label>
                             {{ trust_form.anonymous.errors }}
                         </div>
                     </div>
-                    <div id="msg"></div>
+                    <div class="alert alert-warning collapse" id="trust-msg"></div>
                     <div class="modal-footer">
                         <button type="submit" id="save-trust" class=" btn btn-success gradient save-button">
                             <i class="fa fa-check"></i>Save Trust
@@ -60,6 +62,8 @@
 
 <script>
     $("#save-trust").click(function(e) {
+        debugger;
+        $('#save-trust').attr("disabled", true);
         var profile_username = $("#profile-username").val();
         var url = 'relate/endorse/'+profile_username+'/';
         console.log(url);
@@ -76,18 +80,20 @@
                 debugger;
                 if(data['data']['stat'] == 'ok'){
                     var recipient = data['data']['recipient'];
-                    $('#msg').html(data).fadeIn('slow');
-                    $('#msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
-                    $('#msg').delay(2500).fadeOut('slow');
+                    $('#trust-msg').html(data).fadeIn('slow');
+                    $('#trust-msg').html("<strong><p>Successfully sent trust to " +recipient+ "</p></strong>").fadeIn('slow');
+                    $('#trust-msg').delay(2500).fadeOut('slow');
+                    $('#save-trust').attr("disabled", false);
                     $('#new-trust-modal').modal('hide');
                     location.reload();
                 }
                 else if(data['data']['stat'] == 'error'){
+                    debugger;
                     if('weight' in data['data']['errors']) {
-                        $('#msg').html(data).fadeIn('slow');
                         var error = data["data"]["errors"]["weight"];
-                        $('#msg').html("<strong><p> Weight: " +error+ " Please verify</p></strong>").fadeIn('slow');
-                        $('#msg').delay(2500).fadeOut('slow');
+                        $('#trust-msg').html("<strong><p> Weight: " +error+ " Please verify </strong></p>").fadeIn('slow');
+                        $('#trust-msg').delay(2500).fadeOut('slow');
+                        $("#save-trust").attr("disabled", false);
                     }
                 }
             },

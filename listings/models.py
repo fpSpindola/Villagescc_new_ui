@@ -13,11 +13,11 @@ LEARN = 'Learn'
 GIFT = 'Gift'
 
 LISTING_TYPE = (
-    ('OF', OFFER),
-    ('RQ', REQUEST),
-    ('TC', TEACH),
-    ('LR', LEARN),
-    ('GT', GIFT),
+    ('OFFER', OFFER),
+    ('REQUEST', REQUEST),
+    ('TEACH', TEACH),
+    ('LEARN', LEARN),
+    ('GIFT', GIFT),
 )
 # Create your models here.
 class Listings(models.Model):
@@ -27,7 +27,7 @@ class Listings(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
 
-    listing_type = models.CharField(max_length=2, choices=LISTING_TYPE)
+    listing_type = models.CharField(max_length=100, choices=LISTING_TYPE)
     photo = models.ImageField(upload_to='listings', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)

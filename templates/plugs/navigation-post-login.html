@@ -90,7 +90,7 @@
                         <ul class="dropdown-menu">
                             {% if request.profile %}
                                 <li><a href="{% url 'my_profile' %}">Profile</a></li>
-                                <li><a href="#">Manage Listing</a></li>
+                                <li><a href="{% url 'listing_management:manage_listings' %}">Manage Listing</a></li>
                                 <li><a href="{% url 'accounts:sign_in_user:edit_profile' %}">Edit Profile</a></li>
                                 <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
                                 {% if request.user.is_staff %}
