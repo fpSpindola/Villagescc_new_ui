@@ -13,6 +13,7 @@ def view_listings(request):
 
 
 def edit_listing(request, listing_id):
+    listing_form = ListingsForms()
     listing = Listings.objects.get(id=listing_id, user_id=request.user.id)
 
     if not request.user.id == listing.user_id:
@@ -23,33 +24,38 @@ def edit_listing(request, listing_id):
         messages.add_message(request, messages.ERROR, 'No listing has been found with this id')
         return HttpResponseRedirect(reverse('listing_management:manage_listings'))
     if request.method == 'POST':
-        form = ListingsForms(request.POST)
+        form = ListingsForms(request.POST, request.FILES)
         if form.is_valid():
             try:
                 if form.cleaned_data['listing_type'] == listing.listing_type and \
                                 form.cleaned_data['title'] == listing.title and \
                                 form.cleaned_data['description'] == listing.description and \
                                 form.cleaned_data['price'] == listing.price and \
-                                form.cleaned_data['subcategories'] == listing.subcategories:
+                                form.cleaned_data['subcategories'] == listing.subcategories and \
+                                form.cleaned_data['photo'] == listing.photo:
                         messages.add_message(request, messages.ERROR, 'No changes were identified')
+                        return render(request, 'listing_management/edit_listing.html', {'form': form,
+                                                                                        'listing_form': listing_form})
                 else:
                     listing.listing_type = form.cleaned_data['listing_type']
                     listing.title = form.cleaned_data['title']
                     listing.description = form.cleaned_data['description']
                     listing.price = form.cleaned_data['price']
                     listing.subcategories = form.cleaned_data['subcategories']
+                    listing.photo = form.cleaned_data['photo']
                     listing.save()
                     messages.add_message(request, messages.SUCCESS, 'Listing edited with success.')
-                    HttpResponseRedirect(reverse('listing_management:manage_listings'))
+                    return HttpResponseRedirect(reverse('listing_management:manage_listings'))
             except Exception as e:
                 messages.add_message(request, messages.ERROR, 'An error has occurred, please try again later.')
-                return render(request, 'listing_management/manage_listings.html', {'form': form, 'listings': listing})
+                return render(request, 'listing_management/manage_listings.html', {'form': form, 'listings_form': listing})
     else:
         form = ListingsForms(initial={'listing_type': listing.listing_type,
                                       'title': listing.title,
                                       'description': listing.description,
                                       'price': listing.price,
-                                      'subcategories': listing.subcategories})
+                                      'subcategories': listing.subcategories,
+                                      'photo': listing.photo})
         return render(request, 'listing_management/edit_listing.html', {'form': form})
     HttpResponseRedirect(reverse('listing_management:manage_listings'))
 

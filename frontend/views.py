@@ -130,7 +130,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
         if type_filter:
-            listings = Listings.objects.all().filter(subcategories__sub_categories_text=type_filter)
+            listings = Listings.objects.all().filter(subcategories__id=type_filter)
         else:
             listings = Listings.objects.all()
         form = ListingsForms()
