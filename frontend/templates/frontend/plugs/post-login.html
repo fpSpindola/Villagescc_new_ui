@@ -69,7 +69,7 @@
         </div>
         <div class="col-md-6">
             <div class="">
-                <form action="" method="get"><ul>
+                <form action="" method="get"><ul style="padding-left: 0;">
                     <div class="btn-group">
                         {% if listings %}
                             <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
@@ -98,7 +98,11 @@
                             {% trans 'Trusted only' %}</label></span>
                     {% endif %}
                     <span>
-                        <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                        {% if feed_items %}
+                            <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                        {% elif listings %}
+                            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                        {% endif %}
                     </span>
 
                 </ul></form>
