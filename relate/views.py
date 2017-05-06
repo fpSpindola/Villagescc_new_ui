@@ -250,7 +250,7 @@ def blank_trust(request):
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
             return django_render(request, 'blank_trust.html', {'form': form,
-                                                               'listings_form': listing_form})
+                                                               'listing_form': listing_form})
         try:
             endorsement = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
         except Endorsement.DoesNotExist:
@@ -271,7 +271,7 @@ def blank_trust(request):
     else:
         form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
         profile = request.profile
-        return django_render(request, 'blank_trust.html', {'form': form, 'listings_form': listing_form,
+        return django_render(request, 'blank_trust.html', {'form': form, 'listing_form': listing_form,
                                                            'accounts': accounts, 'profile': profile})
 
 
@@ -291,7 +291,7 @@ def blank_payment(request):
             if recipient == request.profile:
                 messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
                 return django_render(request, 'blank_payment.html', {'form': form,
-                                                                     'listings_form': listing_form})
+                                                                     'listing_form': listing_form})
         if form.is_valid():
             can_ripple = max_amount > 0
             if not can_ripple and request.POST['ripple'] == 'routed':

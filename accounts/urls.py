@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^profiles/([^/]+)/endorsements/$', profile_views.profile_endorsements,
         name='profile_endorsements'),
     url(r'^profiles/([^/]+)/contact/$', profile_views.contact, name='contact'),
+    url(r'^profiles/contact/', profile_views.undefined_contact, name='undefined_contact'),
     url(r'^invite/$', profile_views.invite, name='invite'),
     url(r'^invitations/([^/]+)/$', profile_views.invitation, name='invitation'),
     url(r'^invitations/$', profile_views.invitations_sent, name='invitations_sent'),

@@ -1,7 +1,7 @@
 from decimal import Decimal as D
 from django import forms
 from django.core import validators
-from dal import autocomplete
+from dal import autocomplete as dal_autocomplete
 from django.utils.translation import ugettext_lazy as _
 from relate.models import Endorsement
 from ripple import PRECISION, SCALE
@@ -107,7 +107,7 @@ class AcknowledgementForm(forms.Form):
 
 class BlankTrust(forms.ModelForm):
 
-    recipient = forms.ModelChoiceField(queryset=Profile.objects.values('user__username'),
+    recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
                                        label='Choose the trust receiver', required=True,
                                        widget=forms.Select(attrs={'class': 'form-control'}))
 
@@ -125,7 +125,6 @@ class BlankTrust(forms.ModelForm):
         self.endorser = kwargs.pop('endorser')
         self.recipient = kwargs.pop('recipient')
         super(BlankTrust, self).__init__(*args, **kwargs)
-        self.fields['recipient'].queryset = Profile.objects.values('user__username')
 
     @property
     def max_weight(self):
@@ -155,8 +154,8 @@ class BlankTrust(forms.ModelForm):
 class BlankPaymentForm(forms.Form):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
-                                  widget=autocomplete.Select2ListChoiceField(url='recipient_autocomplete')
-                               )
+                                       label='Choose the trust receiver', required=True,
+                                       widget=forms.Select(attrs={'class': 'form-control'}))
 
     ripple = forms.ChoiceField(
         label=_("Send"),

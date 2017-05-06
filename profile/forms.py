@@ -214,6 +214,11 @@ class ProfileForm(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
+
+    recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
+                                       label='Choose the trust receiver', required=True,
+                                       widget=forms.Select(attrs={'class': 'form-control'}))
+
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'width: 570px;'}))
 
     def send(self, sender, recipient, subject=None,

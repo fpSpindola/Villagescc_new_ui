@@ -16,12 +16,17 @@
 <form action="" method="post">
 	{% csrf_token %}
 	<table class="form">
+
+        <div class="container">
 		<tr>
-			<td>{{ form.message.errors }}{{ form.message }}</td>
+            {{ form.recipient.errors }}{{ form.recipient }}
+            <br>
+			{{ form.message.errors }}{{ form.message }}
 		</tr>
 		<tr>
 			<td><input type="submit" value="{% trans 'Send' %}"></td>
 		</tr>
+        </div>
 	</table>
 </form>
 {% endblock %}

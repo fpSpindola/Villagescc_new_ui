@@ -1,5 +1,4 @@
 django-autocomplete-light
-django_bootstrap_typeahead
 Django==1.8
 psycopg2==2.6.2
 sqlalchemy

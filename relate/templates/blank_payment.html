@@ -4,7 +4,6 @@
 {% load profile number %}
 
 {% block content %}
-    {% include 'autcom' %}
     <div class="container-fluid"></div>
     <form id="blank-payment-form" action="{% url 'blank_payment_user' %}" method="POST">
         {% include 'messages.html' %}
@@ -142,6 +141,7 @@
                 error: function (data) {
                     if(data.status === 500){
                         showInternalServerError();
+                        $('#spin-modal').fadeIn();
                         console.log(data);
                     }
                 }

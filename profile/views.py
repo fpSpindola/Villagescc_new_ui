@@ -329,6 +329,10 @@ def contact(request, username):
     return locals()
 
 
+def undefined_contact(request):
+    form = ContactForm()
+    return django_render(request, 'contact.html', {'form': form})
+
 @login_required
 @render()
 def invite(request):

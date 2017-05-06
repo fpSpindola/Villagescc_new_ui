@@ -2,8 +2,6 @@
 {% load i18n %}
 
 {% block content %}
-    <div class="container-fluid" style="height: 110px;"></div>
-
     <form action="{% url 'blank_trust_user' %}" method="POST">
         {% include 'messages.html' %}
         <div class="container">
@@ -126,10 +124,14 @@
             $.ajax({
                 url: url,
                 type: 'GET',
+                beforeSend: function () {
+                    $('#spin-modal').fadeIn();
+                },
                 success: function (data) {
                     $('#profile-image').attr("src", data['data']);
                     $('#profile-image').attr("hidden", false);
-                    $('#label-profile-image').attr("hidden", false)
+                    $('#label-profile-image').attr("hidden", false);
+                    $('#spin-modal').fadeOut();
                 },
                 error: function (data) {
                     console.log(data);
