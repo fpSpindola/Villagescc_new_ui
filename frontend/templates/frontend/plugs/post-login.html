@@ -96,10 +96,9 @@
                             </div>
                         {% endif %}
                     {% if not listings %}
-                        <div class="input-group" style="align-content: center; width: 250%;">
-                            {{ form.q }}
-                        </div>
-                        <span>{{ form.radius }}</span>
+                        {{ form.q }}
+                        {{ form.radius }}
+
                         <span><label>{{ form.trusted }}
                             <img src="{% static 'img/heart_icon.png' %}"
                                  alt="{% trans 'Heart icon = trusted user' %}">

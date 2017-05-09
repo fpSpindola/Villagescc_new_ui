@@ -55,98 +55,23 @@
             }
         });
     });
+
+    $("#id_categories").on('change', function (e) {
+        var selected_category = $(this).val();
+        $.ajax({
+            url: "{% url 'subcategories_filter' %}",
+            type: 'GET',
+            data: {'category': selected_category},
+            success: function (e) {
+                $("#id_subcategories").find("option").remove().end();
+                e.result.forEach(function (data) {
+                    $("#id_subcategories").append($("<option />").val(data["id"]).text(data["text"]))
+                });
+            },
+            error: function (e) {
+                showInternalServerError();
+            }
+        })
+    })
 </script>
-
-
-{#<form id="formAddListing" enctype="multipart/form-data" method="POST">#}
-{#    {% csrf_token %}#}
-{#    <div class="modal fade" id="addListingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"#}
-{#         aria-hidden="true">#}
-{#        <div class="modal-dialog" role="document">#}
-{#            <div class="modal-content">#}
-{#                <div class="modal-header">#}
-{#                    <h5 class="modal-title" id="addListingModalTitle">Add new listing</h5>#}
-{#                    <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close">#}
-{#                        <span aria-hidden="true">&times;</span>#}
-{#                    </button>#}
-{#                </div>#}
-{#                <div class="modal-body">#}
-{#                    <form id="formAddListing2" enctype="multipart/form-data">#}
-{#                        {% csrf_token %}#}
-{#                        <div class="form-group">#}
-{#                            <label for="inputListingTypeId">Listing Type</label>#}
-{#                            <select class="form-control" id="inputListingTypeId" name="listing_type">#}
-{#                                <option disabled selected value></option>#}
-{#                                <option value="1">OFFER</option>#}
-{#                                <option value="2">REQUEST</option>#}
-{#                                <option value="3">TEACH</option>#}
-{#                                <option value="4">LEARN</option>#}
-{#                                <option value="5">GIFT</option>#}
-{#                            </select>#}
-{#                            <div class="alert alert-warning collapse" id="error_listing_type"></div>#}
-{#                        </div>#}
-{#                        <div class="form-group collapse">#}
-{#                            <label for="inputTitleId">Title</label>#}
-{#                            <input type="text" class="form-control" id="inputTitleId" placeholder="I.e: Orange Juice">#}
-{#                            <div class="alert alert-warning collapse" id="error_title"></div>#}
-{#                        </div>#}
-{#                        <div class="form-group">#}
-{#                            <label for="inputDescription">Description</label>#}
-{#                            <textarea class="form-control" id="inputDescription" rows="3" name="description"></textarea>#}
-{#                            <div class="alert alert-warning collapse" id="error_description"></div>#}
-{#                        </div>#}
-{#                        <div class="form-group">#}
-{#                            <label for="inputPriceId">Price</label>#}
-{#                            <input type="number" class="form-control" id="inputPriceId" value="0" name="price">#}
-{#                            <div class="alert alert-warning collapse" id="error_price"></div>#}
-{#                        </div>#}
-{#                        <div class="form-group">#}
-{#                            <label for="inputSubCategoriesId">Sub Category</label>#}
-{#                            <select class="form-control" id="inputSubCategoriesId" name="sub_categories">#}
-{#                                {% if subcategories %}#}
-{#                                    {% for subcategory in subcategories %}#}
-{#                                        <option value="{{ subcategory.id }}">{{ subcategory.sub_categories_text }} - {{ subcategory.categories.categories_text }}</option>#}
-{#                                    {% endfor %}#}
-{#                                {% endif %}#}
-{#                            </select>#}
-{##}
-{#                            <div class="alert alert-warning collapse" id="error_sub_categories"></div>#}
-{#                        </div>#}
-{#                        <div class="form-group">#}
-{#                            <label for="inputPhotoId" class="custom-file">Choose picture...#}
-{#                                <input type="file" id="inputPhotoId" class="file">#}
-{#                            </label>#}
-{#                        </div>#}
-{#                        <button type="submit" class="btn btn-success pull-right">#}
-{#                            <i class="fa fa-plus"></i>Save Listing#}
-{#                        </button>#}
-{#                    </form>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</form>#}
-{##}
-{#<script>#}
-{#    $('#formAddListing').submit(function (e) {#}
-{#        e.preventDefault();#}
-{#        debugger;#}
-{#        var formData = new FormData($(this));#}
-{#        $.ajax({#}
-{#            url: "{% url 'new_listing' %}",#}
-{#            data: formData,#}
-{#            method: 'POST',#}
-{#            cache: false,#}
-{#            processData: false,#}
-{#            contentType: false,#}
-{#            success: function (e) {#}
-{#                window.location = "{% url 'new_listing' %}";#}
-{#            },#}
-{##}
-{#            error: function (d) {#}
-{#                showFormErrors(d['responseJSON']['errors']);#}
-{#            }#}
-{#        });#}
-{#    });#}
-{#</script>#}
 

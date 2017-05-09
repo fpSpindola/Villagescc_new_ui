@@ -2,6 +2,8 @@ import json
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse
+
+from categories.models import SubCategories
 from listings.models import Listings
 from django.core.urlresolvers import reverse
 from listings.forms import ListingsForms
@@ -88,3 +90,11 @@ def get_listing_info(request, listing_id):
         data["error"] = e
     return JsonResponse({'data': data})
 
+
+def get_subcategories_filter(request):
+    if request.is_ajax():
+        result = []
+        subcategories = SubCategories.objects.filter(categories_id=request.GET.get("category"))
+        for each_subcateogry in subcategories:
+            result.append({"id": each_subcateogry.id, "text": each_subcateogry.sub_categories_text})
+        return JsonResponse({'result': result})

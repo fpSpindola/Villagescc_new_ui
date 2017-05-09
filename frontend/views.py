@@ -20,7 +20,7 @@ def listing_type_filter(request, listing_type):
     :param category_type:
     :return:
     """
-    listing_type_objects = Listings.objects.all().filter(listing_type=listing_type)
+    listing_type_objects = Listings.objects.all().filter(listing_type=listing_type).order_by('-created')
     form = ListingsForms()
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
@@ -41,7 +41,7 @@ def categories_filter(request, category_type):
     :param category_type:
     :return:
     """
-    listing_type_objects = Listings.objects.all().filter(subcategories__categories__categories_text=category_type)
+    listing_type_objects = Listings.objects.all().filter(subcategories__categories__categories_text=category_type).order_by('-created')
     form = ListingsForms()
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
@@ -130,9 +130,9 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
         if type_filter:
-            listings = Listings.objects.all().filter(subcategories__id=type_filter)
+            listings = Listings.objects.all().filter(subcategories__id=type_filter).order_by('-created')
         else:
-            listings = Listings.objects.all()
+            listings = Listings.objects.all().order_by('-created')
         form = ListingsForms()
         # can_ripple = max_amount > 0
         profile = recipient

@@ -20,6 +20,7 @@ LISTING_TYPE = (
     ('GIFT', GIFT),
 )
 # Create your models here.
+
 class Listings(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
     title = models.CharField(max_length=220)
