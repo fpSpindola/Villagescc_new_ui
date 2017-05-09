@@ -196,7 +196,7 @@ class RequestInvitationForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('name', 'photo', 'description')
+        fields = ('name', 'photo', 'job', 'description')
 
         widgets = {
             'name': forms.TextInput(attrs={
@@ -204,6 +204,9 @@ class ProfileForm(forms.ModelForm):
                 'style': 'width: 100%',
             }),
             'description': forms.Textarea(attrs={
+                'class': 'form-control',
+            }),
+            'job': forms.TextInput(attrs={
                 'class': 'form-control',
             })
         }

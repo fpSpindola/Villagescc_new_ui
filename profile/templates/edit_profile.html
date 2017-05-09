@@ -31,7 +31,9 @@
 <form action="" method="post" enctype="multipart/form-data">
 	{% csrf_token %}
 	<table class="form">
-		{{ form }}
+        <div class="form-group">
+		    {{ form }}
+        </div>
 		<tr>
 			<th></th>
 			<td>

@@ -61,6 +61,8 @@ class Profile(models.Model):
                               upload_to='user/%Y/%m', max_length=256, blank=True)
     description = models.TextField(_("Description"), blank=True)
 
+    job = models.TextField(null=True, blank=True)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

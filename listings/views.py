@@ -76,6 +76,10 @@ def get_listing_info(request, listing_id):
         data["listing_price"] = listing.price
         data["listing_photo"] = listing.photo.name
         data["profile_name"] = listing.user.profile.name
+        data["job"] = listing.user.profile.job
+        data["username"] = listing.user.username
+        data["balance"] = listing.user.profile.overall_balance()
+        data["description"] = listing.description
         data["profile_location"] = listing.user.profile.location.full_name()
         data["created_at"] = listing.created.date() if listing.created else None
         data["stat"] = "ok"
