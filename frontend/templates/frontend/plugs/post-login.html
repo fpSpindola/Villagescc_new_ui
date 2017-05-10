@@ -96,7 +96,9 @@
                             </div>
                         {% endif %}
                     {% if not listings %}
-                        {{ form.q }}
+
+                            {{ form.q }}
+                        </div>
                         {{ form.radius }}
 
                         <span><label>{{ form.trusted }}
@@ -123,7 +125,7 @@
                         <div class="panel-heading">{{ each }}</div>
                         <div class="panel-body">
                             <a href="{{ each.get_absolute_url }}">
-                                <img src="{% profile_image_url each '150x150' %}" style="height: 70px; width: 100px;">
+                                <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
                             </a>
                             <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
                                 <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
@@ -219,7 +221,6 @@
 <script>
     $(".listing-modal").click(function (e) {
         $('#spin-modal').fadeIn();
-        debugger;
         var listing_id = $(this).attr('data-listing-id');
         var url = '/get_listing_info/'+listing_id;
         var listing_picture_path = '/media/';
@@ -229,7 +230,6 @@
             cache: false,
             success: function (data) {
                 if(data["data"]["stat"] == "ok"){
-                    debugger;
                     $('#listing-id').val(listing_id);
                     $('.listing-modal-title').text(data["data"]["listing_title"]);
                     $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
@@ -241,11 +241,10 @@
                     $('#label-description').text(data["data"]["description"]);
                     $('#label-profile-username').text(data["data"]["username"]);
                     $('#label-profile-balance').text(data["data"]["balance"]);
-                    $('#label-profile-occupation').text(data["data"]["job"]);
-                    debugger;
-{#                    $('#trust-btn').find() = data["data"]["username"];#}
-{#                    $('#payment-btn').data('data-profile-username', data["data"]["username"]);#}
-{#                    $('#contact-btn').data('data-profile-username', data["data"]["username"]);#}
+                    $('#label-profile-occupation').text(data["data"]["job"])
+                    $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#spin-modal').fadeOut();
                     $("#listing-modal").modal("show");
                 }
@@ -287,7 +286,6 @@
                 }
             },
             error: function (data) {
-                debugger;
                 $('#spin-modal').fadeOut();
                 showInternalServerError();
             }
@@ -307,6 +305,7 @@
             type: 'GET',
             cache: false,
             success: function (data) {
+                debugger;
                 if(data["data"]["stat"] != "ok"){
                     $('#error-modal-alert').text(data["data"]["stat"]);
                     $('#spin-modal').fadeOut();

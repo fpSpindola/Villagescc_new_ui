@@ -227,12 +227,10 @@
             </div>
         </div>
     </section>
-{% endblock %}
 
 <script>
-$(".listing-modal-profile").click(function (e) {
+    $(".listing-modal-profile").click(function (e) {
         $('#spin-modal').fadeIn();
-        debugger;
         var listing_id = $(this).attr('data-listing-id');
         var url = '/get_listing_info/'+listing_id;
         var listing_picture_path = '/media/';
@@ -242,7 +240,6 @@ $(".listing-modal-profile").click(function (e) {
             cache: false,
             success: function (data) {
                 if(data["data"]["stat"] == "ok"){
-                    debugger;
                     $('#listing-id').val(listing_id);
                     $('.listing-modal-title').text(data["data"]["listing_title"]);
                     $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
@@ -255,10 +252,9 @@ $(".listing-modal-profile").click(function (e) {
                     $('#label-profile-username').text(data["data"]["username"]);
                     $('#label-profile-balance').text(data["data"]["balance"]);
                     $('#label-profile-occupation').text(data["data"]["job"]);
-                    debugger;
-{#                    $('#trust-btn').find() = data["data"]["username"];#}
-{#                    $('#payment-btn').data('data-profile-username', data["data"]["username"]);#}
-{#                    $('#contact-btn').data('data-profile-username', data["data"]["username"]);#}
+                    $('#trust-btn').attr('data-profile-username', data["data"]["username"];
+                    $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#spin-modal').fadeOut();
                     $("#listing-modal").modal("show");
                 }
@@ -270,3 +266,5 @@ $(".listing-modal-profile").click(function (e) {
         });
     });
 </script>
+
+{% endblock %}

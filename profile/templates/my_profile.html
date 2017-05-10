@@ -16,11 +16,6 @@
     float: left;
     border: 1px hidden #999;
 }
-.thumbnail{
-    width : 270px;
-    height: 250px;
-    overflow: auto;
-}
 
 .thumbnail .listing {
     width: 100%;
@@ -156,46 +151,44 @@
     </div>
   </div>
 </section>
-{% endblock %}
 
 <script>
     $(".listing-modal-profile").click(function (e) {
-            $('#spin-modal').fadeIn();
-            debugger;
-            var listing_id = $(this).attr('data-listing-id');
-            var url = '/get_listing_info/'+listing_id;
-            var listing_picture_path = '/media/';
-            $.ajax({
-                url: url,
-                type: 'GET',
-                cache: false,
-                success: function (data) {
-                    if(data["data"]["stat"] == "ok"){
-                        debugger;
-                        $('#listing-id').val(listing_id);
-                        $('.listing-modal-title').text(data["data"]["listing_title"]);
-                        $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
-                        $('#label-price').text(data["data"]["listing_price"]);
-                        $('#label-profile-name').text(data["data"]["profile_name"]);
-                        $('#profile-location').text(data["data"]["profile_location"]);
-                        $('#listing-created-at').text(data["data"]["created_at"]);
-                        $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
-                        $('#label-description').text(data["data"]["description"]);
-                        $('#label-profile-username').text(data["data"]["username"]);
-                        $('#label-profile-balance').text(data["data"]["balance"]);
-                        $('#label-profile-occupation').text(data["data"]["job"]);
-                        debugger;
-    {#                    $('#trust-btn').find() = data["data"]["username"];#}
-    {#                    $('#payment-btn').data('data-profile-username', data["data"]["username"]);#}
-    {#                    $('#contact-btn').data('data-profile-username', data["data"]["username"]);#}
-                        $('#spin-modal').fadeOut();
-                        $("#listing-modal").modal("show");
-                    }
-                },
-                error: function (data) {
+        $('#spin-modal').fadeIn();
+        var listing_id = $(this).attr('data-listing-id');
+        var url = '/get_listing_info/'+listing_id;
+        var listing_picture_path = '/media/';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                if(data["data"]["stat"] == "ok"){
+                    $('#listing-id').val(listing_id);
+                    $('.listing-modal-title').text(data["data"]["listing_title"]);
+                    $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                    $('#label-price').text(data["data"]["listing_price"]);
+                    $('#label-profile-name').text(data["data"]["profile_name"]);
+                    $('#profile-location').text(data["data"]["profile_location"]);
+                    $('#listing-created-at').text(data["data"]["created_at"]);
+                    $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                    $('#label-description').text(data["data"]["description"]);
+                    $('#label-profile-username').text(data["data"]["username"]);
+                    $('#label-profile-balance').text(data["data"]["balance"]);
+                    $('#label-profile-occupation').text(data["data"]["job"]);
+                    $('#trust-btn').attr('data-profile-username', data["data"]["username"];
+                    $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                    $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#spin-modal').fadeOut();
-                    showInternalServerError();
+                    $("#listing-modal").modal("show");
                 }
-            });
+            },
+            error: function (data) {
+                $('#spin-modal').fadeOut();
+                showInternalServerError();
+            }
         });
+    });
 </script>
+
+{% endblock %}

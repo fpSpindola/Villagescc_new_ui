@@ -18,7 +18,7 @@ class EndorseForm(forms.ModelForm):
         'over_weight': _("Please ensure this number is below %d.")
     }
 
-    weight = forms.IntegerField(label='Weight:', required=True, min_value=1, widget=forms.NumberInput(attrs={
+    weight = forms.IntegerField(label='Credit limit:', required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control', 'style': 'width: 82%'
     }))
     
@@ -111,7 +111,7 @@ class BlankTrust(forms.ModelForm):
                                        label='Choose the trust receiver', required=True,
                                        widget=forms.Select(attrs={'class': 'form-control'}))
 
-    weight = forms.IntegerField(label='Weight', required=True, min_value=1, widget=forms.NumberInput(attrs={
+    weight = forms.IntegerField(label='Credit limit', required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control'}))
 
     text = forms.CharField(label='Testimonial', required=False,
