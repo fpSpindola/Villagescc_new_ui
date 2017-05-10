@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             name='TagProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('tag', models.ForeignKey(blank=True, on_delete=models.deletion.CASCADE, to='tags.Tag')),
+                ('tag', models.ForeignKey(blank=True, on_delete=models.deletion.CASCADE, to='village_tags.Tag')),
                 ('profile', models.ForeignKey(blank=True, on_delete=models.deletion.CASCADE, to='profile.Profile')),
 
             ],
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             name='TagListing',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('tag', models.ForeignKey(blank=True, on_delete=models.deletion.CASCADE, to='tags.Tag')),
+                ('tag', models.ForeignKey(blank=True, on_delete=models.deletion.CASCADE, to='village_tags.Tag')),
                 ('listing', models.ForeignKey(blank=True, on_delete=models.deletion.CASCADE, to='listings.Listings')),
             ]
         )

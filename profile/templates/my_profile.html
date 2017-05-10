@@ -35,25 +35,34 @@
   </div>
 </div>
 
-<section class="container-fluid" id="profile-info">
-  <div class="row">
-    <div class="col-md-8">
-      <div class="inside-profile-info">
-        <p>Profile description:</p>
-        <p>{{ profile.description }}</p>
-      </div>
-        <hr>
-    </div>
+    <section class="container-fluid" id="profile-info">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="inside-profile-info">
+                    <p>Profile description:</p>
+                    <p>{{ profile.description }}</p>
+                </div>
+                <hr>
+            </div>
 
-{#    <div class="col-md-4" style="text-align: center;">#}
-{#      <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">#}
-{#      <p class="profile-star-rating">#}
-{#        <th>{% trans 'Reputation: ' %}</th>#}
-{#			<td>{% reputation profile request.profile %}</td>#}
-{#      </p>#}
-{#    </div>#}
-  </div>
-</section>
+            <div class="col-md-4" style="text-align: center;">
+                <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
+                <p class="profile-star-rating">
+                <th>{% trans 'Reputation: ' %}</th>
+                <td>{% reputation profile request.profile %}</td>
+                </p>
+                <p><i class="fa fa-balance-scale" aria-hidden="true"></i>
+                {% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour
+                {% plural %} {{ hours }} hours</p>{% endblocktrans %}
+
+                <p><i class="fa fa-pencil" aria-hidden="true"></i>Job: {% if profile.job %}{{ profile.job }} {% else %} -- {% endif %}</p>
+                <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
+                <p data-toggle="tooltip" title="{{ profile.location.full_name }}"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="{{ profile.location.full_name }}"></i>{{ profile.location.full_name|slice:":50" }}</p>
+                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
+            </div>
+
+        </div>
+    </section>
 
 <section class="container-fluid" id="profile-listing-info">
   <div class="row">
@@ -65,7 +74,7 @@
         {% for each in listings %}
           <div class="col-sm-6 col-md-4">
                     <div class="thumbnail">
-                        <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
+                        <img class="listing listing-modal-profile" src="{% product_image_url each '280x280' %}" alt="..." data-listing-id="{{ each.id }}">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
                         <p class="thumbnail-info"></p>
                         <div class="caption" style="height: 60px;">
@@ -77,15 +86,12 @@
         {% endfor %}
             {% else %}
             <h3>There is no open listings for this user</h3>
-{% endif %}
+    {% endif %}
     </div>
   <div class="col-md-3">
-  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>
-    {% endblocktrans %}
-  <p><i class="fa fa-pencil" aria-hidden="true"></i> Job Description</p>
-  <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
-  <p><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="User location"></i> {{ profile.location.full_name }}</p>
-  <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
+{#  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>#}
+{#    {% endblocktrans %}#}
+
 
   <div class="card">
     <h4>Offerings</h4>
@@ -108,9 +114,10 @@
 
 <section class="container-fluid">
   <div class="row">
+  <div class="col-md-9">
       <h3>Endorsed by:</h3>
-    {% if profile_endorsements_received %}
-      {% for each_endorsement_received in profile_endorsements_received %}
+    {% if endorsements_received %}
+      {% for each_endorsement_received in endorsements_received %}
           <div class="container-fluid">
           <hr>
           <div class="image">
@@ -124,14 +131,16 @@
         <p class="text">No endorsements received yet</p>
     {% endif %}
     </div>
+  </div>
 </section>
 
 
 <section class="container-fluid">
   <div class="row">
+  <div class="col-md-9">
       <h3>Endorsed by:</h3>
-    {% if profile_endorsements_made %}
-      {% for each_endorsement_made in profile_endorsements_made %}
+    {% if endorsements_made %}
+      {% for each_endorsement_made in endorsements_made %}
           <div class="container-fluid">
           <hr>
           <div class="image">
@@ -145,5 +154,48 @@
         <p class="text">No endorsements received yet</p>
     {% endif %}
     </div>
+  </div>
 </section>
 {% endblock %}
+
+<script>
+    $(".listing-modal-profile").click(function (e) {
+            $('#spin-modal').fadeIn();
+            debugger;
+            var listing_id = $(this).attr('data-listing-id');
+            var url = '/get_listing_info/'+listing_id;
+            var listing_picture_path = '/media/';
+            $.ajax({
+                url: url,
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+                    if(data["data"]["stat"] == "ok"){
+                        debugger;
+                        $('#listing-id').val(listing_id);
+                        $('.listing-modal-title').text(data["data"]["listing_title"]);
+                        $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                        $('#label-price').text(data["data"]["listing_price"]);
+                        $('#label-profile-name').text(data["data"]["profile_name"]);
+                        $('#profile-location').text(data["data"]["profile_location"]);
+                        $('#listing-created-at').text(data["data"]["created_at"]);
+                        $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                        $('#label-description').text(data["data"]["description"]);
+                        $('#label-profile-username').text(data["data"]["username"]);
+                        $('#label-profile-balance').text(data["data"]["balance"]);
+                        $('#label-profile-occupation').text(data["data"]["job"]);
+                        debugger;
+    {#                    $('#trust-btn').find() = data["data"]["username"];#}
+    {#                    $('#payment-btn').data('data-profile-username', data["data"]["username"]);#}
+    {#                    $('#contact-btn').data('data-profile-username', data["data"]["username"]);#}
+                        $('#spin-modal').fadeOut();
+                        $("#listing-modal").modal("show");
+                    }
+                },
+                error: function (data) {
+                    $('#spin-modal').fadeOut();
+                    showInternalServerError();
+                }
+            });
+        });
+</script>

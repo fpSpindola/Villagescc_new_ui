@@ -1,10 +1,9 @@
-from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import User
 
 # Categories Models
 from categories.models import SubCategories
+from village_tags.models import TagName
 
 OFFER = 'Offer'
 REQUEST = 'Request'
@@ -21,12 +20,14 @@ LISTING_TYPE = (
 )
 # Create your models here.
 
+
 class Listings(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
     title = models.CharField(max_length=220)
     description = models.CharField(max_length=1000, null=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
+    # tag = models.ForeignKey(TagListing, null=True, blank=True)
 
     listing_type = models.CharField(max_length=100, choices=LISTING_TYPE)
     photo = models.ImageField(upload_to='listings', null=True, blank=True)

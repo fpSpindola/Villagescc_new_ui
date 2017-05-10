@@ -47,4 +47,24 @@
     </div>
 </form>
 
+<script>
+    $("#id_categories").on('change', function (e) {
+        var selected_category = $(this).val();
+        $.ajax({
+            url: "{% url 'subcategories_filter' %}",
+            type: 'GET',
+            data: {'category': selected_category},
+            success: function (e) {
+                $("#id_subcategories").find("option").remove().end();
+                e.result.forEach(function (data) {
+                    $("#id_subcategories").append($("<option />").val(data["id"]).text(data["text"]))
+                });
+            },
+            error: function (e) {
+                showInternalServerError();
+            }
+        })
+    });
+</script>
+
 {% endblock %}

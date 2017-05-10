@@ -42,7 +42,12 @@ def edit_listing(request, listing_id):
                     listing.description = form.cleaned_data['description']
                     listing.price = form.cleaned_data['price']
                     listing.subcategories = form.cleaned_data['subcategories']
-                    listing.photo = form.cleaned_data['photo']
+                    if form.cleaned_data["photo"]:
+                        listing.photo = form.cleaned_data['photo']
+                    elif listing.photo:
+                        listing.photo = listing.photo
+                    else:
+                        listing.photo = ""
                     listing.save()
                     messages.add_message(request, messages.SUCCESS, 'Listing edited with success.')
                     return HttpResponseRedirect(reverse('listing_management:manage_listings'))
@@ -57,7 +62,14 @@ def edit_listing(request, listing_id):
                                       'subcategories': listing.subcategories,
                                       'photo': listing.photo})
         return render(request, 'listing_management/edit_listing.html', {'form': form})
-    HttpResponseRedirect(reverse('listing_management:manage_listings'))
+    messages.add_message(request, messages.ERROR, form.errors)
+    form = ListingsForms(initial={'listing_type': listing.listing_type,
+                                  'title': listing.title,
+                                  'description': listing.description,
+                                  'price': listing.price,
+                                  'subcategories': listing.subcategories,
+                                  'photo': listing.photo})
+    return render(request, 'listing_management/edit_listing.html', {'form': form, 'listings_form': listing})
 
 
 @transaction.atomic

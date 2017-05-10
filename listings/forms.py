@@ -11,7 +11,7 @@ from categories.models import SubCategories, Categories
 class ListingsForms(ModelForm):
 
     categories = forms.ModelChoiceField(queryset=Categories.objects.all(),
-                                        required=True,
+                                        required=False,
                                         widget=forms.Select(attrs={
                                             'class': 'form-control'}))
 
@@ -31,10 +31,6 @@ class ListingsForms(ModelForm):
                 'class': 'form-control',
             }),
             'price': NumberInput(attrs={
-                'class': 'form-control',
-                'style': 'width: 100%',
-            }),
-            'categories': forms.Select(attrs={
                 'class': 'form-control',
                 'style': 'width: 100%',
             }),
