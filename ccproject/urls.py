@@ -35,7 +35,7 @@ from listings import urls as listings_urls
 from notification import urls as notification_urls
 from categories import urls as categories_urls
 from management import urls as management_urls
-from relate.views import RecipientAutocomplete
+from relate.views import get_profiles
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -51,7 +51,7 @@ urlpatterns = [
     url('^notifications/', include(notification_urls), name='notification'),
     url('^categories_manager/', include(categories_urls, namespace='categories')),
     url('^management/', 'management.views.management_urls', name='management_urls'),
-    url(r'^recipient-autocomplete/$', RecipientAutocomplete.as_view(), name='recipient_autocomplete'),
+    url(r'^get_profiles/', get_profiles, name='get_profiles'),
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

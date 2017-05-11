@@ -107,9 +107,8 @@ class AcknowledgementForm(forms.Form):
 
 class BlankTrust(forms.ModelForm):
 
-    recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
-                                       label='Choose the trust receiver', required=True,
-                                       widget=forms.Select(attrs={'class': 'form-control'}))
+    recipient = forms.ChoiceField(label='Choose the trust receiver', required=True,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     weight = forms.IntegerField(label='Credit limit', required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control'}))
@@ -154,7 +153,7 @@ class BlankTrust(forms.ModelForm):
 class BlankPaymentForm(forms.Form):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
-                                       label='Choose the trust receiver', required=True,
+                                       label='Choose the payment receiver', required=True,
                                        widget=forms.Select(attrs={'class': 'form-control'}))
 
     ripple = forms.ChoiceField(

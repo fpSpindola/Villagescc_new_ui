@@ -161,6 +161,7 @@ def acknowledge_user(request, recipient_username):
 
 
 def pay_user_ajax(request, recipient_username):
+    data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
         raise Http404
@@ -172,14 +173,17 @@ def pay_user_ajax(request, recipient_username):
         if form.is_valid():
             acknowledgement = form.send_acknowledgement(
                 request.profile, recipient)
-            send_acknowledgement_notification(acknowledgement)
+            # send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
-            return HttpResponseRedirect(acknowledgement.get_absolute_url())
+            data['stat'] = 'ok'
+            data['recipient'] = recipient_username
+            return JsonResponse({'data': data})
     else:
         form = AcknowledgementForm(max_ripple=max_amount, initial=request.GET)
     can_ripple = max_amount > 0
     profile = recipient  # For profile_base.html.
-    return locals()
+    data['stat'] = 'error'
+    return JsonResponse({'data': data})
 
 
 def send_acknowledgement_notification(acknowledgement):
@@ -322,12 +326,22 @@ def send_payment_notification(payment):
                       {'acknowledgement': payment})
 
 
-class RecipientAutocomplete(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        if not self.request.user.is_authenticated():
-            return Profile.objects.none()
+def get_profiles(request):
+    # what was in the question an array is now a python list of dicts.
+    # it can also be in some other file and just imported.
+    if request.is_ajax():
+        q = request.GET.get('term', '')
 
-        qs = Profile.objects.all()
-        if self.q:
-            qs = qs.filter(name_istartswith=self.q)
-        return qs
+        profiles = Profile.objects.filter(name__icontains = q)[:20]
+        results = []
+        for profile in profiles:
+            profile_json = {}
+            profile_json['id'] = profile.id
+            profile_json['label'] = profile.name
+            profile_json['value'] = profile.name
+            results.append(profile_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
