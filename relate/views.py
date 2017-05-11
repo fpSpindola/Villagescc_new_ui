@@ -289,21 +289,13 @@ def blank_payment(request):
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
             return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form})
         recipient = get_object_or_404(Profile, id=request.POST['recipient'])
-        max_amount = ripple.max_payment(request.profile, recipient)
         form = BlankPaymentForm(request.POST, max_ripple=max_amount)
         if recipient == request.profile:
             if recipient == request.profile:
                 messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
                 return django_render(request, 'blank_payment.html', {'form': form,
                                                                      'listing_form': listing_form})
-        if form.is_valid():
-            can_ripple = max_amount > 0
-            if not can_ripple and request.POST['ripple'] == 'routed':
-                messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
-                                                              'so you can only send direct trust')
-                form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-                return django_render(request, 'blank_payment.html', {'form': form,
-                                                                     'listing_form': listing_form})
+
             profile = recipient  # For profile_base.html.
             payment = form.send_payment(request.profile, recipient)
             send_payment_notification(payment)
