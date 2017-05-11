@@ -250,7 +250,7 @@ def blank_trust(request):
             return django_render(request, 'blank_trust.html', {'form': form,
                                                                'listing_form': listing_form,
                                                                'accounts': accounts})
-        recipient = get_object_or_404(Profile, id=request.POST['recipient'])
+        recipient = get_object_or_404(Profile, id=request.POST['data_profile'])
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
             return django_render(request, 'blank_trust.html', {'form': form,
@@ -331,8 +331,8 @@ def get_profiles(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
 
-        profiles = Profile.objects.filter(name__icontains = q)[:20]
-        results = []
+        profiles = Profile.objects.exclude(pk=request.profile.id).filter(name__icontains=q)[:20]
+        results = ()
         for profile in profiles:
             profile_json = {}
             profile_json['id'] = profile.id

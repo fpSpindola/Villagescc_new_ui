@@ -6,7 +6,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
     </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
-    <form action="{% url 'blank_trust_user' %}" method="POST">
+    <form id="form-blank-trust" action="{% url 'blank_trust_user' %}" method="POST">
         {% include 'messages.html' %}
         <div class="container">
             <div class="row">
@@ -155,14 +155,11 @@
                 select: function (event, ui) {
                     console.log(ui.item.id);
                     $("#selected-recipient-value").val(ui.item.id);
-                },
-                change: function (event, ui) {
-                    debugger;
-                    $("#id_recipient").text(ui.item.label);
                     $("#id_recipient").val(ui.item.id);
+                    $("#id_recipient").text(ui.item.label);
                     $("#id_recipient").attr("data-profile-selected", ui.item.id);
                     var profile = $('#id_recipient').attr("data-profile-selected");
-                    var url = '/relate/get_user_photo/'+profile;
+                    var url = '/relate/get_user_photo/' + profile;
                     $.ajax({
                         url: url,
                         type: 'GET',
@@ -177,12 +174,19 @@
                             $('#spin-modal').fadeOut();
                         },
                         error: function (e) {
-                            debugger;
-                            console.log(e);
+                            if (data.status === 500) {
+                                showInternalServerError();
+                                $('#spin-modal').fadeOut();
+                            }
                         }
                     })
                 }
-            });
+            })
         });
+
+        $("#form-blank-trust").submit(function (e) {
+            debugger;
+            $("#id_data_profile").val($("#id_recipient").attr("data-profile-selected"));
+        })
     </script>
 {% endblock %}

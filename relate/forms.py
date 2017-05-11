@@ -106,6 +106,9 @@ class AcknowledgementForm(forms.Form):
 
 
 class BlankTrust(forms.ModelForm):
+    MESSAGES = {
+        'over_weight': _("Please ensure this number is below %d.")
+    }
 
     recipient = forms.ChoiceField(label='Choose the trust receiver', required=True,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -115,6 +118,8 @@ class BlankTrust(forms.ModelForm):
 
     text = forms.CharField(label='Testimonial', required=False,
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+    data_profile = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
         model = Endorsement
@@ -134,12 +139,12 @@ class BlankTrust(forms.ModelForm):
             max_weight += self.instance.weight
         return max_weight
 
-    def clean_weight(self):
-        weight = self.cleaned_data['weight']
-        if self.endorser.endorsement_limited and weight > self.max_weight:
-            raise forms.ValidationError(
-                self.MESSAGES['over_weight'] % self.max_weight)
-        return weight
+    # def clean_weight(self):
+    #     weight = self.cleaned_data['weight']
+    #     if self.endorser.endorsement_limited and weight > self.max_weight:
+    #         raise forms.ValidationError(
+    #             self.MESSAGES['over_weight'] % self.max_weight)
+    #     return weight
 
     def save(self):
         endorsement = super(BlankTrust, self).save(commit=False)

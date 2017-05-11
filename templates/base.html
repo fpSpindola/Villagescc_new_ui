@@ -86,8 +86,19 @@
     <section style="padding-top: 100px;">
     {% include 'messages.html' %}
         {% block content %}
-
         {% endblock %}
+         <div id="spin-modal" class="collapse">
+            <div class="back-spin">
+                <i class="fa fa-refresh fa-spin fa-4x" style="z-index: 10"></i>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function (){
+                $('.spin').click(function () {
+                    $('#spin-modal').fadeIn();
+                });
+            });
+        </script>
     </section>
 </div>
 <script>
