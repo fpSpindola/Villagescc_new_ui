@@ -226,11 +226,17 @@ def get_user_photo(request, profile_id):
     profile = Profile.objects.get(id=profile_id)
     payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile_id).all()
     recipient = get_object_or_404(Profile, id=profile_id)
+    trust = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
     max_amount = ripple.max_payment(request.profile, recipient)
     can_ripple = max_amount > 0
     if payment_list:
         for each_payment in payment_list:
             payments.append('{0} paid {1} in {2}'.format(each_payment.poster.name, each_payment.recipient.name, each_payment.date.date()))
+    if trust:
+        data['has_trust'] = True
+        data['credit_limit'] = trust.weight
+        data['text'] = trust.text
+        data['updated'] = trust.updated
     profile_photo_path = '/media/'+str(profile.photo)
     data['profile_photo_path'] = profile_photo_path
     data['payment_list'] = payments
@@ -245,7 +251,7 @@ def blank_trust(request):
     accounts = ripple.get_user_accounts(request.profile)
     form = BlankTrust(endorser=request.profile, recipient=None)
     if request.method == 'POST':
-        if not request.POST['recipient']:
+        if not request.POST['recipient_name']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
             return django_render(request, 'blank_trust.html', {'form': form,
                                                                'listing_form': listing_form,
@@ -263,6 +269,7 @@ def blank_trust(request):
             endorsement.delete()
             messages.add_message(request, messages.INFO, 'Trust deleted')
             return django_render(request, 'blank_trust.html', {'form': form})
+
         form = BlankTrust(request.POST, instance=endorsement, endorser=request.profile, recipient=recipient)
         if form.is_valid():
             is_new = endorsement is None
@@ -272,6 +279,9 @@ def blank_trust(request):
             messages.add_message(request, messages.INFO, 'Trust saved!')
             return django_render(request, 'blank_trust.html', {'form': form,
                                                                'listing_form': listing_form})
+        else:
+            messages.add_message(request, messages.ERROR, 'An error occurred, please verify.')
+            return django_render(request, 'blank_trust.html', {'form': form, 'listing_form': listing_form})
     else:
         form = BlankTrust(instance=None, endorser=request.profile, recipient=None)
         profile = request.profile
@@ -310,6 +320,9 @@ def blank_payment(request):
             form = BlankPaymentForm(max_ripple=None, initial=request.GET)
             return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
                                                                  'profile': profile})
+        else:
+            messages.add_message(request, messages.ERROR, 'An error occurred, please verify.')
+            return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form})
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
@@ -332,7 +345,7 @@ def get_profiles(request):
         q = request.GET.get('term', '')
 
         profiles = Profile.objects.exclude(pk=request.profile.id).filter(name__icontains=q)[:20]
-        results = ()
+        results = []
         for profile in profiles:
             profile_json = {}
             profile_json['id'] = profile.id

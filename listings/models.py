@@ -1,9 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
-
-# Categories Models
+from django.db import models
 from categories.models import SubCategories
-from village_tags.models import TagName
 
 OFFER = 'Offer'
 REQUEST = 'Request'

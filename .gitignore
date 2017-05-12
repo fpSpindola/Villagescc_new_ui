@@ -6,14 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
-media/
 
 # Distribution / packaging
 .Python
 env/
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/

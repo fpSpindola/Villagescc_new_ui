@@ -110,8 +110,8 @@ class BlankTrust(forms.ModelForm):
         'over_weight': _("Please ensure this number is below %d.")
     }
 
-    recipient = forms.ChoiceField(label='Choose the trust receiver', required=True,
-                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+    recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
+                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     weight = forms.IntegerField(label='Credit limit', required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control'}))
@@ -123,7 +123,8 @@ class BlankTrust(forms.ModelForm):
 
     class Meta:
         model = Endorsement
-        exclude = ('endorser', 'updated')
+        fields = ['recipient_name', 'weight', 'text']
+        exclude = ('endorser', 'recipient', 'updated')
 
     def __init__(self, *args, **kwargs):
         self.endorser = kwargs.pop('endorser')
