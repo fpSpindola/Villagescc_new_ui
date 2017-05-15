@@ -48,6 +48,7 @@ from post.models import Post
 from relate.models import Endorsement
 import ripple.api as api
 from general.util import cache_on_object
+from listings.models import Listings
 
 # Classes that can be stored as feed items.
 ITEM_TYPES = {

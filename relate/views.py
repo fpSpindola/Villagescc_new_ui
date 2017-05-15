@@ -226,7 +226,10 @@ def get_user_photo(request, profile_id):
     profile = Profile.objects.get(id=profile_id)
     payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile_id).all()
     recipient = get_object_or_404(Profile, id=profile_id)
-    trust = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
+    try:
+        trust = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
+    except Endorsement.DoesNotExist:
+        trust = None
     max_amount = ripple.max_payment(request.profile, recipient)
     can_ripple = max_amount > 0
     if payment_list:
@@ -274,8 +277,8 @@ def blank_trust(request):
         if form.is_valid():
             is_new = endorsement is None
             endorsement = form.save()
-            if is_new:
-                send_endorsement_notification(endorsement)
+            # if is_new:
+                # send_endorsement_notification(endorsement)
             messages.add_message(request, messages.INFO, 'Trust saved!')
             return django_render(request, 'blank_trust.html', {'form': form,
                                                                'listing_form': listing_form})

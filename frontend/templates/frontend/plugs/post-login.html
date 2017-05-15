@@ -12,6 +12,16 @@
         height: 150px;
         display: block;
     }
+
+    #id_trusted {
+      width: 25px;
+      padding: 0;
+      margin:0;
+      vertical-align: bottom;
+      position: relative;
+      top: -1px;
+      *overflow: hidden;
+    }
 </style>
 
 <section class="container-fluid" id="home-sub-menu">
@@ -78,12 +88,14 @@
         <div class="col-md-6">
             <div class="">
                 <form action="" method="get"><ul style="padding-left: 0;">
+                <div class="form-group">
                     <div class="btn-group">
                         {% if listings %}
-                            <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
-                            <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px;">
-                                <span class="caret"></span>
+                            <button type="button" class="btn btn-default btn-md btn-change" style="float: left; padding-bottom: 10px;">All listing types</button>
+                            <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px; padding-bottom: 10px;">
+                            <span class="caret"></span>
                             </button>
+
                             <!-- Given for loop to construct all -->
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'frontend:listing_type' 'OFFER' %}">Offer</a></li>
@@ -94,17 +106,31 @@
                                 <li><a href="{% url 'frontend:listing_type' 'GIFT' %}">Gift</a></li>
                             </ul>
                             </div>
+                        </div>
                         {% endif %}
                     {% if not listings %}
-
                             {{ form.q }}
                         </div>
                         {{ form.radius }}
-
                         <span><label>{{ form.trusted }}
                             <img src="{% static 'img/heart_icon.png' %}"
                                  alt="{% trans 'Heart icon = trusted user' %}">
                             {% trans 'Trusted only' %}</label></span>
+                    {% else %}
+                        <div class="form-group">
+                            {{ form_listing_settings.q }}
+                        </div>
+                        <div class="form-group">
+                        {{ form_listing_settings.radius }}
+                        </div>
+                        {{ form_listing_settings.trusted }}
+                        <img src="{% static 'img/heart_icon.png' %}"
+                                 alt="{% trans 'Heart icon = trusted user' %}">
+                        <label for="id_trusted" class="chkbox-trusted">
+                        <span>Trusted only</span>
+                            </label>
+
+                        </div>
                     {% endif %}
                     <span>
                         {% if feed_items %}
@@ -116,7 +142,6 @@
 
                 </ul></form>
             </div>
-        </div>
 
         {% if feed_items %}
             <div class="col-md-10">

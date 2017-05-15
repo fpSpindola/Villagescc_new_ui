@@ -8,10 +8,24 @@ from listings.forms import ListingsForms
 from feed.forms import FeedFilterForm, DATE_FORMAT
 from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
+from frontend.forms import FormListingsSettings
 # models
 
 from listings.models import Listings
 from categories.models import Categories, SubCategories
+
+TRUSTED_SUBQUERY = (
+    "feed_feeditem.poster_id in "
+    "(select to_profile_id from profile_profile_trusted_profiles "
+    "    where from_profile_id = %s)")
+
+LISTINGS_TRUSTED_QUERY = (
+    "select * from listings_listings "
+    "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
+    "where profile_profile.id in "
+    "(select profile_profile_trusted_profiles.to_profile_id "
+    "from profile_profile_trusted_profiles "
+    "    where profile_profile_trusted_profiles.from_profile_id = %s )")
 
 
 def listing_type_filter(request, listing_type):
@@ -122,6 +136,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                 return HttpResponseRedirect(reverse('frontend:home'))
             else:
                 print(form.errors)
+        else:
+            form_listing_settings = FormListingsSettings()
 
         people = None
         trusted_only = None
@@ -133,7 +149,10 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             listings = Listings.objects.all().filter(subcategories__id=type_filter).order_by('-created')
         else:
             listings = Listings.objects.all().order_by('-created')
+            if request.GET.get('trusted') == 'on':
+                trusted_listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY, params=str(request.profile.id))
         form = ListingsForms()
+
         # can_ripple = max_amount > 0
         profile = recipient
         categories_list = Categories.objects.all()
@@ -149,4 +168,5 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'housing_sub_categories': housing_sub_categories,
             'listings': listings, 'people': people, 'listing_form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
-            'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form})
+            'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
+            'form_listing_settings': form_listing_settings})
