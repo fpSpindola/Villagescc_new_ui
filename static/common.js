@@ -47,7 +47,6 @@ function init_feed_filter_form() {
 		$(this).closest('form').submit();
 	});
 	$('#id_trusted').change(function() {
-		debugger;
 		$(this).closest('form').submit();
 	});
 	$('#id_clear').click(function() {

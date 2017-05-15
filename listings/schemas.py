@@ -16,4 +16,5 @@ class SubmitListingSchema(Schema):
     description = fields.String(required=False)
     price = fields.Decimal(required=True, default=0, validate=[Range(min=0, max=999)])
     subcategories = fields.Integer(required=True)
+    tag = fields.String(required=False)
     id_photo = fields.String(required=False)

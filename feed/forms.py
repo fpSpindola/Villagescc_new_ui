@@ -29,8 +29,13 @@ class FeedFilterForm(forms.Form):
         label="Search", required=False, widget=forms.TextInput(
             attrs={'class': 'form-control'}))
     radius = forms.TypedChoiceField(
-        required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None)
-    trusted = forms.BooleanField(required=False)
+        required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
+        widget=forms.Select(attrs={'class': 'form-control'}))
+
+    trusted = forms.BooleanField(required=False,
+                                 widget=forms.CheckboxInput(attrs={
+                                     'class': 'form-control checkbox-inline', 'style': 'vertical-align: middle'
+                                 }))
     
     def __init__(self, data, profile, location=None, item_type=None,
                  poster=None, recipient=None, do_filter=False, *args, **kwargs):

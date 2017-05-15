@@ -23,7 +23,7 @@ class FormListingsSettings(forms.Form):
 
     trusted = forms.BooleanField(label='Trusted only', required=False,
                                  widget=forms.CheckboxInput(attrs={
-                                     'class': 'form-control checkbox-inline', 'style': 'align: left'
+                                     'class': 'form-control checkbox-inline', 'style': 'vertical-align: middle'
                                  }))
 
     q = forms.CharField(label='Search', required=False,

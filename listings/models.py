@@ -1,3 +1,4 @@
+from tags.models import Tag
 from django.contrib.auth.models import User
 from django.db import models
 from categories.models import SubCategories
@@ -53,6 +54,7 @@ class Listings(models.Model):
     photo = models.ImageField(upload_to='listings', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    tag = models.ManyToManyField(Tag, null=True, blank=True)
 
     @property
     def date(self):

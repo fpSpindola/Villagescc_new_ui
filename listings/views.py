@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 
 from categories.models import SubCategories
 from listings.models import Listings
+from tags.models import Tag
 from django.core.urlresolvers import reverse
 from listings.forms import ListingsForms
 from profile.forms import ContactForm
@@ -20,11 +21,15 @@ def add_new_listing(request):
         data, errors = schema.load(request.POST)
         if not errors:
             form = ListingsForms(request.POST, request.FILES)
+            tags_list = data['tag'].split(',')
             if form.is_valid():
                 try:
                     listing = form.save(commit=False)
                     listing.user_id = request.profile.user_id
                     listing.save()
+                    for tag in tags_list:
+                        new_tag = Tag(name=tag)
+                        new_tag.save()
                     return JsonResponse({'msg': 'Success!'})
                 except Exception as e:
                     print(e)

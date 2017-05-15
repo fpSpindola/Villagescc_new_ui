@@ -15,9 +15,15 @@ class ListingsForms(ModelForm):
                                         widget=forms.Select(attrs={
                                             'class': 'form-control'}))
 
+    tag = forms.CharField(required=False,
+                          widget=forms.TextInput(attrs={
+                              'class': 'form-control',
+                              'style': 'width: 100%',
+                              'data-role': 'tagsinput'}))
+
     class Meta:
         model = Listings
-        fields = ['listing_type', 'title', 'description', 'price', 'categories', 'subcategories', 'photo']
+        fields = ['listing_type', 'title', 'description', 'price', 'categories', 'subcategories', 'photo', 'tag']
         widgets = {
             'listing_type': Select(attrs={
                 'class': 'form-control',
@@ -37,4 +43,9 @@ class ListingsForms(ModelForm):
             'subcategories': Select(attrs={
                 'class': 'form-control'
             }),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+
+            'tag': forms.TextInput(attrs={'class': 'form-control',
+                                          'data-role': 'tagsinput',
+                                          'style': 'width: 100%'})
         }

@@ -3,6 +3,7 @@ import ripple.api as ripple
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 # Forms
 from listings.forms import ListingsForms
 from feed.forms import FeedFilterForm, DATE_FORMAT
@@ -20,12 +21,17 @@ TRUSTED_SUBQUERY = (
     "    where from_profile_id = %s)")
 
 LISTINGS_TRUSTED_QUERY = (
-    "select * from listings_listings "
+    "select listings_listings.id from listings_listings "
     "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
     "where profile_profile.id in "
     "(select profile_profile_trusted_profiles.to_profile_id "
     "from profile_profile_trusted_profiles "
-    "    where profile_profile_trusted_profiles.from_profile_id = %s )")
+    "where profile_profile_trusted_profiles.from_profile_id = {0} )")
+
+SUBQUERY = (
+    "profile_profile.id in "
+    "(select profile_profile_trusted_profiles.to_profile_id from profile_profile_trusted_profiles "
+    "where profile_profile_trusted_profiles.from_profile_id = %s)")
 
 
 def listing_type_filter(request, listing_type):
@@ -136,12 +142,10 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                 return HttpResponseRedirect(reverse('frontend:home'))
             else:
                 print(form.errors)
-        else:
-            form_listing_settings = FormListingsSettings()
-
         people = None
         trusted_only = None
         # GET Request
+        form_listing_settings = FormListingsSettings(initial=request.GET)
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
@@ -150,10 +154,15 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         else:
             listings = Listings.objects.all().order_by('-created')
             if request.GET.get('trusted') == 'on':
-                trusted_listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY, params=str(request.profile.id))
-        form = ListingsForms()
+                listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
+            if request.GET.get('q'):
+                listings = listings.filter(title__icontains=request.GET.get('q'))
+            if request.location and request.GET.get('radius'):
+                listings = listings.filter(
+                    Q(user__profile__location__point__dwithin=(request.location.point, request.GET.get('radius'))) |
+                    Q(user__profile__location__isnull=True))
 
-        # can_ripple = max_amount > 0
+        form = ListingsForms()
         profile = recipient
         categories_list = Categories.objects.all()
         subcategories = SubCategories.objects.all()

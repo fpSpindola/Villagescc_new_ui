@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('profile', '0001_initial'),
+        ('listings', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
