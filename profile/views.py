@@ -277,6 +277,12 @@ def edit_profile(request):
         form = ProfileForm(instance=profile)
     return locals()
 
+@login_required()
+def edit_tags(request):
+    tags = request.profile.tags.all()
+    return django_render(request, 'profile_tag_management.html', {'form': form,
+                                                                  'tags': tags})
+
 
 def my_profile(request):
     form = ListingsForms()
