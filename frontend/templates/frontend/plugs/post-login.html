@@ -22,6 +22,12 @@
       top: -1px;
       *overflow: hidden;
     }
+
+    #profile-listing-img {
+        width: 60px;
+        height: 60px;
+        display: block;
+    }
 </style>
 
 <section class="container-fluid" id="home-sub-menu">
@@ -213,8 +219,13 @@
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.listing_type }} | {{ each.price }}</p>
                         <p class="thumbnail-info"></p>
                         <div class="caption" style="height: 115px;">
-                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
+                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
+                                <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" style="margin-right: 10px;" class="img-circle inline"/>
+                            </a>
                             <p style="padding-left: 70px;">{{ each.title }}</p>
+                            {% for each_tag in each.tag.all %}
+                                <span class="label label-info">{{ each_tag.name }}</span>
+                            {% endfor %}
                             <br>
                             <br>
 {#                            <div class="col-sm-12"></div>#}
@@ -241,11 +252,6 @@
         </div>
     </div>
 </section>
-{#<div id="spin-modal" class="collapse">#}
-{#    <div class="back-spin">#}
-{#        <i class="fa fa-refresh fa-spin fa-4x" style="z-index: 10"></i>#}
-{#    </div>#}
-{#</div>#}
 
 <script>
     $(".listing-modal").click(function (e) {

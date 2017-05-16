@@ -18,6 +18,7 @@ from general.mail import send_mail, email_str, send_mail_from_system
 from django.utils import translation
 from django.utils.translation import get_language_info as lang_info
 from django.utils.translation import ugettext_lazy as _
+from tags.models import Tag
 
 CODE_LENGTH = 20
 CODE_CHARS = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -65,6 +66,8 @@ class Profile(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
+
+    tag = models.ManyToManyField(Tag, null=True, blank=True)
 
     trusted_profiles = models.ManyToManyField(
         'Profile', symmetrical=False, related_name='trusting_profiles',
@@ -233,14 +236,14 @@ class Settings(models.Model):
             "Receive occasional news about the Villages community."))
     langs = [(l[0], lang_info(l[0])['name_local']) for l in settings.LANGUAGES]
     language = VarCharField(
-	_("Language"), default="en", max_length=8, choices=langs)
-    
+        _("Language"), default="en", max_length=8, choices=langs)
     # Sticky form settings.
     feed_radius = models.IntegerField(null=True, blank=True)
     feed_trusted = models.BooleanField(default=False)
 
     def __unicode__(self):
         return _(u"Settings for %s") % self.profile
+
 
 class Invitation(models.Model):
     from_profile = models.ForeignKey(Profile, related_name='invitations_sent')

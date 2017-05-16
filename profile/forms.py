@@ -240,6 +240,12 @@ class SettingsForm(forms.ModelForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
 
+    tag = forms.CharField(required=False,
+                          widget=forms.TextInput(attrs={
+                              'class': 'form-control',
+                              'style': 'width: 100%',
+                              'data-role': 'tagsinput'}))
+
     # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
     class Meta:

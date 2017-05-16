@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
@@ -17,6 +18,7 @@ from django.shortcuts import render as django_render
 
 from listings.forms import ListingsForms
 from listings.models import Listings
+from tags.models import Tag
 from accounts.forms import UserForm
 from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
@@ -222,10 +224,19 @@ def edit_settings(request):
                 translation.activate(settings_obj.language)
                 request.session['django_language'] = translation.get_language()
                 if settings_obj.email != old_email:
-                    send_new_address_email(settings_obj)
+                    # send_new_address_email(settings_obj)
                     messages.info(request, MESSAGES['email_updated'])
                 else:
                     messages.info(request, MESSAGES['settings_changed'])
+                tags_list = request.POST['tag'].split(',')
+                for tag in tags_list:
+                    new_tag = Tag(name=tag)
+                    try:
+                        new_tag.save()
+                        new_tag.profile_set.add(settings_obj.profile)
+                    except IntegrityError:
+                        existing_tag = Tag.objects.get(name=tag)
+                        existing_tag.profile_set.add(settings_obj.profile)
                 return redirect(edit_settings)
         elif 'change_password' in request.POST:
             password_form = PasswordChangeForm(request.user, request.POST)
@@ -235,7 +246,12 @@ def edit_settings(request):
                 return redirect(edit_settings)
         
     if 'change_settings' not in request.POST:
-        settings_form = SettingsForm(instance=request.profile.settings)
+        tag_list = []
+        profile_tags_obj = request.profile.tag.all()
+        for profile_tag in profile_tags_obj:
+            tag_list.append(str(profile_tag.name))
+        settings_form = SettingsForm(instance=request.profile.settings,
+                                     initial={'tag': tag_list})
     if 'change_password' not in request.POST:
         password_form = PasswordChangeForm(request.user)
     return locals()

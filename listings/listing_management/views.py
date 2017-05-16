@@ -75,7 +75,10 @@ def edit_listing(request, listing_id):
 @transaction.atomic
 def delete_listing(request):
     if request.method == 'POST' and request.is_ajax():
-        listing_to_remove = Listings.objects.filter(id__in=[",".join(request.POST.getlist('ids[]'))])
+        list_listings_to_remove = []
+        for listing_id in request.POST.getlist('ids[]'):
+            list_listings_to_remove.append(int(listing_id))
+        listing_to_remove = Listings.objects.filter(id__in=list_listings_to_remove)
         try:
             for listings in listing_to_remove:
                 Listings.objects.filter(id=listings.id).delete()

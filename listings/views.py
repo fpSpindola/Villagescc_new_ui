@@ -1,5 +1,6 @@
 import json
 from django.contrib import messages
+from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse
 
@@ -29,7 +30,12 @@ def add_new_listing(request):
                     listing.save()
                     for tag in tags_list:
                         new_tag = Tag(name=tag)
-                        new_tag.save()
+                        try:
+                            new_tag.save()
+                            new_tag.listings_set.add(listing)
+                        except IntegrityError as e:
+                            existing_tag = Tag.objects.get(name=tag)
+                            existing_tag.listings_set.add(listing)
                     return JsonResponse({'msg': 'Success!'})
                 except Exception as e:
                     print(e)
