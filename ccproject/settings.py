@@ -36,14 +36,14 @@ LOCALE_PATHS = (
 )
 
 
-SERVER_EMAIL = 'web@villages.cc'
+SERVER_EMAIL = 'info@villages.cc'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'web@villages.cc'
-EMAIL_HOST_USER = 'web@villages.cc'
-EMAIL_HOST_PASSWORD = 'webvillagescc'
+DEFAULT_FROM_EMAIL = 'info@villages.cc'
+EMAIL_HOST_USER = 'info@villages.cc'
+EMAIL_HOST_PASSWORD = 'infovillagescc'
 SITE_DOMAIN = 'villages.cc'
 HELP_EMAIL = 'info@villages.cc'
 EMAIL_SUBJECT_PREFIX = "[Villages] "
@@ -136,13 +136,13 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'villages',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ripple',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     }
 }
 
