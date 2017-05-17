@@ -154,14 +154,14 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                                                            "where profile_profile.id in "
                                                            "(select profile_profile_trusted_profiles.to_profile_id "
                                                            "from profile_profile_trusted_profiles "
-                                                           "where profile_profile_trusted_profiles.from_profile_id = {0} )".format(request.profile.id)})
+                                                           "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
                 # listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
             if request.GET.get('q'):
                 listings = listings.filter(title__icontains=request.GET.get('q'))
-            if request.location and request.GET.get('radius'):
-                listings = listings.filter(
-                    Q(user__profile__location__point__dwithin=(request.location.point, request.GET.get('radius'))) |
-                    Q(user__profile__location__isnull=True))
+            # if request.location and request.GET.get('radius'):
+            #     listings = listings.filter(
+            #         Q(user__profile__location__point__dwithin=(request.location.point, request.GET.get('radius'))) |
+            #         Q(user__profile__location__isnull=True))
 
         form = ListingsForms()
         profile = recipient

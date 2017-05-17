@@ -55,8 +55,11 @@
                 <a href="{% url 'accounts:forgot_password' %}">
                     {% trans 'Forgot username or password?' %}
                 </a>
-            </div>
         </form>
+
+        <script>
+            $("#first").hide();
+        </script>
     {% endblock %}
 
     <div class="page-header col-sm-12" style="padding-top: 50px;">
@@ -143,6 +146,7 @@
     <script>
         $(document).ready(function(){
             getUrl();
+            debugger;
         });
 
         function getUrl() {

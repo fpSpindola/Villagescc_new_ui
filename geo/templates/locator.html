@@ -8,6 +8,7 @@
         {% block ready_js %}{% endblock %}
         init_instruction_input();
         init_feed_items();
+        $("#first").hide();
     });
 </script>
 
@@ -44,9 +45,9 @@
 	pointer.{% endblocktrans %}</p>
 
 <form id="loc_search_form" class="loc_search_form">
-	<input id="loc_search" class="instruction_input" type="text"
+	<input id="loc_search" class="form-control instruction_input" type="text"
 		help="{% trans 'Neighbourhood, Address, Intersection, or City' %}"/>
-	<input type="submit" value="{% trans 'Locate on Map' %}" />
+	<input type="submit" class="btn btn-primary" value="{% trans 'Locate on Map' %}" />
 </form>
 
 <div class="map_container">
@@ -61,7 +62,24 @@
 	<form action="" method="post">
 		{% csrf_token %}
 		<table class="form">
-			{{ form }}
+			{% for field in form %}
+                {% if field.errors %}
+                    <div class="form-group">
+                        <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="alert alert-warning message">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        <label for="{{ field.label }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endif %}
+            {% endfor %}
 			<tr>
 				<th></th>
 				<td><input type="submit"

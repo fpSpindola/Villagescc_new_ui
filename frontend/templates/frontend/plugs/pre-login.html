@@ -32,6 +32,11 @@
     display: block;
 }
 </style>
+
+<script>
+    $("#section-padding-base").css('padding-top', '0')
+</script>
+
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
         <div class="col-md-2">
@@ -159,13 +164,13 @@
                 <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" alt="...">
+                        <p class="thumbnail-info">{{ each.title }}</p>
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.listing_type }} | {{ each.price }}</p>
                         <p class="thumbnail-info"></p>
                         <div class="caption" style="height: 78px;">
                             <span href="#" style="float: left;">
                                 <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
                             </span>
-                            <p>&nbsp;{{ each.title }}</p>
                         </div>
                     </div>
                 </div>

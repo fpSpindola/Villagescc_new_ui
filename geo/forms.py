@@ -19,3 +19,6 @@ class LocationForm(forms.ModelForm):
             del self.fields['set_home']
         self.fields['point'].widget = forms.HiddenInput()
         self.fields['neighborhood'].widget = forms.TextInput(attrs={'class': 'form-control'})
+        self.fields['city'].widget = forms.TextInput(attrs={'class': 'form-control'})
+        self.fields['state'].widget = forms.TextInput(attrs={'class': 'form-control'})
+        self.fields['country'].widget = forms.TextInput(attrs={'class': 'form-control'})
