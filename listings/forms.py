@@ -21,6 +21,12 @@ class ListingsForms(ModelForm):
                               'style': 'width: 100%',
                               'data-role': 'tagsinput'}))
 
+    price = forms.DecimalField(label='Cost in Village Hours',
+                               widget=forms.NumberInput(attrs={
+                                   'class': 'form-control',
+                                   'style': 'width: 100%'
+                               }))
+
     class Meta:
         model = Listings
         fields = ['listing_type', 'title', 'description', 'price', 'categories', 'subcategories', 'photo', 'tag']
@@ -36,10 +42,10 @@ class ListingsForms(ModelForm):
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
             }),
-            'price': NumberInput(attrs={
-                'class': 'form-control',
-                'style': 'width: 100%',
-            }),
+            # 'price': NumberInput(attrs={
+            #     'class': 'form-control',
+            #     'style': 'width: 100%',
+            # }),
             'subcategories': Select(attrs={
                 'class': 'form-control'
             }),
