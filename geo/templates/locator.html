@@ -2,9 +2,6 @@
 {% load staticfiles %}
 {% load i18n %}
 
-{% block title %}{% trans 'Set Your Location' %}{% endblock %}
-
-{% block nav_location_class %}{% trans 'selected' %}{% endblock %}
 {% block content %}
 <script type="text/javascript">
     $(document).ready(function() {
@@ -16,9 +13,14 @@
 
 <script type="text/javascript"
         src="//maps.google.com/maps/api/js?key=AIzaSyCYeGvzX00IYwIKdcq5GhX2C8hSVQC8O0E&sensor=false"></script>
+
+
+<div class="container">
+
 <script type="text/javascript">
     {% include "locator.js" %}
 </script>
+
 <h2>{% trans 'Set Your Location' %}</h2>
 
 {% if form.errors %}
@@ -48,7 +50,7 @@
 </form>
 
 <div class="map_container">
-	<div id="map_canvas" class="map_canvas"></div>
+	<div id="map_canvas" class="map_canvas" style="clear:both; height:400px;"></div>
 </div>
 
 <div class="feature">
@@ -79,5 +81,6 @@
 		optional fields if they're not appropriate for your
 		location.{% endblocktrans %}</em></p>
 </div>
+    </div>
 {% endblock %}
 

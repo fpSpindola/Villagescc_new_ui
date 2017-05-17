@@ -8,6 +8,7 @@
 {% block nav_contact_class %}selected{% endblock %}
 
 {% block content %}
+<div class="container">
 <h2>{% blocktrans %}Contact {{ profile }}{% endblocktrans %}</h2>
 <p class="feature">
 	{% blocktrans %}Your message will be forwarded
@@ -29,4 +30,5 @@
         </div>
 	</table>
 </form>
+</div>
 {% endblock %}

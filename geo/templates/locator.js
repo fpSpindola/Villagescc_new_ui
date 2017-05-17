@@ -3,6 +3,7 @@ var initial_lng = '{{ initial_lng }}';
 
 $(document).ready(function() {
 	// Search bar updates map.
+	debugger;
 	$('#loc_search_form').submit(function() {
 		query = $('#loc_search').val();
 		loc_search(query);

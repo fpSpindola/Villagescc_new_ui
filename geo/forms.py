@@ -1,9 +1,10 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-
 from geo.models import Location
 
+
 class LocationForm(forms.ModelForm):
+
     class Meta:
         model = Location
         fields = ('neighborhood', 'city', 'state', 'country', 'point')
@@ -17,3 +18,4 @@ class LocationForm(forms.ModelForm):
         if hide_set_home:
             del self.fields['set_home']
         self.fields['point'].widget = forms.HiddenInput()
+        self.fields['neighborhood'].widget = forms.TextInput(attrs={'class': 'form-control'})

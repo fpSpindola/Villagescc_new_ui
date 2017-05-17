@@ -22,7 +22,7 @@ from tags.models import Tag
 from accounts.forms import UserForm
 from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
-    RequestInvitationForm, ForgotPasswordForm)
+    RequestInvitationForm, ForgotPasswordForm, FormProfileTag)
 from profile.models import Profile, Invitation, PasswordResetLink
 from post.models import Post
 import ripple.api as ripple
@@ -228,15 +228,6 @@ def edit_settings(request):
                     messages.info(request, MESSAGES['email_updated'])
                 else:
                     messages.info(request, MESSAGES['settings_changed'])
-                tags_list = request.POST['tag'].split(',')
-                for tag in tags_list:
-                    new_tag = Tag(name=tag)
-                    try:
-                        new_tag.save()
-                        new_tag.profile_set.add(settings_obj.profile)
-                    except IntegrityError:
-                        existing_tag = Tag.objects.get(name=tag)
-                        existing_tag.profile_set.add(settings_obj.profile)
                 return redirect(edit_settings)
         elif 'change_password' in request.POST:
             password_form = PasswordChangeForm(request.user, request.POST)
@@ -457,7 +448,49 @@ def get_shared_by_profile(request):
             pass
     return profile
 
+
 @login_required
 @render()
 def share(request):
     return locals()
+
+
+@login_required()
+def add_profile_tag(request):
+    if request.method == 'POST':
+        tag_form = FormProfileTag(request.POST)
+        if tag_form.is_valid():
+            if request.POST.get('tag'):
+                tags_to_add = request.POST.get('tag').split(',')
+                for tag in tags_to_add:
+                    new_tag = Tag(name=tag.lower())
+                    try:
+                        new_tag.save()
+                        new_tag.profile_set.add(request.profile)
+                    except IntegrityError as e:
+                        existing_tag = Tag.objects.get(name=tag)
+                        existing_tag.profile_set.add(request.profile)
+        profile_tags = request.profile.tag.all()
+        return django_render(request, 'profile_tag_management.html', {'tag_form': tag_form,
+                                                                      'profile_tags': profile_tags})
+    else:
+        profile_tags = request.profile.tag.all()
+        tag_form = FormProfileTag()
+        return django_render(request, 'profile_tag_management.html', {'tag_form': tag_form,
+                                                                      'profile_tags': profile_tags})
+
+
+@login_required()
+def delete_profile_tags(request):
+    if request.method == 'POST' and request.is_ajax():
+        list_tags_to_remove = []
+        for tag_id in request.POST.getlist('ids[]'):
+            list_tags_to_remove.append(int(tag_id))
+        tags_to_remove = Tag.objects.filter(id__in=list_tags_to_remove)
+        try:
+            for tag in tags_to_remove:
+                Tag.objects.filter(id=tag.id).delete()
+
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, 'An error occurred, please try again later.')
+    return HttpResponseRedirect(reverse('add_profile_tags'))

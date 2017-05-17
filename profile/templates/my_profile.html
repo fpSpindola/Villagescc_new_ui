@@ -23,7 +23,7 @@
     display: block;
 }
 </style>
-
+<div class="col-sm-12">
 <div class="container-fluid" id="profile-container-fluid">
   <div class="jumbotron" id="profile-jumbotron">
     <h2>{{ profile.name }}</h2>
@@ -40,7 +40,7 @@
                 <hr>
             </div>
 
-            <div class="col-md-4" style="text-align: center;">
+            <div class="col-md-4" style="text-align: center; padding-left: 100px;">
                 <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
                 <p class="profile-star-rating">
                 <th>{% trans 'Reputation: ' %}</th>
@@ -83,27 +83,18 @@
             <h3>There is no open listings for this user</h3>
     {% endif %}
     </div>
-  <div class="col-md-3">
-{#  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>#}
-{#    {% endblocktrans %}#}
+      <div class="col-md-3">
+          {#  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>#}
+          {#    {% endblocktrans %}#}
 
-
-  <div class="card">
-    <h4>Offerings</h4>
-    <span class="badge">Massage</span>
-    <span class="badge">Web Design</span>
-    <span class="badge">Child Care</span>
-    <span class="badge">Off Grid</span>
+          <div class="card">
+              <h4>Tags</h4>
+              {% for tag in profile.tag.all %}
+                  <span class="badge">{{ tag.name }}</span>
+              {% endfor %}
+          </div>
+      </div>
   </div>
-  <div class="card">
-    <h4>Requests</h4>
-    <span class="badge">Massage</span>
-    <span class="badge">Organic Vegan Food</span>
-    <span class="badge">Help Building</span>
-    <span class="badge">Kids Stuff</span>
-  </div>
-</div>
-</div>
 
 </section>
 
@@ -176,7 +167,7 @@
                     $('#label-profile-username').text(data["data"]["username"]);
                     $('#label-profile-balance').text(data["data"]["balance"]);
                     $('#label-profile-occupation').text(data["data"]["job"]);
-                    $('#trust-btn').attr('data-profile-username', data["data"]["username"];
+                    $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#spin-modal').fadeOut();
@@ -190,5 +181,5 @@
         });
     });
 </script>
-
+</div>
 {% endblock %}

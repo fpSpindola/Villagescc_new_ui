@@ -220,7 +220,8 @@ class ContactForm(forms.Form):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
                                        label='Choose the trust receiver', required=True,
-                                       widget=forms.Select(attrs={'class': 'form-control'}))
+                                       widget=forms.Select(attrs={'class': 'form-control',
+                                                                  'style': 'width: 570px;'}))
 
     message = forms.CharField(widget=forms.Textarea(attrs={'style': 'width: 570px;'}))
 
@@ -240,18 +241,11 @@ class SettingsForm(forms.ModelForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
 
-    tag = forms.CharField(required=False,
-                          widget=forms.TextInput(attrs={
-                              'class': 'form-control',
-                              'style': 'width: 100%',
-                              'data-role': 'tagsinput'}))
-
     # endorsement_limited = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Settings
-        fields = ('email', 'endorsement_limited',
-                  'send_notifications', 'send_newsletter', 'language')
+        fields = ('email', 'send_notifications', 'send_newsletter', 'language')
 
         widgets = {
             'language': forms.Select(attrs={
@@ -263,6 +257,15 @@ class SettingsForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if Settings.objects.filter(email__iexact=email).exclude(
-            pk=self.instance.id).exists():
+                pk=self.instance.id).exists():
             raise forms.ValidationError(ERRORS['email_dup'])
         return email
+
+
+class FormProfileTag(forms.Form):
+
+    tag = forms.CharField(required=False,
+                          widget=forms.TextInput(attrs={
+                              'class': 'form-control',
+                              'style': 'width: 100%',
+                              'data-role': 'tagsinput'}))

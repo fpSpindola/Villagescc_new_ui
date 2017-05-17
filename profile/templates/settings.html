@@ -18,8 +18,29 @@ html {
 
 <form action="" method="post">
 	{% csrf_token %}
+    {% for field in settings_form %}
+        {% if field.errors %}
+            <div class="form-group">
+                <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                {{ field }}
+                <div class="alert alert-warning message">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label for="{{ field.label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
 	<table class="form">
-		{{ settings_form }}
+{#        {% if settings_form.errors %}#}
+{#            <div class="alert alert-warning message">{{ form.errors }}</div>#}
+{#        {% endif %}#}
+{#		{{ settings_form.as_p }}#}
 		<tr>
 			<th></th>
 			<td>
@@ -28,6 +49,13 @@ html {
 			</td>
 		</tr>
 	</table>
+    {% if not form.is_valid %}
+        <script>
+            setTimeout(function () {
+                $('.message').slideUp("fast");
+            }, 4000);
+        </script>
+    {% endif %}
 </form>
 
 <hr>
@@ -36,7 +64,24 @@ html {
 <form action="" method="post">
 	{% csrf_token %}
 	<table class="form">
-		{{ password_form }}
+		{% for field in password_form %}
+        {% if field.errors %}
+            <div class="form-group">
+                <label for="{{ field.label }}" class="error">{{ field.label }}</label>
+                {{ field }}
+                <div class="alert alert-warning message">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label for="{{ field.label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
 		<tr>
 			<th></th>
 			<td>

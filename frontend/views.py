@@ -21,12 +21,7 @@ TRUSTED_SUBQUERY = (
     "    where from_profile_id = %s)")
 
 LISTINGS_TRUSTED_QUERY = (
-    "select listings_listings.id from listings_listings "
-    "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
-    "where profile_profile.id in "
-    "(select profile_profile_trusted_profiles.to_profile_id "
-    "from profile_profile_trusted_profiles "
-    "where profile_profile_trusted_profiles.from_profile_id = {0} )")
+    """"select listings_listings.id from listings_listings inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) where profile_profile.id in (select profile_profile_trusted_profiles.to_profile_id from profile_profile_trusted_profiles where profile_profile_trusted_profiles.from_profile_id = {0})""")
 
 SUBQUERY = (
     "profile_profile.id in "
@@ -154,7 +149,13 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         else:
             listings = Listings.objects.all().order_by('-created')
             if request.GET.get('trusted') == 'on':
-                listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
+                listings = listings.extra(select={"trusted_listings": "select listings_listings.id from listings_listings "
+                                                           "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
+                                                           "where profile_profile.id in "
+                                                           "(select profile_profile_trusted_profiles.to_profile_id "
+                                                           "from profile_profile_trusted_profiles "
+                                                           "where profile_profile_trusted_profiles.from_profile_id = {0} )".format(request.profile.id)})
+                # listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
             if request.GET.get('q'):
                 listings = listings.filter(title__icontains=request.GET.get('q'))
             if request.location and request.GET.get('radius'):
@@ -179,3 +180,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'categories': categories_list, 'trusted_only': trusted_only,
             'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
             'form_listing_settings': form_listing_settings})
+
+
+def pre_home(request):
+    return render(request, 'home_banner.html')

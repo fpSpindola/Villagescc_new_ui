@@ -1,6 +1,17 @@
 {% load staticfiles %}
 {% load i18n %}
 
+{#<link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}"/>#}
+{#<link rel="stylesheet" href="{% static 'animate.css/animate.min.css' %}"/>#}
+{#<link rel="stylesheet" href="{% static 'ionicons-2.0.1/css/ionicons.min.css' %}" />#}
+{#<link rel="stylesheet" href="{% static 'stylesheets/styles.css' %}" />#}
+{#<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">#}
+{#<script src={% static 'jquery/dist/jquery.min.js' %}></script>#}
+{#<script src={% static 'bootstrap/dist/js/bootstrap.min.js' %}></script>#}
+{#<script src={% static 'jquery/dist/jquery.easing.min.js' %}></script>#}
+{#<script src={% static 'js/wow.js' %}></script>#}
+{#<script src={% static 'js/scripts.js' %}></script>#}
+
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -62,3 +73,81 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
+
+<style>
+
+@import url(https://fonts.googleapis.com/css?family=Questrial);
+@import url(http://fonts.googleapis.com/css?family=Dancing+Script:700);
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Questrial','Helvetica Neue',Arial,sans-serif;
+}
+
+#first {
+    position: relative;
+    text-align: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    height: 100vh;
+    width: 100%;
+    padding-top: 250px;
+    background-color: #c9c9c9;
+    background-image: url('../../static/img/peace.jpg');
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+#first .header-content {
+    position: relative;
+    width: 100%;
+    padding: 10px 15px;
+    text-align: center;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+#first .header-content .inner h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#first .header-content .inner p {
+    margin-bottom: 50px;
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+}
+
+.cursive {
+    font-family: 'Dancing Script', cursive;
+    text-transform: none;
+}
+</style>
+<form action="" method="get">
+<header id="first">
+    <div class="header-content">
+        <div class="inner">
+            <h1 class="cursive">Villages.cc Marketplace</h1>
+            <h4>Everyone has value to share!</h4>
+            <div class="form-group">
+            {{ form_listing_settings.q }}
+                </div>
+            <button class="btn btn-primary btn-l">Submit</button>
+        </div>
+    </div>
+</header>
+</form>
+{% include 'messages.html' %}
+<script>
+    var query_input = $("#id_q");
+    query_input.css('width', '400px');
+    query_input.css('border-radius', '10px');
+    query_input.css('height', '40px');
+    query_input.css('padding', '5px');
+    query_input.css('display', 'inline-block');
+    query_input.attr('placeholder', 'What are you seeking?');
+    query_input.attr('text-align', 'center');
+</script>

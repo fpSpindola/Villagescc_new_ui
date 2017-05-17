@@ -6,14 +6,15 @@
     padding-right: 15px;
 }
 
-h1 { color: #ff4411; font-size: 20px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
-p { font-family: 'Inder', sans-serif; line-height: 28px; margin-bottom: 15px; color: #666; }
-a { color: #ff4411; transition: .5s; -moz-transition: .5s; -webkit-transition: .5s; -o-transition: .5s; }
-a:hover { color: #a03c21 }
-
 .meta-info p { font-family: 'Fenix', serif; font-style: italic; color: #666; font-size: 16px; }
 
-.thumbnail{
+.thumbnail .listing {
+    width: 100%;
+    height: 150px;
+    display: block;
+}
+
+.thumbnail .listing-modal{
     width : 300px;
     height: 260px;
     overflow: auto;
@@ -22,6 +23,12 @@ a:hover { color: #a03c21 }
 .thumbnail .listing {
     width: 100%;
     height: 150px;
+    display: block;
+}
+
+#profile-listing-img {
+    width: 60px;
+    height: 60px;
     display: block;
 }
 </style>
@@ -78,9 +85,9 @@ a:hover { color: #a03c21 }
             </nav>
             <br>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="padding-top: 10px;">
             <div class="">
-                <form class="inline_form nav" action="" method="get"><ul>
+                <form action="" method="get"><ul style="padding-left: 0;">
                     <div class="btn-group">
                         {% if listings %}
                             <button type="button" class="btn btn-default btn-md btn-change" style="float: left;">All listing types</button>
@@ -89,24 +96,33 @@ a:hover { color: #a03c21 }
                             </button>
                             <!-- Given for loop to construct all -->
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'frontend:listing_type' 'OF' %}">Offer</a></li>
-                                <li><a href="{% url 'frontend:listing_type' 'RQ' %}">Request</a></li>
-                                <li><a href="{% url 'frontend:listing_type' 'TC' %}">Teach</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'OFFER' %}">OFFER</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'REQUEST' %}">REQUEST</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'TEACH' %}">TEACH</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="{% url 'frontend:listing_type' 'LR' %}">Learn</a></li>
-                                <li><a href="{% url 'frontend:listing_type' 'GT' %}">Gift</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'LEARN' %}">LEARN</a></li>
+                                <li><a href="{% url 'frontend:listing_type' 'GIFT' %}">GIFT</a></li>
                             </ul>
                             </div>
                         {% endif %}
                     {% if not listings %}
-                        <div class="input-group" style="align-content: center; width: 250%;">
+                        <div class="form-group">
                             {{ form.q }}
                         </div>
                         <span>{{ form.radius }}</span>
+                        {% if request.user.is_authenticated %}
                         <span><label>{{ form.trusted }}
                             <img src="{% static 'img/heart_icon.png' %}"
                                  alt="{% trans 'Heart icon = trusted user' %}">
                             {% trans 'Trusted only' %}</label></span>
+                        {% endif %}
+{#                    {% else %}#}
+{#                        <div class="form-group" style="padding-top: 10px;">#}
+{#                            {{ form_listing_settings.q }}#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            {{ form_listing_settings.radius }}#}
+{#                        </div>#}
                     {% endif %}
                     <span>
                         {% if item_type %}
@@ -115,68 +131,40 @@ a:hover { color: #a03c21 }
                             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
                         {% endif %}
                     </span>
-
                 </ul></form>
             </div>
         </div>
 
-{#        <div class="col-md-3" style="float: right;">#}
-{#            <button type="button" class="btn btn-default btn-md btn-last btn-non-active pull-right">#}
-{#                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map#}
-{#            </button>#}
-{#            <button type="button" class="btn btn-default btn-md btn-second btn-non-active pull-right">#}
-{#                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> List#}
-{#            </button>#}
-{#            <button type="button" class="btn btn-default btn-md btn-first btn-active pull-right">#}
-{#                <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Grid#}
-{#            </button>#}
-{#        </div>#}
-
-      <div style="height: 80px;"></div>
-
-        <hr>
-
         {% if feed_items %}
         <div class="col-md-9">
             <div class="feed_item_list">
-            {% for each in feed_items %}
-                <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
-                    <div class="panel-heading">{{ each }}</div>
+                {% for each in feed_items %}
+                    <div class="panel panel-default line{% if each.trusted %} trusted{% else %} untrusted{% endif %}">
+                        <div class="panel-heading">{{ each }}</div>
                         <div class="panel-body">
-{#                            <a href="#">#}
-                                <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
-{#                            </a>#}
+                            <img src="{% profile_image_url each '100x100' %}" style="height: 70px; width: 100px;">
                             <span><i class="fa fa-location-arrow" style="font-size: medium">&nbsp{{ each.location }}</i></span>
                             <p style="margin-left: 15px;"><i class="fa fa-balance-scale"></i>&nbsp{{ each.overall_balance }} hours</p>
 
                         </div>
-                    <div class="btn-group btn-group-md" role="group" style="float: left; margin-left: 10px; margin-bottom: 2px;">
-{#                        <button type="button" class="btn btn-default btn-danger" data-toggle="tooltip" title="Endorse this person">#}
-{#                            <i class="fa fa-heart" aria-hidden="true"></i>#}
-{#                        </button>#}
-{#                        <button type="button" class="btn btn-default btn-success" data-toggle="tooltip" title="Make payment">#}
-{#                            <i class="fa fa-money" aria-hidden="true"></i>#}
-{#                        </button>#}
-{#                        <button type="button" class="btn btn-default btn-primary" data-toggle="tooltip" title="Contact this person">#}
-{#                            <i class="fa fa-envelope" aria-hidden="true"></i>#}
-{#                        </button>#}
                     </div>
-                </div>
                 {% empty %}
-                <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
-            {% endfor %}
+                    <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+                {% endfor %}
             </div>
 
         {% elif listings %}
-        <div class="col-md-9">
+        <div class="col-md-9" style="padding-left: 0;">
             {% for each in listings %}
-                <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-6 col-md-4">
+                <div id="div_listing_{{ each.user.profile.username }}" class="col-sm-3 col-md-4">
                     <div class="thumbnail">
-                        <img class="listing" src="{% product_image_url each '280x280' %}" alt="...">
+                        <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" alt="...">
                         <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.listing_type }} | {{ each.price }}</p>
                         <p class="thumbnail-info"></p>
-                        <div class="caption" style="height: 60px;">
-                            <a href="#" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
+                        <div class="caption" style="height: 78px;">
+                            <span href="#" style="float: left;">
+                                <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                            </span>
                             <p>&nbsp;{{ each.title }}</p>
                         </div>
                     </div>

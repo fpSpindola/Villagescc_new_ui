@@ -11,20 +11,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='tagprofile',
-            name='profile_id',
-        ),
-        migrations.RemoveField(
-            model_name='tagprofile',
-            name=b'tag',
-        ),
         migrations.AlterField(
             model_name='tag',
             name=b'name',
             field=models.CharField(unique=True, max_length=10),
-        ),
-        migrations.DeleteModel(
-            name='TagProfile',
         ),
     ]

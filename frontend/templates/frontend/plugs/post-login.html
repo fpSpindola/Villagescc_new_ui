@@ -155,25 +155,27 @@
         {% if feed_items %}
             <div class="col-md-10">
                 {% for each in feed_items %}
-                    <div class="panel panel-default {% if each.trusted %} trusted{% else %} untrusted{% endif %}">
+                    <div class="panel panel-default">
                         <div class="panel-heading">{{ each }}</div>
                         <div class="panel-body">
                             <a href="{{ each.get_absolute_url }}">
                                 <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
                             </a>
-                            <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
-                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-heart" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-money" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                </button>
-                            </div>
+                                <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
+                                    <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                                        <i class="fa fa-heart" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+
                         </div>
-                        <div class="container-fluid">
+                        {% if each.trusted %}
+                            <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-2">
                                     <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
@@ -199,6 +201,35 @@
                                 </div>
                             </div>
                         </div>
+                        {% else %}
+                            <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span style="color: grey;"><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                                </div>
+                                <div class="col-md-10" style="color: grey;">
+                                    {{ each.location }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span style="color: grey;"><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                                </div>
+                                <div class="col-md-10 pull-left" style="color: grey;">
+                                    {{ each.overall_balance }} hours
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span style="color: grey;"><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                                </div>
+                                <div class="col-md-10" style="color: grey;">
+                                    {{ each.user.last_login }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
                     </div>
                 {% empty %}
                     <p><em>{{ empty_string|default:_('No activity.') }}</em></p>

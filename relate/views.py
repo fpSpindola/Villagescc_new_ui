@@ -47,6 +47,7 @@ def trust_ajax(request, recipient_username):
 
 
 def endorse_user(request, recipient_username):
+    print('Text')
     data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:

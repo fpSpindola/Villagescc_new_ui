@@ -28,4 +28,6 @@ urlpatterns = patterns(
     url(r'^request_invitation/$', 'request_invitation',
         name='request_invitation'),
     url(r'^share/$', 'share', name='share'),
+    url(r'^add_profile_tag/', 'add_profile_tag', name='add_profile_tag'),
+    url(r'^delete_profile_tags', 'delete_profile_tags', name='delete_profile_tags'),
 )
