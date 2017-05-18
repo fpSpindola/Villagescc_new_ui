@@ -218,12 +218,10 @@ class ProfileForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
 
-    recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
-                                       label='Choose the trust receiver', required=True,
-                                       widget=forms.Select(attrs={'class': 'form-control',
-                                                                  'style': 'width: 570px;'}))
+    contact_recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
+                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    message = forms.CharField(widget=forms.Textarea(attrs={'style': 'width: 570px;'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
 
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):

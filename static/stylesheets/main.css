@@ -188,11 +188,11 @@ ul .nav {
 .thumbnail-info {
     position: absolute;
     top: 120px;
-    font-size: 18px;
-    font-weight: 300;
+    font-size: 16px;
+    font-weight: 900;
     background: rgba(25, 25, 25, .5);
     color: #f3f3f3;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
 .thumbnail-tag {
@@ -203,7 +203,6 @@ ul .nav {
   margin-top: 4px;
   margin-left: -11px;
   margin-right: 4px;
-  height: 32px;
   left: 225px;
   color: black;
   background: lightgray;
@@ -382,4 +381,16 @@ ul {
         -webkit-transform:rotate(-45deg);
         z-index: 1000;
         opacity: 0.82;
-    }
+}
+
+.container-listing {
+    width: 360px;
+    height: 120px;
+}
+
+/* resize images */
+.container-listing img {
+    width: 100%;
+    height: auto;
+}
+

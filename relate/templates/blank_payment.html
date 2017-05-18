@@ -134,7 +134,7 @@
                     data['data']['payment_list'].forEach(function (payments) {
                         $('<td>'+payments+'</td>').appendTo('#row-payments')
                     });
-                    max_amount_span.text("Max trusted payment amount: "+data['data']['max_amount']);
+                    max_amount_span.text("You can send a trusted payment of up to "+data['data']['max_amount']+" hours or a direct payment of any amount");
                     max_amount_span.attr("hidden", false);
                     $('#label-profile-image').attr("hidden", false);
                     debugger;

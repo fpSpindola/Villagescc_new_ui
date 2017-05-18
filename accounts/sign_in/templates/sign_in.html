@@ -43,7 +43,7 @@
                 </li>
             </ul>
 
-            {% for field in form %}
+{% for field in form %}
     {% if field.errors %}
         <div class="form-group">
             <label for="{{ field.label }}" class="error">{{ field.label }}</label>

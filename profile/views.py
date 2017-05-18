@@ -18,6 +18,8 @@ from django.shortcuts import render as django_render
 
 from listings.forms import ListingsForms
 from listings.models import Listings
+from relate.forms import AcknowledgementForm
+from relate.forms import EndorseForm
 from tags.models import Tag
 from accounts.forms import UserForm
 from profile.forms import (
@@ -266,7 +268,7 @@ def edit_profile(request):
             return HttpResponseRedirect(reverse(my_profile))
     else:
         form = ProfileForm(instance=profile)
-    return locals()
+    return HttpResponseRedirect(reverse('my_profile'))
 
 @login_required()
 def edit_tags(request):
@@ -288,9 +290,10 @@ def my_profile(request):
 
 @render()
 def profile(request, username):
+    endorsement = None
     profile = get_object_or_404(Profile, user__username=username)
     if profile == request.profile:
-        template = 'my_profile.html'
+        return HttpResponseRedirect(reverse(my_profile))
     else:
         listing_form = ListingsForms()
         template = 'profile.html'
@@ -298,10 +301,14 @@ def profile(request, username):
             profile_endorsements_made = profile.endorsements_made.all()
             profile_endorsements_received = profile.endorsements_received.all()
             account = profile.account(request.profile)
+            trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
+            payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+            contact_form = ContactForm()
             return django_render(request, 'profile.html',
                                  {'profile_endorsements_made': profile_endorsements_made,
                                   'profile_endorsements_received': profile_endorsements_received,
-                                  'account': account, 'listing_form': listing_form, 'profile': profile})
+                                  'account': account, 'listing_form': listing_form, 'profile': profile,
+                                  'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form})
     return locals(), template
 
 
@@ -342,8 +349,24 @@ def contact(request, username):
     return locals()
 
 
-def undefined_contact(request):
+def undefined_contact(request, username=None):
     form = ContactForm()
+    if request.method == 'POST' and not request.is_ajax():
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            profile = Profile.objects.get(pk=form.cleaned_data['contact_recipient_name'])
+            form.send(sender=request.profile, recipient=profile)
+            messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
+            form = ContactForm()
+            return django_render(request, 'contact.html', {'form': form})
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
+            form.send(sender=request.profile, recipient=profile)
+            messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
+            form = ContactForm()
+            return django_render(request, 'contact.html', {'form': form})
     return django_render(request, 'contact.html', {'form': form})
 
 @login_required

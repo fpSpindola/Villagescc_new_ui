@@ -29,234 +29,373 @@
             display: block;
         }
     </style>
-
-    <div class="container-fluid" id="profile-container-fluid">
-        <div class="jumbotron" id="profile-jumbotron">
-            <h2>{{ profile.name }}</h2>
-        </div>
-    </div>
-
-    <section class="container-fluid" id="profile-info">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="inside-profile-info">
-                    <p>Profile description:</p>
-                    <p>{{ profile.description }}</p>
-                </div>
-                <hr>
-            </div>
-
-            <div class="col-md-4" style="text-align: center; padding-left: 100px">
-                <img src="{% profile_image_url profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
-                <p class="profile-star-rating">
-                    <label>Reputation:</label>
-                    {% if profile.reputation %}
-                        <td>{% reputation profile profile %}</td>
-                    {% else %}
-                        <td>No reputation yet</td>
-                    {% endif %}
-                </p>
-                <div class="" ><p><i class="fa fa-balance-scale" aria-hidden="true"></i>
-                    {% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour
-                    {% plural %} {{ hours }} hours</p>{% endblocktrans %}
-
-                    <p><i class="fa fa-pencil" aria-hidden="true"></i> Job: {% if profile.job %}{{ profile.job }} {% else %} -- {% endif %}</p>
-                    <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
-                    <p data-toggle="tooltip" title="{{ profile.location.full_name }}"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="{{ profile.location.full_name }}"></i> {{ profile.location.full_name|truncatechars:50 }}</p>
-                    <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
-                </div>
+    <div class="col-sm-12">
+        <div class="container-fluid" id="profile-container-fluid">
+            <div class="jumbotron" id="profile-jumbotron">
+                <h2>{{ profile.name }}</h2>
             </div>
         </div>
-    </section>
 
-    <section class="container-fluid" id="profile-listing-info">
-        <div class="row">
-            <div class="col-md-9">
-                {% if listings %}
-                    <h3>Open listings</h3>
-                    <bold><hr></bold>
-                    <!-- Construct in the for loop -->
-                    {% for each in listings %}
-                        <div class="col-sm-6 col-md-4">
-                            <div class="thumbnail">
-                                <img class="listing listing-modal-profile" src="{% product_image_url each '280x280' %}" alt="..." data-listing-id="{{ each.id }}">
-                                <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
-                                <p class="thumbnail-info"></p>
-                                <div class="caption">
-                                    <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
-                                    <p>{{ each.title }}</p>
+        <section class="container-fluid" id="profile-info">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="inside-profile-info">
+                        <p>Profile description:</p>
+                        <p>{{ profile.description }}</p>
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="col-md-4" style="text-align: center; padding-left: 100px">
+                    <img src="{% profile_image_url profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
+                    <p class="profile-star-rating">
+                        <label>Reputation:</label>
+                        {% if profile.reputation %}
+                            <td>{% reputation profile profile %}</td>
+                        {% else %}
+                            <td>No reputation yet</td>
+                        {% endif %}
+                    </p>
+                    <div class="" ><p><i class="fa fa-balance-scale" aria-hidden="true"></i>
+                        {% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour
+                        {% plural %} {{ hours }} hours</p>{% endblocktrans %}
+
+                        <p><i class="fa fa-pencil" aria-hidden="true"></i> Job: {% if profile.job %}{{ profile.job }} {% else %} -- {% endif %}</p>
+                        <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
+                        <p data-toggle="tooltip" title="{{ profile.location.full_name }}"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="{{ profile.location.full_name }}"></i> {{ profile.location.full_name|truncatechars:50 }}</p>
+                        <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
+                    </div>
+                    <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="...">
+                        <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ profile.username }}">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ profile.username }}">
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ profile.username }}">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container-fluid" id="profile-listing-info">
+            <div class="row">
+                <div class="col-md-9">
+                    {% if listings %}
+                        <h3>Open listings</h3>
+                        <bold><hr></bold>
+                        <!-- Construct in the for loop -->
+                        {% for each in listings %}
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img class="listing listing-modal-profile" src="{% product_image_url each '280x280' %}" alt="..." data-listing-id="{{ each.id }}">
+                                    <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
+                                    <p class="thumbnail-info"></p>
+                                    <div class="caption">
+                                        <img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/>
+                                        <p>{{ each.title }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <h3>There is no open listings for this user</h3>
-                {% endif %}
-            </div>
-            <div class="col-md-3">
-                <div class="card">
-                    <h4>Tags</h4>
-                    {% for tag in profile.tag.all %}
-                        <span class="badge">tag.name</span>
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <h3>There is no open listings for this user</h3>
+                    {% endif %}
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <h4>Tags</h4>
+                        {% for tag in profile.tag.all %}
+                            <span class="badge">tag.name</span>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Relationship with -->
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-md-9">
-                {% if request.profile %}
-                    <h3>My Relationship with {{ profile.name }}</h3>
-                    <table class="table table-bordered table-relationship">
-                        <tbody>
-                        <tr>
-                            <td>Current Balance</td>
-                            <td>{% blocktrans count hours=profile.overall_balance %}
-                                {{hours}} hour
-                            {% plural %}
-                                {{hours}} hours
-                            {% endblocktrans %}</td>
-                        </tr>
-                        <tr>
-                            <td>Trusted Balance</td>
-                            <td>{% blocktrans count hours=profile.trusted_balance %}
-                                {{hours}} hour
-                            {% plural %}
-                                {{hours}} hours
-                            {% endblocktrans %}</td>
-                        </tr>
-                        <tr>
-                            <th><a href="{% url 'relationship' profile.username %}"
-                            >{% trans 'Balance with Me' %}</a>
-                            </th>
-                            <td>
-                                {% blocktrans count hours=account.balance %}
+        <!-- Relationship with -->
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    {% if request.profile %}
+                        <h3>My Relationship with {{ profile.name }}</h3>
+                        <table class="table table-bordered table-relationship">
+                            <tbody>
+                            <tr>
+                                <td>Current Balance</td>
+                                <td>{% blocktrans count hours=profile.overall_balance %}
                                     {{hours}} hour
                                 {% plural %}
                                     {{hours}} hours
-                                {% endblocktrans %}
-                            </td>
-                        </tr>
-                        {% if account.partner_endorsement %}
-                            <tr>
-                                {% blocktrans count hearts=account.partner_endorsement.weight %}
-                                    <td>{{ partner }} endorsement of you</td>
-                                {% plural %}
-                                    {{ partner }} endorsement of you
-                                {% endblocktrans %}
-                                <td>{% blocktrans count hearts=account.partner_endorsement.weight %}
-                                    {{ hearts }} heart
-                                {% plural %}
-                                    {{ hearts }} hearts
                                 {% endblocktrans %}</td>
                             </tr>
-                        {% endif %}
-                        {% if account.endorsement %}
                             <tr>
-                                {% blocktrans count hearts=account.endorsement.weight %}
-                                    <td>Your endorsement of {{ partner }}</td>
+                                <td>Trusted Balance</td>
+                                <td>{% blocktrans count hours=profile.trusted_balance %}
+                                    {{hours}} hour
                                 {% plural %}
-                                    <td>Your endorsement of {{ partner }}</td>
-                                {% endblocktrans %}
-                                <td>{% blocktrans count hearts=account.endorsement.weight %}
-                                    {{ hearts }} heart
-                                {% plural %}
-                                    {{ hearts }} hearts
+                                    {{hours}} hours
                                 {% endblocktrans %}</td>
                             </tr>
-                        {% endif %}
-                        </tbody>
-                    </table>
-                {% endif %}
+                            <tr>
+                                <th><a href="{% url 'relationship' profile.username %}"
+                                >{% trans 'Balance with Me' %}</a>
+                                </th>
+                                <td>
+                                    {% blocktrans count hours=account.balance %}
+                                        {{hours}} hour
+                                    {% plural %}
+                                        {{hours}} hours
+                                    {% endblocktrans %}
+                                </td>
+                            </tr>
+                            {% if account.partner_endorsement %}
+                                <tr>
+                                    {% blocktrans count hearts=account.partner_endorsement.weight %}
+                                        <td>{{ partner }} endorsement of you</td>
+                                    {% plural %}
+                                        {{ partner }} endorsement of you
+                                    {% endblocktrans %}
+                                    <td>{% blocktrans count hearts=account.partner_endorsement.weight %}
+                                        {{ hearts }} heart
+                                    {% plural %}
+                                        {{ hearts }} hearts
+                                    {% endblocktrans %}</td>
+                                </tr>
+                            {% endif %}
+                            {% if account.endorsement %}
+                                <tr>
+                                    {% blocktrans count hearts=account.endorsement.weight %}
+                                        <td>Your endorsement of {{ partner }}</td>
+                                    {% plural %}
+                                        <td>Your endorsement of {{ partner }}</td>
+                                    {% endblocktrans %}
+                                    <td>{% blocktrans count hearts=account.endorsement.weight %}
+                                        {{ hearts }} heart
+                                    {% plural %}
+                                        {{ hearts }} hearts
+                                    {% endblocktrans %}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-md-9">
-                <h3>Endorsed by:</h3>
-                {% if profile_endorsements_received %}
-                    {% for each_endorsement_received in profile_endorsements_received %}
-                        <div class="container-fluid">
-                            <hr>
-                            <div class="image">
-                                <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3>Endorsed by:</h3>
+                    {% if profile_endorsements_received %}
+                        {% for each_endorsement_received in profile_endorsements_received %}
+                            <div class="container-fluid">
+                                <hr>
+                                <div class="image">
+                                    <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
+                                </div>
+                                <p class="text">Description: {{ each_endorsement_received.text }}</p>
+                                <p class="text">From <a href="{{ each_endorsement_received.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.get_absolute_url }}">{{ profile.name }}</a></p>
                             </div>
-                            <p class="text">Description: {{ each_endorsement_received.text }}</p>
-                            <p class="text">From <a href="{{ each_endorsement_received.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.get_absolute_url }}">{{ profile.name }}</a></p>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text">No endorsements received yet</p>
-                {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="text">No endorsements received yet</p>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-md-9">
-                <h3>Endorsements made:</h3>
-                {% if profile_endorsements_made %}
-                    {% for each_endorsement_made in profile_endorsements_made %}
-                        <div class="container-fluid">
-                            <hr>
-                            <div class="image">
-                                <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3>Endorsements made:</h3>
+                    {% if profile_endorsements_made %}
+                        {% for each_endorsement_made in profile_endorsements_made %}
+                            <div class="container-fluid">
+                                <hr>
+                                <div class="image">
+                                    <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
+                                </div>
+                                <p class="text">Description: {{ each_endorsement_made.text }}</p>
+                                <p class="text">From <a href="{{ profile.get_absolute_url }}">{{ profile.name }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
                             </div>
-                            <p class="text">Description: {{ each_endorsement_made.text }}</p>
-                            <p class="text">From <a href="{{ profile.get_absolute_url }}">{{ profile.name }}</a> to <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text">No endorsements made yet</p>
-                {% endif %}
-                <hr>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text">No endorsements made yet</p>
+                    {% endif %}
+                    <hr>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-<script>
-    $(".listing-modal-profile").click(function (e) {
-        $('#spin-modal').fadeIn();
-        var listing_id = $(this).attr('data-listing-id');
-        var url = '/get_listing_info/'+listing_id;
-        var listing_picture_path = '/media/';
-        $.ajax({
-            url: url,
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                if(data["data"]["stat"] == "ok"){
-                    $('#listing-id').val(listing_id);
-                    $('.listing-modal-title').text(data["data"]["listing_title"]);
-                    $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
-                    $('#label-price').text(data["data"]["listing_price"]);
-                    $('#label-profile-name').text(data["data"]["profile_name"]);
-                    $('#profile-location').text(data["data"]["profile_location"]);
-                    $('#listing-created-at').text(data["data"]["created_at"]);
-                    $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
-                    $('#label-description').text(data["data"]["description"]);
-                    $('#label-profile-username').text(data["data"]["username"]);
-                    $('#label-profile-balance').text(data["data"]["balance"]);
-                    $('#label-profile-occupation').text(data["data"]["job"]);
-                    $('#trust-btn').attr('data-profile-username', data["data"]["username"];
-                    $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
-                    $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
-                    $('#spin-modal').fadeOut();
-                    $("#listing-modal").modal("show");
-                }
-            },
-            error: function (data) {
+        <script>
+            $(".listing-modal-profile").click(function (e) {
+                $('#spin-modal').fadeIn();
+                var listing_id = $(this).attr('data-listing-id');
+                var url = '/get_listing_info/'+listing_id;
+                var listing_picture_path = '/media/';
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                        if(data["data"]["stat"] == "ok"){
+                            $('#listing-id').val(listing_id);
+                            $('.listing-modal-title').text(data["data"]["listing_title"]);
+                            $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                            $('#label-price').text(data["data"]["listing_price"]);
+                            $('#label-profile-name').text(data["data"]["profile_name"]);
+                            $('#profile-location').text(data["data"]["profile_location"]);
+                            $('#listing-created-at').text(data["data"]["created_at"]);
+                            $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                            $('#label-description').text(data["data"]["description"]);
+                            $('#label-profile-username').text(data["data"]["username"]);
+                            $('#label-profile-balance').text(data["data"]["balance"]);
+                            $('#label-profile-occupation').text(data["data"]["job"]);
+                            $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#spin-modal').fadeOut();
+                            $("#listing-modal").modal("show");
+                        }
+                    },
+                    error: function (data) {
+                        $('#spin-modal').fadeOut();
+                        showInternalServerError();
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $(".listing-modal").click(function (e) {
+                $('#spin-modal').fadeIn();
+                var listing_id = $(this).attr('data-listing-id');
+                var url = '/get_listing_info/'+listing_id;
+                var listing_picture_path = '/media/';
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                        if(data["data"]["stat"] == "ok"){
+                            $('#listing-id').val(listing_id);
+                            $('.listing-modal-title').text(data["data"]["listing_title"]);
+                            $('.listing-img').attr("src", listing_picture_path+data["data"]["listing_photo"]);
+                            $('#label-price').text(data["data"]["listing_price"]);
+                            $('#label-profile-name').text(data["data"]["profile_name"]);
+                            $('#profile-location').text(data["data"]["profile_location"]);
+                            $('#listing-created-at').text(data["data"]["created_at"]);
+                            $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
+                            $('#label-description').text(data["data"]["description"]);
+                            $('#label-profile-username').text(data["data"]["username"]);
+                            $('#label-profile-balance').text(data["data"]["balance"]);
+                            $('#label-profile-occupation').text(data["data"]["job"])
+                            $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#contact-btn').attr('data-profile-username', data["data"]["username"]);
+                            $('#spin-modal').fadeOut();
+                            $("#listing-modal").modal("show");
+                        }
+                    },
+                    error: function (data) {
+                        $('#spin-modal').fadeOut();
+                        showInternalServerError();
+                    }
+                });
+            });
+
+
+            $(".trust-modal").click(function (e) {
+                $('#spin-modal').fadeIn();
+                var profile_username = $(this).attr('data-profile-username');
+                $("#profile-username").val(profile_username);
+                var url = '/relate/trust_ajax/'+profile_username;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                        if(data["data"]["stat"] == "error"){
+                            $('#error-modal-alert').text(data["data"]["error_message"]);
+                            $('#spin-modal').fadeOut();
+                            $('#error-modal').modal("show");
+                        }
+                        else if(data["data"]["stat"] == "ok"){
+                            $('#spin-modal').fadeOut();
+                            $('.trust-modal-title').text('Trust ' +profile_username);
+                            $("#new-trust-modal").modal("show");
+                        }
+                        else if(data["data"]["stat"] == "existing"){
+                            $('#id_weight').val(data['data']['weight']);
+                            $('#id_text').val(data['data']['text']);
+                            $('#spin-modal').fadeOut();
+                            $('.trust-modal-title').text('Trust ' +profile_username);
+                            $("#new-trust-modal").modal("show");
+                        }
+                    },
+                    error: function (data) {
+                        $('#spin-modal').fadeOut();
+                        showInternalServerError();
+                    }
+                });
+            });
+
+            $(".payment-modal").click(function (e) {
+                debugger;
+                $('#payment-loading-modal').modal("show");
+                $('#spin-modal').fadeIn();
+                var profile_username = $(this).attr('data-profile-username');
+                $("#profile-username").val(profile_username);
+                var url = '/relate/acknowledge_ajax/'+profile_username;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                        debugger;
+                        if(data["data"]["stat"] != "ok"){
+                            $('#error-modal-alert').text(data["data"]["stat"]);
+                            $('#spin-modal').fadeOut();
+                            $('#erHousingror-modal-alert').modal("show");
+                        }
+                        else if(!data['data']['can_ripple']){
+                            $('label[for="id_ripple_0"]').closest('li').hide();
+                            $('#id_ripple_1').attr('checked', true);
+                            $('.ripple-hours').html("There are no available paths through the trust network to <strong>"+data['data']['recipient']+"</strong>, so you can only send direct acknowledgement.")
+                            $('#spin-modal').fadeOut();
+                            $('#payment-loading-modal').modal("hide");
+                            $("#new-payment-modal").modal("show");
+                        }else if(data["data"]["can_ripple"]){
+                            $('#id_ripple_0').attr('checked', true);
+                            $('.ripple-hours').html("You can send a trusted acknowledgement of up to " + data['data']['max_amount'] + " hour(s) or a direct acknowledgement of any amount.")
+                            $('#spin-modal').fadeOut();
+                            $('#payment-loading-modal').modal("hide");
+                            $("#new-payment-modal").modal("show");
+                        }
+                    },
+
+                    error: function (data) {
+                        debugger;
+                        $('#spin-modal').fadeOut();
+                        showInternalServerError();
+                    }
+                });
+                e.preventDefault();
+            });
+
+            $(".contact-modal").click(function (e) {
+                $('#spin-modal').fadeIn();
+                var profile_username = $(this).attr('data-profile-username');
+                $("#profile-username").val(profile_username);
+                $('#contact-modal-title').text('Contact '+profile_username);
                 $('#spin-modal').fadeOut();
-                showInternalServerError();
-            }
-        });
-    });
-</script>
-
+                $("#new-contact-modal").modal("show");
+            });
+        </script>
+    </div>
 {% endblock %}

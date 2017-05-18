@@ -136,7 +136,13 @@
                             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
                         {% endif %}
                     </span>
-                </ul></form>
+                </ul>
+                {% if subcategory_name %}
+                        <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
+                        font-family: 'Open Sans'; color: #000;">{{ subcategory_name }}</p>
+                    {% endif %}
+                <hr>
+                </form>
             </div>
         </div>
 

@@ -37,6 +37,7 @@ def listing_type_filter(request, listing_type):
     """
     listing_type_objects = Listings.objects.all().filter(listing_type=listing_type).order_by('-created')
     form = ListingsForms()
+    form_listing_settings = FormListingsSettings(initial=request.GET)
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
@@ -47,7 +48,8 @@ def listing_type_filter(request, listing_type):
                                                   'services_sub_categories': services_sub_categories,
                                                   'rideshare_sub_categories': rideshare_sub_categories,
                                                   'housing_sub_categories': housing_sub_categories,
-                                                  'categories': categories_list})
+                                                  'categories': categories_list,
+                                                  'form_listing_settings': form_listing_settings})
 
 
 def categories_filter(request, category_type):
@@ -58,6 +60,7 @@ def categories_filter(request, category_type):
     """
     listing_type_objects = Listings.objects.all().filter(subcategories__categories__categories_text=category_type).order_by('-created')
     form = ListingsForms()
+    form_listing_settings = FormListingsSettings(initial=request.GET)
     categories_list = Categories.objects.all()
     item_sub_categories = SubCategories.objects.all().filter(categories=1)
     services_sub_categories = SubCategories.objects.all().filter(categories=2)
@@ -68,7 +71,8 @@ def categories_filter(request, category_type):
                                                   'services_sub_categories': services_sub_categories,
                                                   'rideshare_sub_categories': rideshare_sub_categories,
                                                   'housing_sub_categories': housing_sub_categories,
-                                                  'categories': categories_list})
+                                                  'categories': categories_list, 'subcategory_name': category_type,
+                                                  'form_listing_settings': form_listing_settings})
 
 
 def home(request, type_filter=None, item_type=None, template='frontend/home.html', poster=None, recipient=None,
@@ -137,6 +141,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                 return HttpResponseRedirect(reverse('frontend:home'))
             else:
                 print(form.errors)
+        subcategory_name = None
         people = None
         trusted_only = None
         # GET Request
@@ -146,6 +151,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         contact_form = ContactForm()
         if type_filter:
             listings = Listings.objects.all().filter(subcategories__id=type_filter).order_by('-created')
+            subcategory_name = SubCategories.objects.get(pk=type_filter)
         else:
             listings = Listings.objects.all().order_by('-created')
             if request.GET.get('trusted') == 'on':
@@ -179,7 +185,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'listings': listings, 'people': people, 'listing_form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
             'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-            'form_listing_settings': form_listing_settings})
+            'form_listing_settings': form_listing_settings, 'subcategory_name': subcategory_name})
 
 
 def pre_home(request):
