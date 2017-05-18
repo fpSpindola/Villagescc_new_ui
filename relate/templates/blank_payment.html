@@ -120,7 +120,7 @@
                 $("#id_recipient").text(ui.item.value);
                 $("#id_recipient").attr("data-profile-selected", ui.item.id);
                 var profile = $("#id_recipient").attr("data-profile-selected");
-                var url = "/relate/get_user_photo/"+profile;
+                var url = "/get_user_photo/"+profile;
                 var max_amount_span = $("#max-amount");
                 $.ajax({
                 url: url,
@@ -166,7 +166,7 @@
         debugger;
         var profile = $('#id_recipient').attr("data-profile-selected");
         $("#id_recipient").val(profile);
-        var url = '/relate/blank_payment/'+profile;
+        var url = '/blank_payment/'+profile;
         $.ajax({
             url: url,
             type: 'POST',

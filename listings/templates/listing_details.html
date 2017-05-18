@@ -105,7 +105,7 @@
         $('#spin-modal').fadeIn();
         var profile_username = '{{ listing.user.username }}';
         $("#profile-username").val(profile_username);
-        var url = '/relate/trust_ajax/' + profile_username;
+        var url = '/trust_ajax/' + profile_username;
         $.ajax({
             url: url,
             type: 'GET',
@@ -129,7 +129,7 @@
         var profile_username = '{{ listing.user.username }}';
         $('#payment-modal-title').text('Pay '+profile_username);
         $("#profile-username").val(profile_username);
-        var url = '/relate/acknowledge_ajax/'+profile_username;
+        var url = '/acknowledge_ajax/'+profile_username;
         console.log(url);
         $.ajax({
             url: url,

@@ -313,7 +313,7 @@
                 $('#spin-modal').fadeIn();
                 var profile_username = $(this).attr('data-profile-username');
                 $("#profile-username").val(profile_username);
-                var url = '/relate/trust_ajax/'+profile_username;
+                var url = '/trust_ajax/'+profile_username;
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -350,7 +350,7 @@
                 $('#spin-modal').fadeIn();
                 var profile_username = $(this).attr('data-profile-username');
                 $("#profile-username").val(profile_username);
-                var url = '/relate/acknowledge_ajax/'+profile_username;
+                var url = '/acknowledge_ajax/'+profile_username;
                 console.log(url);
                 $.ajax({
                     url: url,

@@ -19,7 +19,7 @@ urlpatterns = patterns(
     url(r'^profiles/([^/]+)/$', 'profile', name='profile'),
     url(r'^profiles/my_profile', 'my_profile', name='my_profile'),
     url(r'^profiles/([^/]+)/posts/$', 'profile_posts', name='profile_posts'),
-    url(r'^profiles/contact/', 'undefined_contact', name='undefined_contact'),
+    url(r'^contact/', 'undefined_contact', name='undefined_contact'),
     url(r'^profiles/([^/]+)/endorsements/$', 'profile_endorsements',
         name='profile_endorsements'),
     url(r'^profiles/([^/]+)/contact/$', 'contact', name='contact'),

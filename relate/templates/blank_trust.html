@@ -138,7 +138,7 @@
                     $("#id_recipient_name").text(ui.item.label);
                     $("#id_recipient_name").attr("data-profile-selected", ui.item.id);
                     var profile = $('#id_recipient_name').attr("data-profile-selected");
-                    var url = '/relate/get_user_photo/' + profile;
+                    var url = '/get_user_photo/' + profile;
                     $.ajax({
                         url: url,
                         type: 'GET',

@@ -359,7 +359,7 @@ def undefined_contact(request, username=None):
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
             form = ContactForm()
             return django_render(request, 'contact.html', {'form': form})
-    else:
+    elif request.method == 'POST' and request.is_ajax():
         form = ContactForm(request.POST)
         if form.is_valid():
             profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])

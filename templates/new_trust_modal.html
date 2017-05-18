@@ -62,10 +62,9 @@
 
 <script>
     $("#save-trust").click(function(e) {
-        debugger;
         $('#save-trust').attr("disabled", true);
         var profile_username = $("#profile-username").val();
-        var url = 'relate/endorse/'+profile_username+'/';
+        var url = '/endorse/'+profile_username+'/';
         console.log(url);
         $.ajax({
             url: url,
@@ -77,7 +76,6 @@
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
             success: function(data){
-                debugger;
                 if(data['data']['stat'] == 'ok'){
                     var recipient = data['data']['recipient'];
                     $('#trust-msg').html(data).fadeIn('slow');
@@ -98,7 +96,6 @@
                 }
             },
             error: function (resp){
-                debugger;
                 if(resp.status === 500) {
                     showInternalServerError();
                 }

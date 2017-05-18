@@ -59,7 +59,7 @@
     $("#save-payment").click(function(e) {
         $("#save-payment").attr("disabled", true);
         var profile_username = $("#profile-username").val();
-        var url = 'relate/pay/'+profile_username+'/';
+        var url = 'pay_user_ajax/'+profile_username+'/';
         console.log(url);
         $.ajax({
             url: url,
@@ -71,7 +71,6 @@
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
             success: function(data){
-                debugger;
                 if(data['data']['stat'] == 'ok'){
                     var recipient = data['data']['recipient'];
                     $('#payment-msg').html(data).fadeIn('slow');
@@ -93,7 +92,6 @@
                 }
             },
             error: function (resp){
-                debugger;
                 $("#save-payment").attr("disabled", false);
                 console.log('Error ' + resp);
             }
