@@ -37,12 +37,14 @@
 {#    $("#section-padding-base").css('padding-top', '0')#}
 {#</script>#}
 
+{% if request.user_agent.is_mobile %}
+{% endif %}
+
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
         <div class="col-md-2">
             <nav class="sidebar">
                 <ul>
-                    <li>
                         <div><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
                         <ul class="collapse">
                             <li></li>

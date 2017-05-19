@@ -10,6 +10,7 @@ from feed.forms import FeedFilterForm, DATE_FORMAT
 from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
+from django_user_agents.utils import get_user_agent
 # models
 
 from listings.models import Listings
@@ -83,6 +84,12 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
     url: /home
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
+
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile:
+        user_agent_type = 'mobile'
+    else:
+        user_agent_type = 'desktop'
     endorsement = None
     if item_type:
         form = FeedFilterForm(request.GET, request.profile, request.location, item_type,
@@ -126,7 +133,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                                                       'url_param_str': url_param_str,
                                                       'next_page_param_str': next_page_param_str,
                                                       'extra_context': extra_context,
-                                                      'recipient': recipient,
+                                                      'recipient': recipient, 'user_agent_type': user_agent_type,
                                                       'item_sub_categories': item_sub_categories,
                                                       'services_sub_categories': services_sub_categories,
                                                       'rideshare_sub_categories': rideshare_sub_categories,
@@ -163,7 +170,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                                                            "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
                 # listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
             if request.GET.get('q'):
-                listings = listings.filter(title__icontains=request.GET.get('q'))
+                listings = listings.filter(Q(title__icontains=request.GET.get('q')) |
+                                           Q(description__icontains=request.GET.get('q')))
             # if request.location and request.GET.get('radius'):
             #     listings = listings.filter(
             #         Q(user__profile__location__point__dwithin=(request.location.point, request.GET.get('radius'))) |
@@ -181,7 +189,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
             'services_sub_categories': services_sub_categories,
             'rideshare_sub_categories': rideshare_sub_categories,
-            'housing_sub_categories': housing_sub_categories,
+            'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
             'listings': listings, 'people': people, 'listing_form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
             'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
