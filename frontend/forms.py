@@ -28,12 +28,14 @@ class FormListingsSettings(forms.Form):
 
     trusted = forms.BooleanField(label='Trusted only', required=False,
                                  widget=forms.CheckboxInput(attrs={
-                                     'class': 'form-control checkbox-inline', 'style': 'vertical-align: middle'
+                                     'class': 'form-control checkbox-inline',
+                                     'style': 'vertical-align: middle; width: 15px;'
                                  }))
 
     q = forms.CharField(label='Search', required=False,
                         widget=forms.TextInput(attrs={
-                            'class': 'form-control'}))
+                            'class': 'form-control',
+                            'placeholder': 'Search posts...'}))
 
     radius = forms.TypedChoiceField(
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,

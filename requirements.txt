@@ -6,3 +6,4 @@ IPy
 networkx==1.8
 Pillow
 marshmallow
+django-user-agents
