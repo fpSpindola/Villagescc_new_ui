@@ -3,6 +3,7 @@ import ripple.api as ripple
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.db.models import Q
 # Forms
 from listings.forms import ListingsForms
@@ -48,8 +49,8 @@ def listing_type_filter(request, listing_type):
                                                   'services_sub_categories': services_sub_categories,
                                                   'rideshare_sub_categories': rideshare_sub_categories,
                                                   'housing_sub_categories': housing_sub_categories,
-                                                  'categories': categories_list,
-                                                  'form_listing_settings': form_listing_settings})
+                                                  'categories': categories_list, 'listing_type_filter': listing_type,
+                                                  'form_listing_settings': form_listing_settings, 'is_listing': True})
 
 
 def categories_filter(request, category_type):
@@ -72,14 +73,22 @@ def categories_filter(request, category_type):
                                                   'rideshare_sub_categories': rideshare_sub_categories,
                                                   'housing_sub_categories': housing_sub_categories,
                                                   'categories': categories_list, 'subcategory_name': category_type,
-                                                  'form_listing_settings': form_listing_settings})
+                                                  'form_listing_settings': form_listing_settings,
+                                                  'category_filter': category_type, 'is_listing': True})
+
+
+def get_listings_and_remaining(listings):
+    count = len(listings)
+    if count > 0:
+        limit = settings.LISTINGS_PER_PAGE
+        query = listings[:limit]
+        return query, count - len(query)
 
 
 def home(request, type_filter=None, item_type=None, template='frontend/home.html', poster=None, recipient=None,
          extra_context=None, do_filter=False):
     """
-    This is home page but before logged in user will see this pages
-    returns before login home.
+
     url: /home
     """
     # max_amount = ripple.max_payment(request.profile, recipient)
@@ -141,16 +150,21 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
                 return HttpResponseRedirect(reverse('frontend:home'))
             else:
                 print(form.errors)
+
         subcategory_name = None
         people = None
         trusted_only = None
         # GET Request
-        form_listing_settings = FormListingsSettings(initial=request.GET)
+        form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location,
+                                                     do_filter, initial=request.GET)
+        if form_listing_settings.is_valid():
+            listing_items, remaining_count = form_listing_settings.get_results()
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
         if type_filter:
             listings = Listings.objects.all().filter(subcategories__id=type_filter).order_by('-created')
+            # items, count = get_listings_and_remaining(listings, up_to_date=date)
             subcategory_name = SubCategories.objects.get(pk=type_filter)
         else:
             listings = Listings.objects.all().order_by('-created')
@@ -185,7 +199,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'listings': listings, 'people': people, 'listing_form': form,
             'categories': categories_list, 'trusted_only': trusted_only,
             'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-            'form_listing_settings': form_listing_settings, 'subcategory_name': subcategory_name})
+            'form_listing_settings': form_listing_settings, 'subcategory_name': subcategory_name,
+            'is_listing': True})
 
 
 def pre_home(request):

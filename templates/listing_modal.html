@@ -1,3 +1,11 @@
+<style>
+    .listing-img {
+        width: 550px;
+        height: 550px;
+        display: block;
+    }
+</style>
+
 <div id="listing-modal" class="modal fade modal-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <input type="text" id="listing-id" hidden>
     <div class="modal-dialog">
@@ -20,7 +28,7 @@
                     <h4>Price: <span id="label-price" class="label label-info"></span></h4>
                     <hr>
                     <h5>Seller name: <span id="label-profile-name" class="label label-info"></span></h5>
-                    <h5>Seller username: <span id="label-profile-username" class="label label-info"></span></h5>
+                    <h5>Seller username: <span class="label label-info"><a href="#" id="listing-profile-username"></a></span></h5>
                     <h5>Occupation: <span id="label-profile-occupation" class="label label-info"></span></h5>
                     <h5>Balance: <span id="label-profile-balance" class="label label-info"></span> </h5>
                     <h5>Description: <span id="label-description" class="label label-info"></span> </h5>

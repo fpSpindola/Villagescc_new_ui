@@ -102,7 +102,7 @@
                     <ul style="padding-left: 0;">
                 <div class="form-group">
                     <div class="btn-group">
-                        {% if listings %}
+                        {% if is_listing %}
                             <button type="button" class="btn btn-default btn-md btn-change" style="float: left; padding-bottom: 10px;">All listing types</button>
                             <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px; padding-bottom: 10px;">
                             <span class="caret"></span>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         {% endif %}
-                    {% if not listings %}
+                    {% if not is_listing %}
                         <div class="form-group">
                             {{ form.q }}
                         </div>
@@ -152,7 +152,7 @@
                     <span>
                         {% if feed_items %}
                             <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-                        {% elif listings %}
+                        {% elif is_listing %}
                             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
                         {% endif %}
                     </span>
@@ -161,6 +161,9 @@
                     {% if subcategory_name %}
                         <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
                         font-family: 'Open Sans'; color: #000;">{{ subcategory_name }}</p>
+                    {% elif listing_type_filter %}
+                        <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
+                        font-family: 'Open Sans'; color: #000;">{{ listing_type_filter }}</p>
                     {% endif %}
                     <hr>
 
@@ -319,9 +322,10 @@
                     $('#listing-created-at').text(data["data"]["created_at"]);
                     $('#listing-created-at').attr("href", "/listing_details/"+listing_id);
                     $('#label-description').text(data["data"]["description"]);
-                    $('#label-profile-username').text(data["data"]["username"]);
+                    $('#listing-profile-username').text(data["data"]["username"]);
+                    $("#listing-profile-username").attr("href", "/profiles/"+data["data"]["username"]);
                     $('#label-profile-balance').text(data["data"]["balance"]);
-                    $('#label-profile-occupation').text(data["data"]["job"])
+                    $('#label-profile-occupation').text(data["data"]["job"]);
                     $('#trust-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#payment-btn').attr('data-profile-username', data["data"]["username"]);
                     $('#contact-btn').attr('data-profile-username', data["data"]["username"]);

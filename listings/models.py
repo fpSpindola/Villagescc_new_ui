@@ -1,3 +1,4 @@
+from django.conf import settings
 from tags.models import Tag
 from django.contrib.auth.models import User
 from django.db import models
@@ -23,23 +24,38 @@ TRUSTED_SUBQUERY = (
     "(select to_profile_id from profile_profile_trusted_profiles "
     "    where from_profile_id = %s)")
 
-# Create your models here.
 
-
-class ListingManager(GeoManager):
-    def get_feed_and_remaining(self, *args, **kwargs):
+class ListingsManager(GeoManager):
+    def get_items_and_remaining(self, *args, **kwargs):
         """
-        Returns feed and count of remaining items not returned after
-        limiting the query.
+
+        :param args:
+        :param kwargs:
+        :return:
         """
         count_kwargs = kwargs.copy()
         count_kwargs.pop('limit', None)
-        count = self.get_feed_count(*args, **count_kwargs)
+        count = self.get_items_count(self, *args, **count_kwargs)
         if count > 0:
-            items = self.get_feed(*args, **kwargs)
+            items = self.get_items(*args, **kwargs)
         else:
             items = []
         return items, count - len(items)
+
+    def get_items_count(self, *args, **kwargs):
+        return self._item_query(*args, **kwargs).count()
+
+    def get_items(self, *args, **kwargs):
+        limit = kwargs.pop('limit', settings.FEED_ITEMS_PER_PAGE)
+        query = self._item_query(*args, **kwargs)[:limit]
+        return query
+
+    def _item_query(self, listing=None, location=None, radius=None, tsearch=None, trusted_only=False,
+                    up_to_date=None):
+        query = self.get_queryset().order_by('-created')
+        if up_to_date:
+            query = query.filter(created__lt=up_to_date)
+        return query
 
 
 class Listings(models.Model):
@@ -55,6 +71,8 @@ class Listings(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     tag = models.ManyToManyField(Tag, null=True, blank=True)
+
+    objects = ListingsManager()
 
     @property
     def date(self):
