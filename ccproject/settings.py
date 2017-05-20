@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'about',
     'listings',
     'tags',
+    'django_user_agents',
 
     # Ripple
     'account',
@@ -98,8 +99,15 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'profile.middleware.ProfileMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
     'geo.middleware.LocationMiddleware',
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.request",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+)
 
 ROOT_URLCONF = 'ccproject.urls'
 

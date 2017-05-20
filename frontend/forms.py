@@ -42,6 +42,7 @@ class FormListingsSettings(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, data, profile, location=None, *args, **kwargs):
+        self.profile, self.location = (profile, location)
         data = data.copy()
         if 'radius' not in data:
             default_radius = (profile and profile.settings.feed_radius or DEFAULT_RADIUS)
@@ -59,7 +60,9 @@ class FormListingsSettings(forms.Form):
             query_radius = None
         trusted = data['trusted']
         # while True:
-        items, count = Listings.objects.get_items_and_remaining()
+        items, count = Listings.objects.get_items_and_remaining(location=self.location, tsearch=tsearch,
+                                                                trusted_only=trusted, radius=query_radius,
+                                                                up_to_date=date)
             # query_radius = next_query_radius(query_radius)
             # self.data['radius'] = query_radius
             # if query_radius == INFINITE_RADIUS:

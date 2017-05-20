@@ -29,11 +29,9 @@
         display: block;
     }
 </style>
-
+<form action="" method="get">
 {% if user_agent_type == 'mobile' %}
-
     <div class="col-md-2">
-
     {% if not listings %}
         {{ form.radius }}
         <span><label>{{ form.trusted }}
@@ -55,7 +53,6 @@
             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
         {% endif %}
     </div>
-
             <nav class="sidebar">
                 <ul>
                     <li class="menu-group" style="padding-left: 0">
@@ -206,9 +203,7 @@
 
 <section class="container-fluid" id="home-sub-menu">
     <div class="row">
-
         <div class="col-md-6">
-                <form action="" method="get">
                     <ul style="padding-left: 0;">
                 <div class="form-group">
                     <div class="btn-group">
@@ -360,7 +355,7 @@
 
         {% elif listings %}
             <div class="col-md-10" style="padding-left: 0;">
-            {% for each in listings %}
+            {% for each in listing_items %}
                 <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-3">
                     <div class="thumbnail">
                         <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
@@ -390,6 +385,11 @@
                     </div>
                 </div>
             {% endfor %}
+             {% if remaining_count %}
+                <p><a href="?{{ next_page_param_str }}">
+                    {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+                </a></p>
+            {% endif %}
         {% else %}
             <div class="col-md-9">
                 <strong>There is nothing to show</strong>

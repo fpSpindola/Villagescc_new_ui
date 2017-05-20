@@ -5,18 +5,18 @@ from django.db import models
 from categories.models import SubCategories
 from django.contrib.gis.db.models import GeoManager
 
-OFFER = 'Offer'
-REQUEST = 'Request'
-TEACH = 'Teach'
-LEARN = 'Learn'
-GIFT = 'Gift'
+OFFER = 'OFFER'
+REQUEST = 'REQUEST'
+TEACH = 'TEACH'
+LEARN = 'LEARN'
+# GIFT = 'GIFT'
 
 LISTING_TYPE = (
     ('OFFER', OFFER),
     ('REQUEST', REQUEST),
     ('TEACH', TEACH),
     ('LEARN', LEARN),
-    ('GIFT', GIFT),
+    # ('GIFT', GIFT),
 )
 
 TRUSTED_SUBQUERY = (
@@ -48,13 +48,24 @@ class ListingsManager(GeoManager):
     def get_items(self, *args, **kwargs):
         limit = kwargs.pop('limit', settings.FEED_ITEMS_PER_PAGE)
         query = self._item_query(*args, **kwargs)[:limit]
-        return query
+        items = []
+        for listing_item in query:
+            items.append(listing_item)
+        return items
 
-    def _item_query(self, listing=None, location=None, radius=None, tsearch=None, trusted_only=False,
+    def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
                     up_to_date=None):
-        query = self.get_queryset().order_by('-created')
+        query = self.get_queryset().order_by('-updated')
         if up_to_date:
-            query = query.filter(created__lt=up_to_date)
+            query = query.filter(updated__lt=up_to_date)
+        if trusted_only:
+            query.extra(select={"trusted_listings": "select listings_listings.id from listings_listings "
+                                                       "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
+                                                       "where profile_profile.id in "
+                                                       "(select profile_profile_trusted_profiles.to_profile_id "
+                                                       "from profile_profile_trusted_profiles "
+                                                       "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(
+                request.profile.id)})
         return query
 
 
@@ -70,7 +81,7 @@ class Listings(models.Model):
     photo = models.ImageField(upload_to='listings', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    tag = models.ManyToManyField(Tag, null=True, blank=True)
+    tag = models.ManyToManyField(Tag)
 
     objects = ListingsManager()
 

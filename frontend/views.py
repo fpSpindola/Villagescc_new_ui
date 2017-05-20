@@ -133,22 +133,23 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
 
         context = locals()
         context.update(extra_context or {})
-        return render(request, 'frontend/home.html', {'url_params': url_params, 'feed_items': feed_items,
-                                                      'next_page_date': next_page_date, 'context': context,
-                                                      'form': form, 'listing_form': listing_form,
-                                                      'poster': poster, 'do_filter': do_filter,
-                                                      'remaining_count': remaining_count,
-                                                      'item_type': item_type, 'template': template,
-                                                      'url_param_str': url_param_str,
-                                                      'next_page_param_str': next_page_param_str,
-                                                      'extra_context': extra_context,
-                                                      'recipient': recipient, 'user_agent_type': user_agent_type,
-                                                      'item_sub_categories': item_sub_categories,
-                                                      'services_sub_categories': services_sub_categories,
-                                                      'rideshare_sub_categories': rideshare_sub_categories,
-                                                      'housing_sub_categories': housing_sub_categories,
-                                                      'categories': categories_list, 'trust_form': trust_form,
-                                                      'payment_form': payment_form, 'contact_form': contact_form})
+        return render(request, 'frontend/home.html',
+                      {'url_params': url_params, 'feed_items': feed_items,
+                      'next_page_date': next_page_date, 'context': context,
+                      'form': form, 'listing_form': listing_form,
+                      'poster': poster, 'do_filter': do_filter,
+                      'remaining_count': remaining_count,
+                      'item_type': item_type, 'template': template,
+                      'url_param_str': url_param_str,
+                      'next_page_param_str': next_page_param_str,
+                      'extra_context': extra_context,
+                      'recipient': recipient, 'user_agent_type': user_agent_type,
+                      'item_sub_categories': item_sub_categories,
+                      'services_sub_categories': services_sub_categories,
+                      'rideshare_sub_categories': rideshare_sub_categories,
+                      'housing_sub_categories': housing_sub_categories,
+                      'categories': categories_list, 'trust_form': trust_form,
+                      'payment_form': payment_form, 'contact_form': contact_form})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)
@@ -163,9 +164,21 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         trusted_only = None
         # GET Request
         form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location,
-                                                     do_filter, initial=request.GET)
+                                                     do_filter)
         if form_listing_settings.is_valid():
             listing_items, remaining_count = form_listing_settings.get_results()
+
+        if listing_items:
+            next_page_date = listing_items[-1].date
+        else:
+            next_page_date = None
+        url_params = request.GET.copy()
+        url_params.pop('d', None)
+        url_param_str = url_params.urlencode()
+        if next_page_date:
+            url_params['d'] = next_page_date.strftime(DATE_FORMAT)
+        next_page_param_str = url_params.urlencode()
+
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
@@ -175,14 +188,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             subcategory_name = SubCategories.objects.get(pk=type_filter)
         else:
             listings = Listings.objects.all().order_by('-created')
-            if request.GET.get('trusted') == 'on':
-                listings = listings.extra(select={"trusted_listings": "select listings_listings.id from listings_listings "
-                                                           "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
-                                                           "where profile_profile.id in "
-                                                           "(select profile_profile_trusted_profiles.to_profile_id "
-                                                           "from profile_profile_trusted_profiles "
-                                                           "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request.profile.id)})
-                # listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
+            # if request.GET.get('trusted') == 'on':
+            # listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
             if request.GET.get('q'):
                 listings = listings.filter(Q(title__icontains=request.GET.get('q')) |
                                            Q(description__icontains=request.GET.get('q')))
@@ -201,14 +208,14 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         housing_sub_categories = SubCategories.objects.all().filter(categories=4)
         return render(request, 'frontend/home.html', {
             'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
-            'services_sub_categories': services_sub_categories,
-            'rideshare_sub_categories': rideshare_sub_categories,
+            'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
-            'listings': listings, 'people': people, 'listing_form': form,
-            'categories': categories_list, 'trusted_only': trusted_only,
-            'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-            'form_listing_settings': form_listing_settings, 'subcategory_name': subcategory_name,
-            'is_listing': True})
+            'listings': listings, 'people': people, 'listing_form': form, 'categories': categories_list,
+            'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
+            'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
+            'subcategory_name': subcategory_name, 'is_listing': True, 'url_params': url_params,
+            'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
+            'next_page_param_str': next_page_param_str})
 
 
 def pre_home(request):
