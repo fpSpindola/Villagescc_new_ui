@@ -142,13 +142,13 @@ WSGI_APPLICATION = 'ccproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'villages',
+        'NAME': 'villages_new_ui',
         'USER': 'postgres',
         'PASSWORD': 'test123!'
     },
-    'villagesripple': {
+    'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ripple',
+        'NAME': 'villagesripple_new_ui',
         'USER': 'postgres',
         'PASSWORD': 'test123!'
     }
