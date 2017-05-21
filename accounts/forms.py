@@ -34,13 +34,14 @@ class UserForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email']
+        fields = ['first_name', 'username', 'email']
 
 
 class ProfileCreationForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['user']
+
 
 class ProfileSettingsForm(ModelForm):
     class Meta:

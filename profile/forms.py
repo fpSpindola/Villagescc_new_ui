@@ -30,10 +30,10 @@ class RegistrationForm(UserCreationForm):
         max_length=100, required=False, label=_("Name"), help_text=_(
             "Name displayed to other users. You can change this later."),
         widget=forms.TextInput(attrs={'class': 'form-control'}))
-    last_name = forms.CharField(
-        max_length=100, required=False, label=_("Last name"), help_text=_(
-            "Name displayed to other users. You can change this later."),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # last_name = forms.CharField(
+    #     max_length=100, required=False, label=_("Last name"), help_text=_(
+    #         "Name displayed to other users. You can change this later."),
+    #     widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(
         max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
             "The address to receive notifications from Villages."),
@@ -71,13 +71,13 @@ class RegistrationForm(UserCreationForm):
         user.last_login = timezone.now()
         user.email = data['email']
         user.first_name = data['first_name']
-        user.last_name = data['last_name']
+        # user.last_name = data['last_name']
         user.save()
         profile = Profile(user=user, name=data.get('name', ''))
         if not location.id:
             location.save()
         profile.location = location
-        profile.name = data['first_name'] + ' ' + data['last_name']
+        # profile.name = data['first_name'] + ' ' + data['last_name']
         profile.save()
         profile.settings.email = data['email']
         profile.settings.language = language
@@ -93,7 +93,7 @@ class RegistrationForm(UserCreationForm):
         return self.cleaned_data['password1']
 
 RegistrationForm.base_fields.keyOrder = [
-    'first_name', 'last_name', 'email', 'username', 'password1', 'password2']
+    'first_name', 'email', 'username', 'password1', 'password2']
 
 
 class ForgotPasswordForm(forms.Form):

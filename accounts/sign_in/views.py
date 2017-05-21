@@ -38,7 +38,7 @@ SHARED_BY_USERNAME_KEY = 'u'
 MESSAGES = {
     'profile_saved': _("Profile saved."),
     'contact_sent': _("Message sent."),
-    'registration_done': _("Thank you for registering.<br><br>"
+    'registration_done': _("Thank you for registering. "
                            "Please continue filling out your profile by "
                            "uploading a photo and describing yourself for other "
                            "users.<br><br>"
@@ -47,14 +47,14 @@ MESSAGES = {
                            "address under account settings."),
     'password_changed': _("Password changed."),
     'settings_changed': _("Settings saved."),
-    'email_updated': _("Settings saved.<br><br>"
+    'email_updated': _("Settings saved. "
                        "A confirmation email has been sent to your new address. "
                        "If you do not receive it, please verify that you have "
                        "entered the correct email."),
     'invitation_sent': _("Invitation sent to %s."),
     'invitation_deleted': _("Invitation deleted."),
     'invitation_request_sent': _("Invitation request sent."),
-    'invitation_landing': _("%s has invited you to Villages.cc.<br>"
+    'invitation_landing': _("%s has invited you to Villages.cc. "
                             "Please take a look around and then use the "
                             "<em>Join</em> link on the right to register."),
     'password_link_sent': _("A password reset link has been emailed to you."),
