@@ -15,8 +15,9 @@ class ListingsForms(ModelForm):
                                         widget=forms.Select(attrs={
                                             'class': 'form-control'}))
 
-    subcategories = forms.ChoiceField(label='Sub-category', required=True,
-                                      widget=forms.Select(attrs={'class': 'form-control'}))
+    subcategories = forms.ModelChoiceField(queryset=SubCategories.objects.all(),
+                                           label='Sub-category', required=False,
+                                           widget=forms.Select(attrs={'class': 'form-control'}))
 
     tag = forms.CharField(required=False, label='Tags',
                           widget=forms.TextInput(attrs={

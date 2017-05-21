@@ -2,7 +2,7 @@ from django.conf import settings
 from tags.models import Tag
 from django.contrib.auth.models import User
 from django.db import models
-from categories.models import SubCategories
+from categories.models import Categories, SubCategories
 from django.contrib.gis.db.models import GeoManager, Q
 
 OFFER = 'OFFER'
@@ -79,7 +79,9 @@ class ListingsManager(GeoManager):
 
         if type_filter:
             if type_filter in LISTING_TYPE_CHECK:
-                    query = query.filter(listing_type=type_filter).order_by('-updated')
+                query = query.filter(listing_type=type_filter).order_by('-updated')
+            elif Categories.objects.filter(categories_text=type_filter):
+                query = query.filter(subcategories__categories__categories_text=type_filter).order_by('-updated')
             else:
                 query = query.filter(subcategories__id=type_filter).order_by('-updated')
         return query

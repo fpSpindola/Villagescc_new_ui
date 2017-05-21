@@ -3,7 +3,6 @@
 
 {% block content %}
 <!-- App page content -->
-        {% include 'messages.html' %}
         <form class="col-sm-6 col-lg-4" action="" method="post">
             {% csrf_token %}
             {% for field in form %}

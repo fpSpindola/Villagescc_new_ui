@@ -11,9 +11,9 @@ from listings.models import Listings
 
 all_posts = Post.objects.all()
 for post in all_posts:
-    post_user_id = post.user_id
+    post_user_id = post.user.user_id
     post_date = post.date
-    if len(post.title) < 220:
+    if len(post.title) < 70:
         post_title = post.title
     else:
         post_title = post.title[:70]

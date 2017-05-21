@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db.models import Q
 # Forms
 from listings.forms import ListingsForms
+from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
 from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
@@ -187,6 +188,18 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         profile = recipient
         categories_list = Categories.objects.all()
         subcategories = SubCategories.objects.all()
+        if type_filter in LISTING_TYPE_CHECK:
+            # is listing_type filter
+            item_type_name = type_filter
+        else:
+            try:
+                SubCategories.objects.filter(id=type_filter)
+                # is subcategory id
+                item_type_name = SubCategories.objects.filter(id=type_filter).values('sub_categories_text')[0]['sub_categories_text']
+            except:
+                # is category filter
+                item_type_name = type_filter
+
         item_sub_categories = SubCategories.objects.all().filter(categories=1)
         services_sub_categories = SubCategories.objects.all().filter(categories=2)
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
@@ -198,7 +211,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'people': people, 'listing_form': form, 'categories': categories_list,
             'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
             'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
-            'subcategory_name': subcategory_name, 'is_listing': True, 'url_params': url_params,
+            'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
             'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
             'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter})
 
