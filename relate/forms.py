@@ -158,9 +158,9 @@ class BlankTrust(forms.ModelForm):
 
 class BlankPaymentForm(forms.Form):
 
-    recipient = forms.ChoiceField(
-        label='Choose the payment receiver', required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
+                                       label='Choose the payment receiver', required=True,
+                                       widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     ripple = forms.ChoiceField(
         label=_("Send"),
