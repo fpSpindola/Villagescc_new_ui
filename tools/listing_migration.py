@@ -16,7 +16,7 @@ for post in all_posts:
     if len(post.title) < 220:
         post_title = post.title
     else:
-        post_title = post.title[:220]
+        post_title = post.title[:70]
 
     post_text = post.text
     post_image = post.image
