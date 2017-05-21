@@ -186,13 +186,14 @@
                     <div class="form-group">
                         <div class="btn-group">
                             {% if is_listing %}
-                                <button type="button" class="btn btn-default btn-md btn-change" style="float: left; padding-bottom: 10px;">All listing types</button>
+                                <button type="button" class="btn btn-default btn-md btn-change" style="float: left; padding-bottom: 10px;">Listing Types</button>
                                 <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px; padding-bottom: 10px;">
                                     <span class="caret"></span>
                                 </button>
 
                                 <!-- Given for loop to construct all -->
                                 <ul class="dropdown-menu">
+                                    <li><a href="{% url 'frontend:home'%}">ALL LISTING TYPES</a></li>
                                     <li><a href="{% url 'frontend:home' 'OFFER' %}">OFFER</a></li>
                                     <li><a href="{% url 'frontend:home' 'REQUEST' %}">REQUEST</a></li>
                                     <li><a href="{% url 'frontend:home' 'TEACH' %}">TEACH</a></li>
