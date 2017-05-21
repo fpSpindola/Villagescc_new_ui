@@ -19,6 +19,8 @@ LISTING_TYPE = (
     # ('GIFT', GIFT),
 )
 
+LISTING_TYPE_CHECK = ['OFFER', 'REQUEST', 'TEACH', 'LEARN']
+
 TRUSTED_SUBQUERY = (
     "feed_feeditem.poster_id in "
     "(select to_profile_id from profile_profile_trusted_profiles "
@@ -76,12 +78,10 @@ class ListingsManager(GeoManager):
                                  Q(description__icontains=tsearch))
 
         if type_filter:
-            for each_type in LISTING_TYPE:
-                if type_filter in each_type:
+            if type_filter in LISTING_TYPE_CHECK:
                     query = query.filter(listing_type=type_filter).order_by('-updated')
-                    break
-                else:
-                    query = query.filter(subcategories__id=type_filter).order_by('-updated')
+            else:
+                query = query.filter(subcategories__id=type_filter).order_by('-updated')
         return query
 
 

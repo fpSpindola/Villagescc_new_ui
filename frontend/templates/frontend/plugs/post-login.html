@@ -100,7 +100,7 @@
                                 <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">ALL HOUSING</a></li>
                                 <hr>
                                     {% for each_sub_category in housing_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.id }}</a></li>
+                                        <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -191,7 +191,7 @@
                                 <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">ALL HOUSING</a></li>
                                 <hr>
                                     {% for each_sub_category in housing_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.id }}</a></li>
+                                        <li><a href="#">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
