@@ -351,21 +351,24 @@
                                 <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}"
                                      style="margin-right: 10px;" class="img-circle inline"/>
                             </a>
+
                             {% for each_tag in each.tag.all %}
-                                <span class="label label-info">{{ each_tag.name }}</span>
-                            {% endfor %}
-{#                            <div class="col-sm-12"></div>#}
-                            <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="...">
-                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-heart" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-money" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                </button>
-                            </div>
+                                        <span class="label label-info">{{ each_tag.name }}</span>
+
+                                {% endfor %}
+                                <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
+                                    <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
+                                        <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                                            <i class="fa fa-heart" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                            <i class="fa fa-money" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>

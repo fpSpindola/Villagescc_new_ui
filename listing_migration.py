@@ -20,7 +20,7 @@ for post in all_posts:
 
     post_text = post.text
     post_image = post.image
-    post_listing_type = 'REQUEST'
+    post_listing_type = 'REQUEST' if post.want else 'OFFER'
 
     listing = Listings(title=post_title, listing_type=post_listing_type, photo=post_image, user_id=post_user_id,
                        subcategories_id=2, description=post_title, created=post_date, updated=post_date)
