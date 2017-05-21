@@ -29,7 +29,7 @@ SECRET_KEY = 'oe@ut#9t8xzd0%19xobf3c4jqa75&#!@+e27ioubq=#r1^4h#8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'ccproject', 'locale/'),
