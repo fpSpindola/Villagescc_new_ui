@@ -35,7 +35,7 @@
                         <button type="submit" id="send-contact" class=" btn btn-success gradient save-button">
                             <i class="fa fa-check"></i>Send
                         </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                     <div id="msg"></div>
                 </div>
@@ -61,6 +61,9 @@
                xhr.setRequestHeader("X-CSRFToken", csrftoken);
            },
            success: function (data) {
+               $('#new-contact-modal').modal("hide");
+               showSuccessMessage('Contact sent');
+               $('#send-contact').attr("disabled", false);
                location.reload();
            },
            error: function (resp) {
