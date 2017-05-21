@@ -84,7 +84,6 @@ class SignInUserLogIn(View):
     def get(self, request):
         form = self.form_class()
         form.fields.pop('first_name')
-        form.fields.pop('last_name')
         form.fields.pop('email')
         return django_render(request, 'accounts/sign_in.html', {'form': form})
 
@@ -110,7 +109,6 @@ class SignInUserLogIn(View):
                 return HttpResponseRedirect(reverse('accounts:sign_in_user:sign_in_log_in'))
         except ObjectDoesNotExist:
             form.fields.pop('first_name')
-            form.fields.pop('last_name')
             form.fields.pop('email')
             messages.add_message(request, messages.WARNING, 'This user is not registered yet')
             return django_render(request, 'accounts/sign_in.html', {'form': form})
