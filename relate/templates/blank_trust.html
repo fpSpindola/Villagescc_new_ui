@@ -7,7 +7,6 @@
     </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
     <form id="form-blank-trust" action="{% url 'blank_trust_user' %}" method="POST">
-        {% include 'messages.html' %}
         <div class="container">
             {% csrf_token %}
             {% for field in form %}

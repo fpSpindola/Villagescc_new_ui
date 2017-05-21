@@ -37,15 +37,15 @@
 <form id="form-pre-login" action="" method="get">
     {% if user_agent_type == 'mobile' %}
         <div class="col-md-2">
-{#            {% if not listing_items %}#}
-{#                {{ form.radius }}#}
-{#                <span><label>{{ form.trusted }}#}
-{#            <img src="{% static 'img/heart_icon.png' %}"#}
-{#                 alt="{% trans 'Heart icon = trusted user' %}">#}
-{#                    {% trans 'Trusted only' %}</label>#}
-{#            {% else %}#}
-{#                {{ form_listing_settings.radius }}#}
-{#            {% endif %}#}
+            {#            {% if not listing_items %}#}
+            {#                {{ form.radius }}#}
+            {#                <span><label>{{ form.trusted }}#}
+            {#            <img src="{% static 'img/heart_icon.png' %}"#}
+            {#                 alt="{% trans 'Heart icon = trusted user' %}">#}
+            {#                    {% trans 'Trusted only' %}</label>#}
+            {#            {% else %}#}
+            {#                {{ form_listing_settings.radius }}#}
+            {#            {% endif %}#}
             <div>
                 {% if feed_items %}
                     <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
@@ -236,18 +236,6 @@
                     <a href="{{ each.get_absolute_url }}">
                         <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
                     </a>
-                    <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
-                        <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                            <i class="fa fa-heart" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                            <i class="fa fa-money" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                        </button>
-                    </div>
-
                 </div>
                 {% if each.trusted %}
                     <div class="container-fluid">
@@ -326,7 +314,7 @@
                 <p class="thumbnail-tag" style="margin-left: -80px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                 <div class="caption" style="height: 115px;">
                     <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
-                        <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}"
+                        <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
                              style="margin-right: 10px;" class="img-circle inline"/>
                     </a>
                     {% for each_tag in each.tag.all %}
@@ -334,17 +322,6 @@
                     {% endfor %}
                     {#                            <div class="col-sm-12"></div>#}
                 </div>
-            <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="...">
-                        <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                            <i class="fa fa-heart" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                            <i class="fa fa-money" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                        </button>
-                    </div>
             </div>
         </div>
     {% endfor %}
