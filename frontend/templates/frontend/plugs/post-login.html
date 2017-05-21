@@ -32,7 +32,7 @@
 <form action="" method="get">
 {% if user_agent_type == 'mobile' %}
     <div class="col-md-2">
-    {% if not listings %}
+    {% if not listing_items %}
         {{ form.radius }}
         <span><label>{{ form.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
@@ -40,6 +40,7 @@
             {% trans 'Trusted only' %}</label>
         </span>
     {% else %}
+        {{ form_listing_settings.radius }}
         <span><label>{{ form_listing_settings.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
                  alt="{% trans 'Heart icon = trusted user' %}">
@@ -49,7 +50,7 @@
     <div>
         {% if feed_items %}
             <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-        {% elif listings %}
+        {% elif listing_items %}
             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
         {% endif %}
     </div>
@@ -116,7 +117,7 @@
 
     <div class="col-md-2">
 
-    {% if not listings %}
+    {% if not listing_items %}
         {{ form.radius }}
         <span><label>{{ form.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
@@ -124,6 +125,7 @@
             {% trans 'Trusted only' %}</label>
         </span>
     {% else %}
+        {{ form_listing_settings.radius }}
         <span><label>{{ form_listing_settings.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
                  alt="{% trans 'Heart icon = trusted user' %}">
@@ -134,7 +136,7 @@
     <div>
         {% if feed_items %}
             <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-        {% elif listings %}
+        {% elif listing_items %}
             <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
         {% endif %}
     </div>
@@ -215,11 +217,11 @@
 
                             <!-- Given for loop to construct all -->
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'frontend:listing_type' 'OFFER' %}">OFFER</a></li>
-                                <li><a href="{% url 'frontend:listing_type' 'REQUEST' %}">REQUEST</a></li>
-                                <li><a href="{% url 'frontend:listing_type' 'TEACH' %}">TEACH</a></li>
+                                <li><a href="{% url 'frontend:home' 'OFFER' %}">OFFER</a></li>
+                                <li><a href="{% url 'frontend:home' 'REQUEST' %}">REQUEST</a></li>
+                                <li><a href="{% url 'frontend:home' 'TEACH' %}">TEACH</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="{% url 'frontend:listing_type' 'LEARN' %}">LEARN</a></li>
+                                <li><a href="{% url 'frontend:home' 'LEARN' %}">LEARN</a></li>
 {#                                <li><a href="{% url 'frontend:listing_type' 'GIFT' %}">Gift</a></li>#}
                             </ul>
                             </div>
@@ -235,23 +237,8 @@
                         </div>
 
 {#                        {{ form_listing_settings.radius }}#}
-
-{#                        <span>#}
-{#                        {% if feed_items %}#}
-{#                            <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>#}
-{#                        {% elif listings %}#}
-{#                            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>#}
-{#                        {% endif %}#}
-{#                    </span>#}
-{#                        </div>#}
                     {% endif %}
-                    <span>
-                        {% if feed_items %}
-                            <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-                        {% elif is_listing %}
-                            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
-                        {% endif %}
-                    </span>
+
                 </ul>
                     {% if subcategory_name %}
                         <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
@@ -353,14 +340,14 @@
             {% endif %}
             </div>
 
-        {% elif listings %}
+        {% elif listing_items %}
             <div class="col-md-10" style="padding-left: 0;">
             {% for each in listing_items %}
                 <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-3">
                     <div class="thumbnail">
                         <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
                         <p class="thumbnail-info">{{ each.title }}</p>
-                        <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.listing_type }} | {{ each.price }} VH</p>
+                        <p class="thumbnail-tag" style="margin-left: -80px;">{{ each.listing_type }} | {{ each.price }} VH</p>
                         <div class="caption" style="height: 115px;">
                             <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
                                 <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}"

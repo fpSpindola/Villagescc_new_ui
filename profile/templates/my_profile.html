@@ -130,10 +130,11 @@
           <div class="container-fluid">
           <hr>
           <div class="image">
-            <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_made.endorser '60x60' %}" alt="">
+            <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_made.recipient '60x60' %}" alt="">
           </div>
             <p class="text">Description: {{ each_endorsement_made.text }}</p>
-            <p class="text">From <a href="{{ each_endorsement_made.get_absolute_url }}">{{ each_endorsement_made.endorser.name }}</a> to <a href="{{ each_endorsement_made.get_absolute_url }}">{{ profile.name }}</a></p>
+            <p class="text">From {{ each_endorsement_made.endorser.name }} to
+                <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
           </div>
       {% endfor %}
     {% else %}

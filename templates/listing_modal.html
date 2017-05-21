@@ -25,15 +25,41 @@
                             </div>
                         </div>
                     </div>
-                    <h4>Price: <span id="label-price" class="label label-info"></span></h4>
+
                     <hr>
-                    <h5>Seller name: <span id="label-profile-name" class="label label-info"></span></h5>
-                    <h5>Seller username: <span class="label label-info"><a href="#" id="listing-profile-username"></a></span></h5>
-                    <h5>Occupation: <span id="label-profile-occupation" class="label label-info"></span></h5>
-                    <h5>Balance: <span id="label-profile-balance" class="label label-info"></span> </h5>
-                    <h5>Description: <span id="label-description" class="label label-info"></span> </h5>
-                    <h5>Location: <span class="label label-info"><a href="{% url 'locator' %}" id="profile-location"></a></span></h5>
-                    <h5>Created At:<span class="label label-info"><a href="#" id="listing-created-at"></a></span></h5>
+                    <div>
+                        <label for="label-price">Price:</label>
+                        <span id="label-price" class="label label-info"></span>
+                    </div>
+                    <div>
+                        <label for="label-profile-name">Seller name:</label>
+                        <span id="label-profile-name" class="label label-info"></span>
+                    </div>
+                    <div>
+                        <label for="listing-profile-username">Seller username:</label>
+                        <span class="label label-info"><a href="#" id="listing-profile-username"></a></span>
+                    </div>
+                    <div>
+                        <label for="label-profile-occupation">Occupation:</label>
+                        <span id="label-profile-occupation" class="label label-info"></span>
+                    </div>
+                    <div>
+                        <label for="label-profile-balance">Balance:</label>
+                        <span id="label-profile-balance" class="label label-info"></span>
+                    </div>
+                    <div>
+                        <label for="label-description">Description:</label>
+                        <textarea id="label-description" class="form-control" style="width: 485px; height: 100px;">
+                        </textarea>
+                    </div>
+                    <div>
+                        <label for="profile-location">Location:</label>
+                        <span class="label label-info"><a href="{% url 'locator' %}" id="profile-location"></a></span>
+                    </div>
+                    <div>
+                        <label for="listing-created-at">Location:</label>
+                        <span class="label label-info"><a href="#" id="listing-created-at"></a></span>
+                    </div>
                 </div>
                 <div id="msg"></div>
                 <div class="modal-footer">

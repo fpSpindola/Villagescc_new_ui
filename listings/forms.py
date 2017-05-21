@@ -11,17 +11,21 @@ from categories.models import SubCategories, Categories
 class ListingsForms(ModelForm):
 
     categories = forms.ModelChoiceField(queryset=Categories.objects.all(),
-                                        required=False,
+                                        required=False, label='Category',
                                         widget=forms.Select(attrs={
                                             'class': 'form-control'}))
 
-    tag = forms.CharField(required=False,
+    subcategories = forms.ChoiceField(label='Sub-category', required=True,
+                                      widget=forms.Select(attrs={'class': 'form-control'}))
+
+    tag = forms.CharField(required=False, label='Tags',
                           widget=forms.TextInput(attrs={
                               'class': 'form-control',
                               'style': 'width: 100%',
-                              'data-role': 'tagsinput'}))
+                              'data-role': 'tagsinput',
+                              'title': "Tags are used to match you with other people - (Separate tags with commas ',')"}))
 
-    price = forms.DecimalField(label='Cost in Village Hours',
+    price = forms.DecimalField(label='Price (In Village Hours ?)',
                                widget=forms.NumberInput(attrs={
                                    'class': 'form-control',
                                    'style': 'width: 100%'
@@ -42,16 +46,7 @@ class ListingsForms(ModelForm):
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
             }),
-            # 'price': NumberInput(attrs={
-            #     'class': 'form-control',
-            #     'style': 'width: 100%',
+            # 'subcategories': Select(attrs={
+            #     'class': 'form-control'
             # }),
-            'subcategories': Select(attrs={
-                'class': 'form-control'
-            }),
-            'photo': forms.FileInput(attrs={'class': 'form-control'}),
-
-            'tag': forms.TextInput(attrs={'class': 'form-control',
-                                          'data-role': 'tagsinput',
-                                          'style': 'width: 100%'})
-        }
+            'photo': forms.FileInput(attrs={'class': 'form-control'})}

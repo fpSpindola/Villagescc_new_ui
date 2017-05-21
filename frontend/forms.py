@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django.forms.widgets import Select, NumberInput
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from listings.models import Listings
 
@@ -41,8 +42,8 @@ class FormListingsSettings(forms.Form):
         required=False, choices=RADIUS_CHOICES, coerce=int, empty_value=None,
         widget=forms.Select(attrs={'class': 'form-control'}))
 
-    def __init__(self, data, profile, location=None, *args, **kwargs):
-        self.profile, self.location = (profile, location)
+    def __init__(self, data, profile, location=None, type_filter=None, *args, **kwargs):
+        self.profile, self.location, self.type_filter = (profile, location, type_filter)
         data = data.copy()
         if 'radius' not in data:
             default_radius = (profile and profile.settings.feed_radius or DEFAULT_RADIUS)
@@ -59,16 +60,41 @@ class FormListingsSettings(forms.Form):
         if radius == INFINITE_RADIUS:
             query_radius = None
         trusted = data['trusted']
-        # while True:
-        items, count = Listings.objects.get_items_and_remaining(location=self.location, tsearch=tsearch,
-                                                                trusted_only=trusted, radius=query_radius,
-                                                                up_to_date=date)
-            # query_radius = next_query_radius(query_radius)
-            # self.data['radius'] = query_radius
-            # if query_radius == INFINITE_RADIUS:
-            #     query_radius = None
-            # continue
+        while True:
+            items, count = Listings.objects.get_items_and_remaining(location=self.location, tsearch=tsearch,
+                                                                    trusted_only=trusted, radius=query_radius,
+                                                                    up_to_date=date, request_profile=self.profile,
+                                                                    type_filter=self.type_filter)
+            if (not (self.profile and self.profile.settings.feed_radius) and
+                not self._explicit_radius and
+                len(items) < settings.LISTING_ITEMS_PER_PAGE and query_radius != None):
+                query_radius = next_query_radius(query_radius)
+                self.data['radius'] = query_radius
+                if query_radius == INFINITE_RADIUS:
+                    query_radius = None
+                continue
+            break
         return items, count
+
+    def update_sticky_filter_prefs(self):
+        """
+        Save radius and trusted filter values as sticky prefs to profile
+        settings.
+        """
+        if not self.profile:
+            return
+        data = self.cleaned_data
+        radius = data['radius']
+        trusted = data['trusted']
+        save_settings = False
+        if radius != self.profile.settings.feed_radius:
+            self.profile.settings.feed_radius = radius
+            save_settings = True
+        if trusted != self.profile.settings.feed_trusted:
+            self.profile.settings.feed_trusted = trusted
+            save_settings = True
+        if save_settings:
+            self.profile.settings.save()
 
 
 def next_query_radius(radius):

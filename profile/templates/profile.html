@@ -121,66 +121,71 @@
                 <div class="col-md-9">
                     {% if request.profile %}
                         <h3>My Relationship with {{ profile.name }}</h3>
-                        <table class="table table-bordered table-relationship">
-                            <tbody>
-                            <tr>
-                                <td>Current Balance</td>
-                                <td>{% blocktrans count hours=profile.overall_balance %}
-                                    {{hours}} hour
-                                {% plural %}
-                                    {{hours}} hours
-                                {% endblocktrans %}</td>
-                            </tr>
-                            <tr>
-                                <td>Trusted Balance</td>
-                                <td>{% blocktrans count hours=profile.trusted_balance %}
-                                    {{hours}} hour
-                                {% plural %}
-                                    {{hours}} hours
-                                {% endblocktrans %}</td>
-                            </tr>
-                            <tr>
-                                <th><a href="{% url 'relationship' profile.username %}"
-                                >{% trans 'Balance with Me' %}</a>
-                                </th>
-                                <td>
-                                    {% blocktrans count hours=account.balance %}
+                        <div class="table-responsive">
+                            <table class="table table-responsive table-bordered table-relationship">
+                                <tbody>
+                                <tr>
+                                    <td>Current Balance</td>
+                                    <td>{% blocktrans count hours=profile.overall_balance %}
                                         {{hours}} hour
                                     {% plural %}
                                         {{hours}} hours
-                                    {% endblocktrans %}
-                                </td>
-                            </tr>
-                            {% if account.partner_endorsement %}
-                                <tr>
-                                    {% blocktrans count hearts=account.partner_endorsement.weight %}
-                                        <td>{{ partner }} endorsement of you</td>
-                                    {% plural %}
-                                        {{ partner }} endorsement of you
-                                    {% endblocktrans %}
-                                    <td>{% blocktrans count hearts=account.partner_endorsement.weight %}
-                                        {{ hearts }} heart
-                                    {% plural %}
-                                        {{ hearts }} hearts
                                     {% endblocktrans %}</td>
                                 </tr>
-                            {% endif %}
-                            {% if account.endorsement %}
                                 <tr>
-                                    {% blocktrans count hearts=account.endorsement.weight %}
-                                        <td>Your endorsement of {{ partner }}</td>
+                                    <td>Trusted Balance</td>
+                                    <td>{% blocktrans count hours=profile.trusted_balance %}
+                                        {{hours}} hour
                                     {% plural %}
-                                        <td>Your endorsement of {{ partner }}</td>
-                                    {% endblocktrans %}
-                                    <td>{% blocktrans count hearts=account.endorsement.weight %}
-                                        {{ hearts }} heart
-                                    {% plural %}
-                                        {{ hearts }} hearts
+                                        {{hours}} hours
                                     {% endblocktrans %}</td>
                                 </tr>
-                            {% endif %}
-                            </tbody>
-                        </table>
+                                <tr>
+                                    <th><a href="{% url 'relationship' profile.username %}"
+                                    >{% trans 'Balance with Me' %}</a>
+                                    </th>
+                                    <td>
+                                        {% blocktrans count hours=account.balance %}
+                                            {{hours}} hour
+                                        {% plural %}
+                                            {{hours}} hours
+                                        {% endblocktrans %}
+                                    </td>
+                                </tr>
+                                {% if account.partner_endorsement %}
+                                    <tr>
+                                        <th>Endorsements of you</th>
+                                        <td>
+{#                                        {% blocktrans count hearts=account.partner_endorsement.weight %}#}
+{#                                            <td>{{ partner }} endorsement of you</td>#}
+{#                                        {% plural %}#}
+{#                                            {{ partner }} endorsement of you#}
+{#                                        {% endblocktrans %}#}
+                                        {% blocktrans count hearts=account.partner_endorsement.weight %}
+                                            {{ hearts }} trust
+                                        {% plural %}
+                                            {{ hearts }} trusts
+                                        {% endblocktrans %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if account.endorsement %}
+                                    <tr>
+                                        {% blocktrans count hearts=account.endorsement.weight %}
+                                            <td>Your endorsement of {{ partner }}</td>
+                                        {% plural %}
+                                            <td>Your endorsement of {{ partner }}</td>
+                                        {% endblocktrans %}
+                                        <td>{% blocktrans count hearts=account.endorsement.weight %}
+                                            {{ hearts }} heart
+                                        {% plural %}
+                                            {{ hearts }} hearts
+                                        {% endblocktrans %}</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -198,7 +203,10 @@
                                     <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
                                 </div>
                                 <p class="text">Description: {{ each_endorsement_received.text }}</p>
-                                <p class="text">From <a href="{{ each_endorsement_received.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.get_absolute_url }}">{{ profile.name }}</a></p>
+                                <p class="text">From <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">
+                                    {{ each_endorsement_received.endorser.name }}</a>
+                                    to <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">
+                                        {{ profile.name }}</a></p>
                             </div>
                         {% endfor %}
                     {% else %}

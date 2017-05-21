@@ -163,7 +163,7 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         people = None
         trusted_only = None
         # GET Request
-        form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location,
+        form_listing_settings = FormListingsSettings(request.GET, request.profile, request.location, type_filter,
                                                      do_filter)
         if form_listing_settings.is_valid():
             listing_items, remaining_count = form_listing_settings.get_results()
@@ -182,21 +182,6 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
-        if type_filter:
-            listings = Listings.objects.all().filter(subcategories__id=type_filter).order_by('-created')
-            # items, count = get_listings_and_remaining(listings, up_to_date=date)
-            subcategory_name = SubCategories.objects.get(pk=type_filter)
-        else:
-            listings = Listings.objects.all().order_by('-created')
-            # if request.GET.get('trusted') == 'on':
-            # listings = Listings.objects.raw(LISTINGS_TRUSTED_QUERY.format(request.profile.id))
-            if request.GET.get('q'):
-                listings = listings.filter(Q(title__icontains=request.GET.get('q')) |
-                                           Q(description__icontains=request.GET.get('q')))
-            # if request.location and request.GET.get('radius'):
-            #     listings = listings.filter(
-            #         Q(user__profile__location__point__dwithin=(request.location.point, request.GET.get('radius'))) |
-            #         Q(user__profile__location__isnull=True))
 
         form = ListingsForms()
         profile = recipient
@@ -210,12 +195,12 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
             'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
             'housing_sub_categories': housing_sub_categories, 'user_agent_type': user_agent_type,
-            'listings': listings, 'people': people, 'listing_form': form, 'categories': categories_list,
+            'people': people, 'listing_form': form, 'categories': categories_list,
             'trusted_only': trusted_only, 'trust_form': trust_form, 'payment_form': payment_form,
             'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
             'subcategory_name': subcategory_name, 'is_listing': True, 'url_params': url_params,
             'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
-            'next_page_param_str': next_page_param_str})
+            'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter})
 
 
 def pre_home(request):

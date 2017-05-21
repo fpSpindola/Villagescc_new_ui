@@ -3,7 +3,7 @@ from tags.models import Tag
 from django.contrib.auth.models import User
 from django.db import models
 from categories.models import SubCategories
-from django.contrib.gis.db.models import GeoManager
+from django.contrib.gis.db.models import GeoManager, Q
 
 OFFER = 'OFFER'
 REQUEST = 'REQUEST'
@@ -54,26 +54,42 @@ class ListingsManager(GeoManager):
         return items
 
     def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
-                    up_to_date=None):
+                    up_to_date=None, request_profile=None, type_filter=None):
         query = self.get_queryset().order_by('-updated')
         if up_to_date:
             query = query.filter(updated__lt=up_to_date)
         if trusted_only:
-            query.extra(select={"trusted_listings": "select listings_listings.id from listings_listings "
-                                                       "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
-                                                       "where profile_profile.id in "
-                                                       "(select profile_profile_trusted_profiles.to_profile_id "
-                                                       "from profile_profile_trusted_profiles "
-                                                       "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(
-                request.profile.id)})
+            query.extra(select={
+                "trusted_listings": "select listings_listings.id from listings_listings "
+                                    "inner join profile_profile on (listings_listings.user_id = profile_profile.user_id) "
+                                    "where profile_profile.id in "
+                                    "(select profile_profile_trusted_profiles.to_profile_id "
+                                    "from profile_profile_trusted_profiles "
+                                    "where profile_profile_trusted_profiles.from_profile_id = {0} LIMIT 1)".format(request_profile.id)})
+        if location and radius:
+            query = query.filter(
+                Q(user__profile__location__point__dwithin=(location.point, radius)) |
+                Q(user__profile__location__isnull=True))
+
+        if tsearch:
+            query = query.filter(Q(title__icontains=tsearch) |
+                                 Q(description__icontains=tsearch))
+
+        if type_filter:
+            for each_type in LISTING_TYPE:
+                if type_filter in each_type:
+                    query = query.filter(listing_type=type_filter).order_by('-updated')
+                    break
+                else:
+                    query = query.filter(subcategories__id=type_filter).order_by('-updated')
         return query
 
 
 class Listings(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
-    title = models.CharField(max_length=220)
-    description = models.CharField(max_length=1000, null=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    title = models.CharField(max_length=70)
+    description = models.CharField(max_length=5000, null=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     subcategories = models.ForeignKey(SubCategories, null=True, blank=True)
     # tag = models.ForeignKey(TagListing, null=True, blank=True)
 
