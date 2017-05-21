@@ -146,7 +146,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'test123!'
     },
-    'ripple': {
+    'villagesripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ripple',
         'USER': 'postgres',
