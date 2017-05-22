@@ -1,3 +1,11 @@
+<style>
+    .modal-body {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+</style>
+
+
 <form class="form-horizontal" id="contact-form" method="POST">
     {% csrf_token %}
     <div id="new-contact-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -49,8 +57,7 @@
        $("#send-contact").attr("disabled", true);
        var profile_username = $("#profile-username").val();
        $("#id_contact_recipient_name").val(profile_username);
-       debugger;
-       var url = '/profiles/contact/'+profile_username+'/';
+       var url = '/contact/'+profile_username+'/';
        $.ajax({
            url: url,
            type: 'POST',

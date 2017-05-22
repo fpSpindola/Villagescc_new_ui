@@ -61,7 +61,7 @@
                         {% plural %} {{ hours }} hours</p>{% endblocktrans %}
 
                         <p><i class="fa fa-pencil" aria-hidden="true"></i> Job: {% if profile.job %}{{ profile.job }} {% else %} -- {% endif %}</p>
-                        <p><i class="fa fa-heart" aria-hidden="true"></i> Total Hearts: {{ profile.endorsement_sum }}</p>
+                        <p><i class="fa fa-heart" aria-hidden="true"></i> Total hours trust: {{ profile.endorsement_sum }}</p>
                         <p data-toggle="tooltip" title="{{ profile.location.full_name }}"><i class="fa fa-home" aria-hidden="true" data-toggle="tooltip" title="{{ profile.location.full_name }}"></i> {{ profile.location.full_name|truncatechars:50 }}</p>
                         <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ profile.user.date_joined|naturalday }}</p>
                     </div>
@@ -120,75 +120,68 @@
             <div class="row">
                 <div class="col-md-9">
                     {% if request.profile %}
-                        <h3>My Relationship with {{ profile.name }}</h3>
-                        <div class="table-responsive">
-                            <table class="table table-responsive table-bordered table-relationship">
-                                <tbody>
-                                <tr>
-                                    <td>Current Balance</td>
-                                    <td>{% blocktrans count hours=profile.overall_balance %}
-                                        {{hours}} hour
-                                    {% plural %}
-                                        {{hours}} hours
-                                    {% endblocktrans %}</td>
-                                </tr>
-                                <tr>
-                                    <td>Trusted Balance</td>
-                                    <td>{% blocktrans count hours=profile.trusted_balance %}
-                                        {{hours}} hour
-                                    {% plural %}
-                                        {{hours}} hours
-                                    {% endblocktrans %}</td>
-                                </tr>
-                                <tr>
-                                    <th><a href="{% url 'relationship' profile.username %}"
-                                    >{% trans 'Balance with Me' %}</a>
-                                    </th>
-                                    <td>
-                                        {% blocktrans count hours=account.balance %}
-                                            {{hours}} hour
-                                        {% plural %}
-                                            {{hours}} hours
-                                        {% endblocktrans %}
-                                    </td>
-                                </tr>
-                                {% if account.partner_endorsement %}
-                                    <tr>
-                                        <th>Endorsements of you</th>
-                                        <td>
-{#                                        {% blocktrans count hearts=account.partner_endorsement.weight %}#}
-{#                                            <td>{{ partner }} endorsement of you</td>#}
-{#                                        {% plural %}#}
-{#                                            {{ partner }} endorsement of you#}
-{#                                        {% endblocktrans %}#}
-                                        {% blocktrans count hearts=account.partner_endorsement.weight %}
-                                            {{ hearts }} trust
-                                        {% plural %}
-                                            {{ hearts }} trusts
-                                        {% endblocktrans %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                                {% if account.endorsement %}
-                                    <tr>
-                                        {% blocktrans count hearts=account.endorsement.weight %}
-                                            <td>Your endorsement of {{ partner }}</td>
-                                        {% plural %}
-                                            <td>Your endorsement of {{ partner }}</td>
-                                        {% endblocktrans %}
-                                        <td>{% blocktrans count hearts=account.endorsement.weight %}
-                                            {{ hearts }} heart
-                                        {% plural %}
-                                            {{ hearts }} hearts
-                                        {% endblocktrans %}</td>
-                                    </tr>
-                                {% endif %}
-                                </tbody>
-                            </table>
+                        <h4>My Relationship with {{ profile.name }}</h4>
+
+                        <div>
+                        <label>Current Balance: </label>
+                        {% blocktrans count hours=profile.overall_balance %}
+                            {{hours}} hour
+                        {% plural %}
+                            {{hours}} hours
+                        {% endblocktrans %}
                         </div>
-                    {% endif %}
+
+                        <div>
+                        <label>Trusted balance:</label>
+                        {% blocktrans count hours=profile.overall_balance %}
+                            {{hours}} hour
+                        {% plural %}
+                            {{hours}} hours
+                        {% endblocktrans %}
+                        </div>
+
+                        <div>
+                            <label><a href="{% url 'relationship' profile.username %}"
+                            >{% trans 'Balance with Me: ' %}</a></label>
+                            {% blocktrans count hours=account.balance %}
+                                {{hours}} hour
+                            {% plural %}
+                                {{hours}} hours
+                            {% endblocktrans %}
+                        </div>
+                        {% if account.partner_endorsement %}
+                            <div>
+                                <label>Endorsements from you:</label>
+                                {% blocktrans count hearts=account.partner_endorsement.weight %}
+                                    {{ partner }}
+                                {% plural %}
+                                    {{ partner }}
+                                {% endblocktrans %}
+                                {% blocktrans count hearts=account.partner_endorsement.weight %}
+                                    {{ hearts }} trust
+                                {% plural %}
+                                    {{ hearts }} trusts
+                                {% endblocktrans %}
+                            </div>
+                        {% endif %}
+                        <div>
+                            {% if account.endorsement %}
+                                {% blocktrans count hearts=account.endorsement.weight %}
+                                    <label>Endorsements from them {{ partner }}</label>
+                                {% plural %}
+                                    <label>Endorsements from them {{ partner }}</label>
+                                {% endblocktrans %}
+                                {% blocktrans count hearts=account.endorsement.weight %}
+                                    {{ hearts }} hours trust
+                                {% plural %}
+                                    {{ hearts }} hours trust
+                                {% endblocktrans %}
+                            {% endif %}
+                            </div>
+
+                   {% endif %}
+                        </div>
                 </div>
-            </div>
         </section>
 
         <section class="container-fluid">

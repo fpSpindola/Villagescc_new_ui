@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db import IntegrityError
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
@@ -365,8 +366,7 @@ def undefined_contact(request, username=None):
             profile = Profile.objects.get(user__username=form.cleaned_data['contact_recipient_name'])
             form.send(sender=request.profile, recipient=profile)
             messages.add_message(request, messages.SUCCESS, 'Successfully sent message')
-            form = ContactForm()
-            return django_render(request, 'contact.html', {'form': form})
+            return JsonResponse({'msg': 'Success'})
     return django_render(request, 'contact.html', {'form': form})
 
 @login_required

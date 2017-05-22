@@ -109,3 +109,11 @@ def get_subcategories_filter(request):
         for each_subcateogry in subcategories:
             result.append({"id": each_subcateogry.id, "text": each_subcateogry.sub_categories_text})
         return JsonResponse({'result': result})
+
+
+def get_category_by_subcategory(request):
+    if request.is_ajax():
+        result = []
+        category = SubCategories.objects.get(id=request.GET.get("subcategory"))
+        result.append({"id": category.categories.id, "text": category.categories.categories_text})
+        return JsonResponse({'result': result})

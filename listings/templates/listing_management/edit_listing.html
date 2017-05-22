@@ -26,7 +26,11 @@
     {% for field in form %}
         <div class="form-group">
             <label for="{{field.label}}" class="col-lg-2 control-label {% if field.errors %}error{% endif %}">{{ field.label }}</label>
-            <div class="col-lg-6 {% if field.errors %}error{% endif %}">
+            {% if field.auto_id == 'id_categories' %}
+                <div id="div_{{ field.auto_id }}" class="col-lg-6 {% if field.errors %}error{% endif %}">
+            {% else %}
+                <div class="col-lg-6 {% if field.errors %}error{% endif %}">
+            {% endif %}
                 {{ field }}
                 {% if field.errors %}
                     {% for error in field.errors %}
@@ -65,6 +69,25 @@
             }
         })
     });
+
+    $(document).ready(function (data) {
+        var subcategory = $("#id_subcategories").val();
+        $.ajax({
+            url: "{% url 'get_category' %}",
+            type: "GET",
+            data: {'subcategory': subcategory},
+            success: function (e) {
+                debugger;
+                var category_id = e.result[0]["id"];
+                $('#div_id_categories select option[value="' + category_id + '"]').prop('selected', true);
+            },
+            error: function (e) {
+                showInternalServerError();
+            }
+        })
+    })
 </script>
+
+
 
 {% endblock %}

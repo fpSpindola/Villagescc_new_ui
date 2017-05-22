@@ -1,3 +1,11 @@
+<style>
+    .modal-body {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+</style>
+
+
 <form class="form-horizontal" id="add-posting-modal" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div id="new-posting-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-posting-modal" aria-hidden="true" style="opacity: 0.9 !important;">

@@ -46,8 +46,8 @@ class ListingsForms(ModelForm):
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
-            }),
+            })}
             # 'subcategories': Select(attrs={
             #     'class': 'form-control'
             # }),
-            'photo': forms.FileInput(attrs={'class': 'form-control'})}
+            # 'photo': forms.FileInput(attrs={'class': 'form-control'})}

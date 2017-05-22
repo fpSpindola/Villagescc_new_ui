@@ -18,9 +18,10 @@ class EndorseForm(forms.ModelForm):
         'over_weight': _("Please ensure this number is below %d.")
     }
 
-    weight = forms.IntegerField(label='Credit limit:', required=True, min_value=1, widget=forms.NumberInput(attrs={
-        'class': 'form-control', 'style': 'width: 82%'
-    }))
+    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
+                                required=True, min_value=1, widget=forms.NumberInput(attrs={
+            'class': 'form-control', 'style': 'width: 82%'
+        }))
     
     class Meta:
         model = Endorsement
@@ -31,6 +32,7 @@ class EndorseForm(forms.ModelForm):
         self.recipient = kwargs.pop('recipient')
         super(EndorseForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget = (forms.Textarea(attrs={'class': 'form-control', 'style': 'width: 570px; height: 215px;'}))
+        self.fields['text'].label = 'Testimonial (This is a public statement)'
 
     @property
     def max_weight(self):
@@ -113,10 +115,10 @@ class BlankTrust(forms.ModelForm):
     recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
                                      widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    weight = forms.IntegerField(label='Credit limit', required=True, min_value=1, widget=forms.NumberInput(attrs={
+    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)", required=True, min_value=1, widget=forms.NumberInput(attrs={
         'class': 'form-control'}))
 
-    text = forms.CharField(label='Testimonial', required=False,
+    text = forms.CharField(label='Testimonial (This is a public statement)', required=False,
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
 
     data_profile = forms.CharField(widget=forms.HiddenInput())

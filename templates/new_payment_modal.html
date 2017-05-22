@@ -1,5 +1,12 @@
 {% load relate %}
 <!-- Trust Modal -->
+<style>
+    .modal-body {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+</style>
+
 <form class="form-horizontal" id="new-payment-form" method="POST">
     {% csrf_token %}
     <div id="new-payment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
