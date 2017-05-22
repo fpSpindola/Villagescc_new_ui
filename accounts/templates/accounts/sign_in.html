@@ -15,7 +15,6 @@
         </div>
     {% endblock %}
     {% block content %}
-        {% include 'messages.html' %}
         <form class="col-lg-4" action="" method="post">
                 {% csrf_token %}
                 {% for field in form %}

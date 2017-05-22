@@ -17,6 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
 from django.shortcuts import render as django_render
 
+from accounts.views import SignInUserLogIn
 from listings.forms import ListingsForms
 from listings.models import Listings
 from relate.forms import AcknowledgementForm
@@ -186,7 +187,6 @@ def forgot_password(request):
         form = ForgotPasswordForm(request.POST)
         sign_in_form = UserForm()
         sign_in_form.fields.pop('first_name')
-        sign_in_form.fields.pop('last_name')
         sign_in_form.fields.pop('email')
         if form.is_valid():
             form.create_reset_link()
@@ -208,7 +208,7 @@ def reset_password(request, code):
             form.save()
             link.delete()
             messages.info(request, MESSAGES['password_reset'])
-            return redirect(login)
+            return HttpResponseRedirect(reverse('accounts:sign_in_user:sign_in_log_in'))
     else:
         form = SetPasswordForm(link.profile.user)
     return locals()
