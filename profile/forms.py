@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from profile.models import (
@@ -9,6 +10,8 @@ from profile.models import (
 from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
 from django.utils import timezone
+
+alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
 ERRORS = {
     'email_dup': _("That email address is registered to another user."),
@@ -46,6 +49,7 @@ class RegistrationForm(UserCreationForm):
         self.fields['username'].help_text = _(
             "Desired login name. You cannot change this.")
         self.fields['username'].widget = forms.TextInput(attrs={'class': 'form-control'})
+        self.fields['username'].validators = [alphanumeric]
         self.fields['password1'].help_text = _("Desired password.")
     
     def clean_email(self):

@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
@@ -10,6 +11,10 @@ from profile.models import Profile
 
 class RegisterForm(ModelForm):
     """ Signup form """
+
+    username = forms.CharField(max_length=30, required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     terms_of_service = forms.BooleanField(label='I agree with terms of service', required=True,
                                           widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
