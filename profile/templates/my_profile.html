@@ -67,17 +67,24 @@
       <bold><hr></bold>
         <!-- Construct in the for loop -->
         {% for each in listings %}
-          <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail">
-                        <img class="listing listing-modal-profile" src="{% product_image_url each '280x280' %}" alt="..." data-listing-id="{{ each.id }}">
-                        <p class="thumbnail-tag" style="margin-left: -55px;">{{ each.subcategories.sub_categories_text }}</p>
-                        <p class="thumbnail-info"></p>
-                        <div class="caption" style="height: 60px;">
-                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;"><img src="{% profile_image_url each.user.profile '60x60' %}" class="img-circle inline"/></a>
-                            <p>&nbsp{{ each.title }}</p>
-                        </div>
+            <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-3">
+                <div class="thumbnail">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                    <p class="thumbnail-info">{{ each.title }}</p>
+                    <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
+                    <div class="caption" style="height: 115px;">
+                        <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
+                            <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
+                                 style="margin-right: 10px;" class="img-circle inline"/>
+                        </a>
+
+                        {% for each_tag in each.tag.all %}
+                            <span class="label label-info">{{ each_tag.name }}</span>
+
+                        {% endfor %}
                     </div>
                 </div>
+            </div>
         {% endfor %}
             {% else %}
             <h3>There is no open listings for this user</h3>
@@ -110,7 +117,7 @@
             <img class="img-rounded endorsed-by-img" src="{% profile_image_url each_endorsement_received.endorser '60x60' %}" alt="">
           </div>
             <p class="text">Description: {{ each_endorsement_received.text }}</p>
-            <p class="text">From <a href="{{ each_endorsement_received.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.get_absolute_url }}">{{ profile.name }}</a></p>
+            <p class="text">From <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a></p>
           </div>
       {% endfor %}
     {% else %}

@@ -67,10 +67,8 @@ def endorse_user(request, recipient_username):
         form = EndorseForm(request.POST, instance=endorsement,
                            endorser=request.profile, recipient=recipient)
         if form.is_valid():
-            is_new = endorsement is None
             endorsement = form.save()
-            if is_new:
-                send_endorsement_notification(endorsement)
+            send_endorsement_notification(endorsement)
             messages.info(request, MESSAGES['endorsement_saved'])
             data['recipient'] = recipient_username
             data['stat'] = 'ok'
@@ -276,10 +274,8 @@ def blank_trust(request):
 
         form = BlankTrust(request.POST, instance=endorsement, endorser=request.profile, recipient=recipient)
         if form.is_valid():
-            is_new = endorsement is None
             endorsement = form.save()
-            # if is_new:
-                # send_endorsement_notification(endorsement)
+            send_endorsement_notification(endorsement)
             messages.add_message(request, messages.INFO, 'Trust saved!')
             return django_render(request, 'blank_trust.html', {'form': form,
                                                                'listing_form': listing_form})

@@ -51,7 +51,7 @@
 
             <button type="submit" id="save-payment" class=" btn btn-success gradient save-button">
                 <i class="fa fa-check"></i> Save trust</button>
-            <button class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</button>
+            <a href="{% url 'frontend:home' %}" class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</a>
 
 
             <div class="container" style="padding-top: 10px;">
@@ -61,9 +61,9 @@
                         <th>{% trans 'Overall Balance' %}</th>
                         <td>
                             {% blocktrans count hours=request.profile.overall_balance %}
-                                {{ hours }} hour
+                                {{ hours }} hour trust
                             {% plural %}
-                                {{ hours }} hours
+                                {{ hours }} hours trust
                             {% endblocktrans %}
                         </td>
                     </tr>
@@ -72,9 +72,9 @@
                         <th>{% trans 'Trusted Balance' %}</th>
                         <td><strong>
                             {% blocktrans count hours=request.profile.trusted_balance %}
-                                {{ hours }} hour
+                                {{ hours }} hour trust
                             {% plural %}
-                                {{ hours }} hours
+                                {{ hours }} hours trust
                             {% endblocktrans %}
                         </strong></td>
                     </tr>

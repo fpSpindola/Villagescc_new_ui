@@ -188,7 +188,7 @@ ul .nav {
 .thumbnail-info {
     position: absolute;
     top: 112px;
-    width: 200px;
+    width: 90%;
     font-size: 14px;
     font-weight: 900;
     background: rgba(25, 25, 25, .5);

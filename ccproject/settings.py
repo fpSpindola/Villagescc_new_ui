@@ -143,15 +143,15 @@ WSGI_APPLICATION = 'ccproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'villages',
+        'NAME': 'villages_new_ui',
         'USER': 'postgres',
-        'PASSWORD': 'teste123!'
+        'PASSWORD': 'test123!'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ripple',
+        'NAME': 'villagesripple_new_ui',
         'USER': 'postgres',
-        'PASSWORD': 'teste123!'
+        'PASSWORD': 'test123!'
     }
 }
 
@@ -225,6 +225,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 GEOIP_PATH = '/usr/share/GeoIP'
+
+LOGIN_URL = ''
 
 PASSWORD_RESET_LINK_EXPIRY = timedelta(days=7)
 
