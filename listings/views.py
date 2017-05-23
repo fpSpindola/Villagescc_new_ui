@@ -13,6 +13,7 @@ from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 from relate.forms import EndorseForm
 from .schemas import SubmitListingSchema
+from es_utils.utils import save_document
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -28,6 +29,7 @@ def add_new_listing(request):
                     listing = form.save(commit=False)
                     listing.user_id = request.profile.user_id
                     listing.save()
+                    save_document(listing)
                     for tag in tags_list:
                         new_tag = Tag(name=tag)
                         try:
