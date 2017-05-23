@@ -1,23 +1,29 @@
+from __future__ import unicode_literals
+
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.utils.translation import ugettext_lazy as _
 
-from profile.models import Profile
-from general.mail import send_mail_from_system
 
-class EmailUsersForm(forms.Form):
-    subject = forms.CharField()
-    body = forms.CharField(widget=forms.Textarea)
+class AdminAuthenticationForm(AuthenticationForm):
+    """
+    A custom authentication form used in the admin app.
+    """
+    error_messages = {
+        'invalid_login': _("Please enter the correct %(username)s and password "
+                           "for a staff account. Note that both fields may be "
+                           "case-sensitive."),
+    }
+    required_css_class = 'required'
 
-    def send(self):
-        data = self.cleaned_data
-        recipients = Profile.objects.filter(settings__send_newsletter=True)
+    def confirm_login_allowed(self, user):
+        if not user.is_active or not user.is_staff:
+            raise forms.ValidationError(
+                self.error_messages['invalid_login'],
+                code='invalid_login',
+                params={'username': self.username_field.verbose_name}
+            )
 
-        # TODO: Implement a send_mass_mail that re-uses the same connection
-        # to send multiple mails.
 
-        count = 0
-        for recipient in recipients.iterator():
-            send_mail_from_system(
-                data['subject'], recipient, 'newsletter_email.txt',
-                {'body': data['body']})
-            count += 1
-        return count
+class AdminPasswordChangeForm(PasswordChangeForm):
+    required_css_class = 'required'
