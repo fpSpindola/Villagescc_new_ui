@@ -239,6 +239,9 @@ class ContactForm(forms.Form):
 
 
 class SettingsForm(forms.ModelForm):
+
+    # username = forms.CharField(required=True, max_length=30, validators=[alphanumeric],
+    #                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     # Email is required.
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}),
                              max_length=EmailField.MAX_EMAIL_LENGTH)
