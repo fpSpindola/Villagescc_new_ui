@@ -29,7 +29,7 @@ def add_new_listing(request):
                     listing = form.save(commit=False)
                     listing.user_id = request.profile.user_id
                     listing.save()
-                    save_document(listing)
+
                     for tag in tags_list:
                         new_tag = Tag(name=tag)
                         try:
@@ -38,6 +38,7 @@ def add_new_listing(request):
                         except IntegrityError as e:
                             existing_tag = Tag.objects.get(name=tag)
                             existing_tag.listings_set.add(listing)
+                    save_document(listing)
                     return JsonResponse({'msg': 'Success!'})
                 except Exception as e:
                     print(e)

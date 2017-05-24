@@ -1,7 +1,7 @@
 from django.conf import settings
 
 
-def prepare_document(listing_obj):
+def handle_document(listing_obj):
 
     es_doc = {
         'listing_id': listing_obj.id,
@@ -16,8 +16,8 @@ def prepare_document(listing_obj):
         'created': listing_obj.created,
         'updated': listing_obj.updated,
         'location': {
-            'lat': listing_obj.user.profile.location.point.coords[0],
-            'lon': listing_obj.user.profile.location.point.coords[1],
+            'lat': int(listing_obj.user.profile.location.point.coords[0]),
+            'lon': int(listing_obj.user.profile.location.point.coords[1]),
         },
         'listing_url': 'http://www.villages.cc/listing_details/{0}'.format(listing_obj.id)
     }
@@ -43,6 +43,6 @@ def prepare_document(listing_obj):
 
 
 def save_document(listing_obj):
-    document = prepare_document(listing_obj)
+    document = handle_document(listing_obj)
     settings.ELASTICSEARCH.index(index="villages", doc_type="listings", body=document)
 
