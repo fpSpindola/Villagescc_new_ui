@@ -1,6 +1,6 @@
-PUT _template/listings
+PUT _template/villages
 {
-    "template": "listings*",
+    "template": "villages*",
       "settings": {
          "index": {
             "refresh_interval": "30s",
@@ -72,4 +72,4 @@ PUT _template/listings
          }
       },
       "aliases": {}
-   }
+}

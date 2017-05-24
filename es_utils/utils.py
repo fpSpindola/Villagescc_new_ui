@@ -32,8 +32,8 @@ def handle_document(listing_obj):
         lon = listing_obj.user.profile.location.point.coords[1]
         location_full_name = listing_obj.user.profile.location.full_name()
         es_doc['location'] = {
-            'lat': lat,
-            'lon': lon
+            'lat': float(lat),
+            'lon': float(lon)
         }
         es_doc['city'] = city
         es_doc['state'] = state
