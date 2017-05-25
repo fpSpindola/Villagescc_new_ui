@@ -55,7 +55,7 @@
                             <li class="menu-group">
                             <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
                                 <ul>
-                                    <li><a href="{% url 'frontend:category_type' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
+                                    <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
                                     <hr>
                                     {% for each_sub_category in item_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -66,7 +66,7 @@
                             <li class="menu-group">
                                 <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
                                 <ul>
-                                    <li><a href="{% url 'frontend:category_type' 'SERVICES' %}">ALL SERVICES</a></li>
+                                    <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
                                     <hr>
                                     {% for each_sub_category in services_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -77,7 +77,7 @@
                             <li class="menu-group">
                                 <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
                                 <ul>
-                                    <li><a href="{% url 'frontend:category_type' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
+                                    <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
                                     <hr>
                                     {% for each_sub_category in rideshare_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
@@ -88,7 +88,7 @@
                             <li class="menu-group">
                                 <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
                                 <ul>
-                                <li><a href="{% url 'frontend:category_type' 'HOUSING' %}">ALL HOUSING</a></li>
+                                <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
                                 <hr>
                                     {% for each_sub_category in housing_sub_categories %}
                                         <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
