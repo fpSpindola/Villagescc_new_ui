@@ -116,17 +116,19 @@
                 {% endif %}
             </div>
             <hr>
-            {% if listing_items %}
             <nav class="sidebar">
                 <ul>
-                    <li class="menu-group" style="padding-left: 0">
-                    <div id="all_categories"><i class="fa fa-globe"></i>ALL CATEGORIES</div>
-                    <ul class="collapse">
-                        {% for each in categories %}
+                    <li>
+                        <div id="all_categories"><i class="fa fa-globe"></i><a href="{% url 'frontend:home' %}">ALL CATEGORIES</a></div>
+                        <ul class="collapse">
+                            <li></li>
+                        </ul>
+                    </li>
+                    {% for each in categories %}
                         {% if each.categories_text == 'PRODUCTS' %}
                             <li class="menu-group">
                             <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
-                                <ul>
+                                <ul class="collapse">
                                     <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
                                     <hr>
                                     {% for each_sub_category in item_sub_categories %}
@@ -137,7 +139,7 @@
                         {% elif each.categories_text == 'SERVICES' %}
                             <li class="menu-group">
                                 <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
-                                <ul>
+                                <ul class="collapse">
                                     <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
                                     <hr>
                                     {% for each_sub_category in services_sub_categories %}
@@ -148,7 +150,7 @@
                         {% elif each.categories_text == 'RIDESHARE' %}
                             <li class="menu-group">
                                 <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
-                                <ul>
+                                <ul class="collapse">
                                     <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
                                     <hr>
                                     {% for each_sub_category in rideshare_sub_categories %}
@@ -159,25 +161,21 @@
                         {% elif each.categories_text == 'HOUSING' %}
                             <li class="menu-group">
                                 <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
-                                <ul>
+                                <ul class="collapse">
                                 <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
                                 <hr>
                                     {% for each_sub_category in housing_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
+                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
                         {% endif %}
                     {% endfor %}
-                    </ul>
-                    </li>
-
                 </ul>
             </nav>
             {% endif %}
             <br>
         </div>
-    {% endif %}
 
     <section class="container-fluid" id="home-sub-menu">
         <div class="row">
