@@ -85,6 +85,7 @@ class RegistrationForm(UserCreationForm):
         profile.save()
         profile.settings.email = data['email']
         profile.settings.language = language
+        profile.settings.feed_radius = -1
         profile.settings.save()
         return profile
 

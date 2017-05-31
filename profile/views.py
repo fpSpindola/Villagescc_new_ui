@@ -304,12 +304,14 @@ def profile(request, username):
             account = profile.account(request.profile)
             trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
             payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
+            listings = Listings.objects.filter(user_id=profile.user_id)
             contact_form = ContactForm()
             return django_render(request, 'profile.html',
                                  {'profile_endorsements_made': profile_endorsements_made,
                                   'profile_endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,
-                                  'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form})
+                                  'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
+                                  'listings': listings})
     return locals(), template
 
 
