@@ -6,8 +6,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from general.models import VarCharField
 
+
 class LocationDeserializationError(Exception):
     pass
+
 
 class Location(models.Model):
     "A geographic location, named by neighborhood, city, state, country."

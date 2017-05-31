@@ -54,7 +54,8 @@ PUT _template/villages
                   "type": "text"
                },
                "location": {
-                  "type": "geo_point"
+                  "type": "geo_point",
+                  "ignore_malformed": false
                },
                "city": {
                   "type": "keyword"
