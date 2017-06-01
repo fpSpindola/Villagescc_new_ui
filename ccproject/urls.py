@@ -54,4 +54,5 @@ urlpatterns = [
     url(r'^get_profiles/', get_profiles, name='get_profiles'),
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja')),
+    url('', include('social_django.urls', namespace='social')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

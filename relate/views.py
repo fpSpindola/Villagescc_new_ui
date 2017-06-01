@@ -248,6 +248,15 @@ def get_user_photo(request, profile_id):
     return JsonResponse({'data': data})
 
 
+def get_recipients_data(request):
+    if request.is_ajax() and request.method == 'GET':
+        result = []
+        recipient_info = Profile.objects.filter(string__contains=request.GET['query'])
+        for recipient in recipient_info:
+            result.append({'recipient_name': recipient['name'], 'recipient_profile_id': recipient['id']})
+        return JsonResponse({'result': result})
+
+
 def blank_trust(request):
     listing_form = ListingsForms()
     accounts = ripple.get_user_accounts(request.profile)

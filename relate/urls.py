@@ -10,6 +10,7 @@ urlpatterns = patterns(
     url(r'^trust/', 'blank_trust', name='blank_trust_user'),
     url(r'^pay/', 'blank_payment', name='blank_payment_user'),
     url(r'^get_user_photo/([^/]+)', 'get_user_photo', name='get_user_photo'),
+    url(r'^get_recipients_data/', 'get_recipients_data', name='get_recipients_data'),
     url(r'^trust_ajax/([^/]+)/$', 'trust_ajax', name='trust_user_ajax'),
     url(r'^endorsements/$', login_required(feed),
         dict(item_type=Endorsement, template='endorsements.html',

@@ -50,6 +50,8 @@
     <script src="{% static 'js/bootstrap-switch.min.js' %}"></script>
     <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/typeahead.jquery.min.js' %}"></script>
+    <script src="{% static 'assets/typeahead.js/bloodhound.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/responsive-tables.js' %}"></script>
     <script src="{% static 'common.js' %}"></script>
@@ -75,6 +77,36 @@
 {% include 'payment-loading-modal.html' %}
 {% include 'error-modal.html' %}
 {% include 'templates.html' %}
+
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1199641510163736',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.8'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=1199641510163736";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 {% if request.user.is_authenticated %}
     {% include 'plugs/navigation-post-login.html' %}
