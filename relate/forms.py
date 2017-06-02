@@ -162,7 +162,7 @@ class BlankPaymentForm(forms.Form):
 
     recipient = forms.ModelChoiceField(queryset=Profile.objects.all(),
                                        label='Choose the payment receiver', required=True,
-                                       widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                       widget=forms.TextInput(attrs={'class': 'form-control typeahead'}))
 
     ripple = forms.ChoiceField(
         label=_("Send"),
@@ -201,11 +201,11 @@ class BlankPaymentForm(forms.Form):
                     [self.ERRORS['max_ripple']])
         return data
 
-    def send_payment(self, payer, recipient):
-        data = self.cleaned_data
+    def send_payment(self, payer, recipient, data):
+        # data = self.cleaned_data
         routed = data.get('ripple') == ROUTED
         obj = ripple.pay(
-            payer, recipient, data['amount'], data['memo'], routed=routed)
+            payer, recipient, int(data['amount']), data['memo'], routed=routed)
         # Create feed item
         FeedItem.create_feed_items(
             sender=ripple.RipplePayment, instance=obj, created=True)

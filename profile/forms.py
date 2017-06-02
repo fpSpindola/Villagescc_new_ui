@@ -224,9 +224,11 @@ class ProfileForm(forms.ModelForm):
 class ContactForm(forms.Form):
 
     contact_recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
-                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                     widget=forms.TextInput(attrs={'class': 'form-control typeahead'}))
 
     message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+    data_profile = forms.CharField(widget=forms.HiddenInput())
 
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):

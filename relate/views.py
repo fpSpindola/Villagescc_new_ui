@@ -213,7 +213,7 @@ def view_acknowledgement(request, payment_id):
     return locals()
 
 
-def get_user_photo(request, profile_id):
+def get_user_photo(request, profile_username):
     """
     This method is used to catpure user_photo path, payment list summary and max trust amount in payments
     :param request:
@@ -222,9 +222,9 @@ def get_user_photo(request, profile_id):
     """
     data = {}
     payments = []
-    profile = Profile.objects.get(id=profile_id)
-    payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile_id).all()
-    recipient = get_object_or_404(Profile, id=profile_id)
+    profile = Profile.objects.get(user__username=profile_username)
+    payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile.id).all()
+    recipient = get_object_or_404(Profile, id=profile.id)
     try:
         trust = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
     except Endorsement.DoesNotExist:
@@ -251,9 +251,13 @@ def get_user_photo(request, profile_id):
 def get_recipients_data(request):
     if request.is_ajax() and request.method == 'GET':
         result = []
-        recipient_info = Profile.objects.filter(string__contains=request.GET['query'])
+        if not request.GET['query']:
+            recipient_info = Profile.objects.all()[:50]
+        else:
+            recipient_info = Profile.objects.filter(name__icontains=request.GET['query'])
         for recipient in recipient_info:
-            result.append({'recipient_name': recipient['name'], 'recipient_profile_id': recipient['id']})
+            result.append({'name': recipient.name, 'profile_id': recipient.id,
+                           'username': recipient.username})
         return JsonResponse({'result': result})
 
 
@@ -262,12 +266,12 @@ def blank_trust(request):
     accounts = ripple.get_user_accounts(request.profile)
     form = BlankTrust(endorser=request.profile, recipient=None)
     if request.method == 'POST':
-        if not request.POST['recipient_name']:
+        if not request.POST['data_profile']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
             return django_render(request, 'blank_trust.html', {'form': form,
                                                                'listing_form': listing_form,
                                                                'accounts': accounts})
-        recipient = get_object_or_404(Profile, id=request.POST['data_profile'])
+        recipient = get_object_or_404(Profile, user__username=request.POST['data_profile'])
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a trust to yourself')
             return django_render(request, 'blank_trust.html', {'form': form,
@@ -307,31 +311,27 @@ def blank_payment(request):
         if not request.POST['recipient']:
             messages.add_message(request, messages.ERROR, 'The recipient is invalid, please verify')
             return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form})
-        recipient = get_object_or_404(Profile, id=request.POST['recipient'])
+        recipient = get_object_or_404(Profile, user__username=request.POST['recipient'])
         max_amount = ripple.max_payment(request.profile, recipient)
         form = BlankPaymentForm(request.POST, max_ripple=max_amount)
         if recipient == request.profile:
             messages.add_message(request, messages.ERROR, 'You cant send a payment to yourself')
             return django_render(request, 'blank_payment.html', {'form': form,
                                                                  'listing_form': listing_form})
-        if form.is_valid():
-            can_ripple = max_amount > 0
-            if not can_ripple and request.POST['ripple'] == 'routed':
-                messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
-                                                              'so you can only send direct trust')
-                form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-                return django_render(request, 'blank_payment.html', {'form': form,
-                                                                     'listing_form': listing_form})
-            profile = recipient  # For profile_base.html.
-            payment = form.send_payment(request.profile, recipient)
-            send_payment_notification(payment)
-            messages.add_message(request, messages.INFO, 'Payment sent.')
+        can_ripple = max_amount > 0
+        if not can_ripple and request.POST['ripple'] == 'routed':
+            messages.add_message(request, messages.ERROR, 'There are no available paths through the trust network, '
+                                                          'so you can only send direct trust')
             form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-            return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
-                                                                 'profile': profile})
-        else:
-            messages.add_message(request, messages.ERROR, 'An error occurred, please verify.')
-            return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form})
+            return django_render(request, 'blank_payment.html', {'form': form,
+                                                                 'listing_form': listing_form})
+        profile = recipient  # For profile_base.html.
+        payment = form.send_payment(request.profile, recipient, request.POST)
+        send_payment_notification(payment)
+        messages.add_message(request, messages.INFO, 'Payment sent.')
+        form = BlankPaymentForm(max_ripple=None, initial=request.GET)
+        return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
+                                                             'profile': profile})
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,

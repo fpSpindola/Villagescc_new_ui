@@ -2,9 +2,16 @@
 {% load i18n %}
 
 {% block content %}
-{#    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />#}
-{#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">#}
-{#    </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>#}
+
+    <style>
+        #div-recipient-name .tt-menu {
+            max-height: 150px;
+            width: 100%;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+    </style>
 
     <form id="form-blank-trust" action="{% url 'blank_trust_user' %}" method="POST">
 
@@ -14,7 +21,6 @@
             </span> | <span style="font-size: 18px;"> Let your friends know that you trust a promise from them and they can use their credit with your network.</span>
         </h3>
         <hr>
-
 
         <div class="container">
             {% csrf_token %}
@@ -34,12 +40,14 @@
                         {% if not field.auto_id == 'id_data_profile' %}
                             <label for="{{ field.label }}">{{ field.label }}</label>
                         {% endif %}
-                        {{ field }}
                         {% if field.auto_id == 'id_recipient_name' %}
-                            <div class="form-group">
-                                <label id="label-profile-image" for="profile-image" hidden>Receiver profile picture</label>
-                                <div><img id="profile-image" src="" class="img-rounded" hidden style="height: 70px; width: 120px;"></div>
+                            <div class="form-group" id="div-recipient-name">
+                                {{ field }}
                             </div>
+                            <label id="label-profile-image" for="profile-image" hidden>Receiver profile picture</label>
+                            <div><img id="profile-image" src="" class="img-rounded" hidden style="height: 70px; width: 120px;"></div>
+                        {% else %}
+                            {{ field }}
                         {% endif %}
                     </div>
                 {% endif %}
@@ -134,52 +142,6 @@
             </script>
         {% endif %}
     </form>
-{#    <script>#}
-{#        $(function() {#}
-{#            $("#id_recipient_name").autocomplete({#}
-{#                source: "/get_profiles",#}
-{#                minLength: 2,#}
-{#                select: function (event, ui) {#}
-{#                    console.log(ui.item.id);#}
-{#                    $("#selected-recipient-value").val(ui.item.id);#}
-{#                    $("#id_recipient_name").val(ui.item.id);#}
-{#                    $("#id_recipient_name").text(ui.item.label);#}
-{#                    $("#id_recipient_name").attr("data-profile-selected", ui.item.id);#}
-{#                    var profile = $('#id_recipient_name').attr("data-profile-selected");#}
-{#                    var url = '/get_user_photo/' + profile;#}
-{#                    $.ajax({#}
-{#                        url: url,#}
-{#                        type: 'GET',#}
-{#                        beforeSend: function () {#}
-{#                            $('#spin-modal').fadeIn();#}
-{#                        },#}
-{#                        success: function (e) {#}
-{#                            debugger;#}
-{#                            if(e['data']['has_trust']){#}
-{#                                $("#id_weight").val(e['data']['credit_limit']);#}
-{#                                $("#id_text").val(e['data']['text'])#}
-{#                            }#}
-{#                            $('#profile-image').attr("src", e['data']['profile_photo_path']);#}
-{#                            $('#profile-image').attr("hidden", false);#}
-{#                            $('#label-profile-image').attr("hidden", false);#}
-{#                            $('#spin-modal').fadeOut();#}
-{#                        },#}
-{#                        error: function (e) {#}
-{#                            if (data.status === 500) {#}
-{#                                showInternalServerError();#}
-{#                                $('#spin-modal').fadeOut();#}
-{#                            }#}
-{#                        }#}
-{#                    })#}
-{#                }#}
-{#            })#}
-{#        });#}
-{##}
-{#        $("#form-blank-trust").submit(function (e) {#}
-{#            debugger;#}
-{#            $("#id_data_profile").val($("#id_recipient_name").attr("data-profile-selected"));#}
-{#        })#}
-{#    </script>#}
     <script>
         var recipients = new Bloodhound({
             datumTokenizer: function (datum) {
@@ -191,6 +153,7 @@
                 url: "{% url 'get_recipients_data' %}?query=%QUERY",
                 transform: function (response) {
                     return $.map(response.result, function (recipient) {
+                        $('#id_recipient_name').attr("data-profile-selected", recipient.username);
                         return {
                             value: recipient.name
                         };
@@ -209,5 +172,40 @@
             source: recipients,
             limit: 20
         });
+
+        $("#id_recipient_name").bind('typeahead:selected', function (e) {
+            debugger;
+            $("#id_data_profile").val($("#id_recipient_name").attr("data-profile-selected"));
+            $.ajax({
+                url:'/get_user_photo/' + $("#id_recipient_name").attr("data-profile-selected"),
+                type:'POST',
+                data: {'profile_username': $("#id_recipient_name").attr("data-profile-selected")},
+                beforeSend: function (xhr) {
+                    $('#spin-modal').fadeIn();
+                    var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (e) {
+                    debugger;
+                    if(e['data']['has_trust']){
+                        $("#id_weight").val(e['data']['credit_limit']);
+                        $("#id_text").val(e['data']['text'])
+                    }
+                    $('#profile-image').attr("src", e['data']['profile_photo_path']);
+                    $('#profile-image').attr("hidden", false);
+                    $('#label-profile-image').attr("hidden", false);
+                    $('#spin-modal').fadeOut();
+                },
+                error: function (e){
+                    debugger;
+                    if (e.status === 500) {
+                        showInternalServerError();
+                        $('#spin-modal').fadeOut();
+                    }
+                }
+            });
+        });
+
+
     </script>
 {% endblock %}
