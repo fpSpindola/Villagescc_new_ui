@@ -155,7 +155,8 @@
                     return $.map(response.result, function (recipient) {
                         $('#id_recipient_name').attr("data-profile-selected", recipient.username);
                         return {
-                            value: recipient.name
+                            value: recipient.username,
+                            suggest: recipient
                         };
                     });
                 }
@@ -170,7 +171,13 @@
         {
             display: 'value',
             source: recipients,
-            limit: 20
+            limit: 20,
+            templates: {
+                suggestion: function (data) {
+                    debugger;
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
         });
 
         $("#id_recipient_name").bind('typeahead:selected', function (e) {
