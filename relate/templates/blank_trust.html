@@ -182,11 +182,11 @@
 
         $("#id_recipient_name").bind('typeahead:selected', function (e) {
             debugger;
-            $("#id_data_profile").val($("#id_recipient_name").attr("data-profile-selected"));
+            $("#id_data_profile").val($("#id_recipient_name").val());
             $.ajax({
-                url:'/get_user_photo/' + $("#id_recipient_name").attr("data-profile-selected"),
+                url:'/get_user_photo/' + $("#id_recipient_name").val(),
                 type:'POST',
-                data: {'profile_username': $("#id_recipient_name").attr("data-profile-selected")},
+                data: {'profile_username': $("#id_recipient_name").val()},
                 beforeSend: function (xhr) {
                     $('#spin-modal').fadeIn();
                     var csrftoken = $(document).find("input[name='csrfmiddlewaretoken']").val();

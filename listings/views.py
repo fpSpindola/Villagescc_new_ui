@@ -13,8 +13,19 @@ from profile.forms import ContactForm
 from relate.forms import AcknowledgementForm
 from relate.forms import EndorseForm
 from .schemas import SubmitListingSchema
-from es_utils.utils import save_document
 from django.core.exceptions import ObjectDoesNotExist
+from profile.models import ProfilePageTag
+
+
+def update_profile_tags(tag_obj, profile_obj, listing_obj=None):
+    existing_profile_tag = ProfilePageTag.objects.filter(tag_id=tag_obj.id, profile_id=profile_obj.id)
+    if not existing_profile_tag:
+        new_profile_page_tag = ProfilePageTag()
+        new_profile_page_tag.tag_id = tag_obj.id
+        new_profile_page_tag.listing_obj = listing_obj.id if listing_obj else None
+        new_profile_page_tag.profile_id = profile_obj.id
+        new_profile_page_tag.listing_type = listing_obj.listing_type if listing_obj else None
+        new_profile_page_tag.save()
 
 
 def add_new_listing(request):
@@ -35,10 +46,12 @@ def add_new_listing(request):
                         try:
                             new_tag.save()
                             new_tag.listings_set.add(listing)
+                            update_profile_tags(new_tag, request.profile, listing)
                         except IntegrityError as e:
                             existing_tag = Tag.objects.get(name=tag)
                             existing_tag.listings_set.add(listing)
-                    save_document(listing)
+                            update_profile_tags(existing_tag, request.profile, listing)
+                    # save_document(listing)
                     return JsonResponse({'msg': 'Success!'})
                 except Exception as e:
                     print(e)

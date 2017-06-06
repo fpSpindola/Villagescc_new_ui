@@ -20,6 +20,7 @@ from django.shortcuts import render as django_render
 from accounts.views import SignInUserLogIn
 from listings.forms import ListingsForms
 from listings.models import Listings
+from listings.views import update_profile_tags
 from relate.forms import AcknowledgementForm
 from relate.forms import EndorseForm
 from tags.models import Tag
@@ -27,7 +28,7 @@ from accounts.forms import UserForm
 from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
     RequestInvitationForm, ForgotPasswordForm, FormProfileTag)
-from profile.models import Profile, Invitation, PasswordResetLink
+from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
 from post.models import Post
 import ripple.api as ripple
 from geo.util import location_required
@@ -271,26 +272,51 @@ def edit_profile(request):
         form = ProfileForm(instance=profile)
     return HttpResponseRedirect(reverse('my_profile'))
 
-@login_required()
-def edit_tags(request):
-    tags = request.profile.tags.all()
-    return django_render(request, 'profile_tag_management.html', {'form': form,
-                                                                  'tags': tags})
+# @login_required()
+# def edit_tags(request):
+#     tags = request.profile.tags.all()
+#     return django_render(request, 'profile_tag_management.html', {'form': form,
+#                                                                   'tags': tags})
 
 
 def my_profile(request):
-    form = ListingsForms()
+
+    offer_tags = []
+    request_tags = []
+    teach_tags = []
+    learn_tags = []
+
+    listing_form = ListingsForms()
     listings = Listings.objects.filter(user_id=request.profile.user_id)
     endorsements_received = request.profile.endorsements_received.all()
     endorsements_made = request.profile.endorsements_made.all()
-    return django_render(request, 'my_profile.html', {'profile': request.profile, 'listings': listings,
-                                                      'endorsements_made': endorsements_made,
-                                                      'endorsements_received': endorsements_received,
-                                                      'form': form})
+    profile_tags = ProfilePageTag.objects.filter(profile_id=request.profile.id)
+
+    for each_profile_tag in profile_tags:
+        if each_profile_tag.listing_type == 'OFFER':
+            offer_tags.append(each_profile_tag)
+        elif each_profile_tag.listing_type == 'REQUEST':
+            request_tags.append(each_profile_tag)
+        elif each_profile_tag.listing_type == 'TEACH':
+            teach_tags.append(each_profile_tag)
+        elif each_profile_tag.listing_type == 'LEARN':
+            learn_tags.append(each_profile_tag)
+
+    return django_render(request, 'my_profile.html',
+                         {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
+                          'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
+                          'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
+                          'listing_form': listing_form})
 
 
 @render()
 def profile(request, username):
+
+    offer_tags = []
+    request_tags = []
+    teach_tags = []
+    learn_tags = []
+
     endorsement = None
     profile = get_object_or_404(Profile, user__username=username)
     if profile == request.profile:
@@ -306,6 +332,19 @@ def profile(request, username):
             payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
             listings = Listings.objects.filter(user_id=profile.user_id)
             contact_form = ContactForm()
+
+            profile_tags = ProfilePageTag.objects.filter(profile_id=profile.id)
+
+            for each_profile_tag in profile_tags:
+                if each_profile_tag.listing_type == 'OFFER':
+                    offer_tags.append(each_profile_tag)
+                elif each_profile_tag.listing_type == 'REQUEST':
+                    request_tags.append(each_profile_tag)
+                elif each_profile_tag.listing_type == 'TEACH':
+                    teach_tags.append(each_profile_tag)
+                elif each_profile_tag.listing_type == 'LEARN':
+                    learn_tags.append(each_profile_tag)
+
             return django_render(request, 'profile.html',
                                  {'profile_endorsements_made': profile_endorsements_made,
                                   'profile_endorsements_received': profile_endorsements_received,
@@ -491,15 +530,13 @@ def add_profile_tag(request):
                     new_tag = Tag(name=tag.lower())
                     try:
                         new_tag.save()
-                        new_tag.profile_set.add(request.profile)
+                        update_profile_tags(new_tag, request.profile)
                     except IntegrityError as e:
                         existing_tag = Tag.objects.get(name=tag)
-                        existing_tag.profile_set.add(request.profile)
-        profile_tags = request.profile.tag.all()
-        return django_render(request, 'profile_tag_management.html', {'tag_form': tag_form,
-                                                                      'profile_tags': profile_tags})
+                        update_profile_tags(existing_tag, request.profile)
+        return django_render(request, 'profile_tag_management.html', {'tag_form': tag_form})
     else:
-        profile_tags = request.profile.tag.all()
+        profile_tags = ProfilePageTag.objects.filter(profile_id=request.profile.id)
         tag_form = FormProfileTag()
         return django_render(request, 'profile_tag_management.html', {'tag_form': tag_form,
                                                                       'profile_tags': profile_tags})
@@ -514,8 +551,10 @@ def delete_profile_tags(request):
         tags_to_remove = Tag.objects.filter(id__in=list_tags_to_remove)
         try:
             for tag in tags_to_remove:
-                Tag.objects.filter(id=tag.id).delete()
-
+                try:
+                    ProfilePageTag.objects.filter(id=tag.id).delete()
+                except Exception as e:
+                    print(e)
         except Exception as e:
             messages.add_message(request, messages.ERROR, 'An error occurred, please try again later.')
     return HttpResponseRedirect(reverse('add_profile_tags'))

@@ -29,14 +29,14 @@
                         <td class="pointer center td-checkbox">
                             <input id="{{ tag.id }}" type="checkbox" value="{{ tag.id }}">
                         </td>
-                        <td width="100%"><p class="pull-left">{{ tag.name }}</p></td>
+                        <td width="100%"><p class="pull-left">{{ tag.tag.name }}</p></td>
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             {% else %}
                 <p>
-                    Sorry, we did not find any listings.
+                    Sorry, we did not find any tags.
                 </p>
             {% endif %}
         </div>

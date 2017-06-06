@@ -68,7 +68,8 @@
                     return $.map(response.result, function (recipient) {
                         $('#id_contact_recipient_name').attr("data-profile-selected", recipient.username);
                         return {
-                            value: recipient.name
+                            value: recipient.username,
+                            suggest: recipient
                         };
                     });
                 }
@@ -83,11 +84,17 @@
             {
                 display: 'value',
                 source: recipients,
-                limit: 20
+                limit: 20,
+                templates: {
+                suggestion: function (data) {
+                    debugger;
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
             });
         debugger;
         $("#blank-contact-form").submit(function (e) {
-            $("#id_data_profile").val($('#id_contact_recipient_name').attr("data-profile-selected"));
+            $("#id_data_profile").val($('#id_contact_recipient_name').val());
         })
     </script>
 

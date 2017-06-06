@@ -133,7 +133,8 @@
                     return $.map(response.result, function (recipient) {
                         $('#id_recipient').attr("data-profile-selected", recipient.username);
                         return {
-                            value: recipient.name
+                            value: recipient.username,
+                            suggest: recipient
                         };
                     });
                 }
@@ -148,13 +149,19 @@
         {
             display: 'value',
             source: recipients,
-            limit: 20
+            limit: 20,
+            templates: {
+                suggestion: function (data) {
+                    debugger;
+                    return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
+                }
+            }
         });
         var max_amount_span = $("#max-amount");
         $("#id_recipient").bind('typeahead:selected', function (e) {
             debugger;
             $.ajax({
-                url:'/get_user_photo/' + $("#id_recipient").attr("data-profile-selected"),
+                url:'/get_user_photo/' + $("#id_recipient").val(),
                 type:'POST',
                 beforeSend: function (xhr) {
                     $('#spin-modal').fadeIn();
@@ -198,7 +205,7 @@
 
     $("#blank-payment-form").submit(function () {
         debugger;
-        var profile = $('#id_recipient').attr("data-profile-selected");
+        var profile = $('#id_recipient').val();
         $("#id_recipient").val(profile);
         var url = '/blank_payment/'+profile;
         $.ajax({

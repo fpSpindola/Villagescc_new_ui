@@ -320,10 +320,18 @@ pre_save.connect(PasswordResetLink.pre_save, sender=PasswordResetLink,
 def generate_code():
     return ''.join((random.choice(CODE_CHARS) for i in xrange(CODE_LENGTH)))
 
+
 @receiver(user_logged_in)
 def setlang(sender, **kwargs):
     try:
-	translation.activate(kwargs['user'].profile.settings.language)
-	kwargs['request'].session['django_language']=translation.get_language()
+        translation.activate(kwargs['user'].profile.settings.language)
+        kwargs['request'].session['django_language'] = translation.get_language()
     except:
-	pass
+        pass
+
+
+class ProfilePageTag(models.Model):
+    listing_type = models.CharField(max_length=100, blank=True, null=True)
+    tag = models.ForeignKey(Tag, related_name='profile_tag', blank=True, null=True)
+    profile = models.ForeignKey(Profile, related_name='profile')
+    created_at = models.DateTimeField(auto_now_add=True)
