@@ -93,41 +93,46 @@
                 <div class="col-md-3">
                     {#  <p><i class="fa fa-balance-scale" aria-hidden="true"></i>{% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour {% plural %} {{ hours }} hours</p>#}
                     {#    {% endblocktrans %}#}
-
-                    <div class="card">
-                        <h4>Offer tags</h4>
-                        {% for offer_tag in offer_tags %}
-                            <span class="badge">{{ offer_tag.tag.name }}</span>
-                        {% endfor %}
-                    </div>
-
+                    {% if offer_tags %}
+                        <div class="card">
+                            <h4>Offer tags</h4>
+                            {% for offer_tag in offer_tags %}
+                                <span class="badge">{{ offer_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     {% if request_tags %}
-                    <div class="card">
-                        <h4>Request tags</h4>
-                        {% for request_tag in request_tags %}
-                            <span class="badge">{{ request_tag.tag.name }}</span>
-                        {% endfor %}
-                    </div>
+                        <div class="card">
+                            <h4>Request tags</h4>
+                            {% for request_tag in request_tags %}
+                                <span class="badge">{{ request_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
                     {% endif %}
-
                     {% if teach_tags %}
-                    <div class="card">
-                        <h4>Teach tags</h4>
-                        {% for teach_tag in teach_tags %}
-                            <span class="badge">{{ teach_tag.tag.name }}</span>
-                        {% endfor %}
-                    </div>
+                        <div class="card">
+                            <h4>Teach tags</h4>
+                            {% for teach_tag in teach_tags %}
+                                <span class="badge">{{ teach_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
                     {% endif %}
-
                     {% if learn_tags %}
-                    <div class="card">
-                        <h4>Learn tags</h4>
-                        {% for learn_tag in learn_tags %}
-                            <span class="badge">{{ learn_tag.tag.name }}</span>
-                        {% endfor %}
-                    </div>
+                        <div class="card">
+                            <h4>Learn tags</h4>
+                            {% for learn_tag in learn_tags %}
+                                <span class="badge">{{ learn_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
                     {% endif %}
-
+                    {% if other_tags %}
+                        <div class="card">
+                            <h4>Other tags</h4>
+                            {% for other_tag in other_tags %}
+                                <span class="badge">{{ other_tag.tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 

@@ -285,6 +285,7 @@ def my_profile(request):
     request_tags = []
     teach_tags = []
     learn_tags = []
+    other_tags = []
 
     listing_form = ListingsForms()
     listings = Listings.objects.filter(user_id=request.profile.user_id)
@@ -301,12 +302,14 @@ def my_profile(request):
             teach_tags.append(each_profile_tag)
         elif each_profile_tag.listing_type == 'LEARN':
             learn_tags.append(each_profile_tag)
+        else:
+            other_tags.append(each_profile_tag)
 
     return django_render(request, 'my_profile.html',
                          {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
                           'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
                           'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
-                          'listing_form': listing_form})
+                          'other_tags': other_tags, 'listing_form': listing_form})
 
 
 @render()
@@ -316,6 +319,7 @@ def profile(request, username):
     request_tags = []
     teach_tags = []
     learn_tags = []
+    other_tags = []
 
     endorsement = None
     profile = get_object_or_404(Profile, user__username=username)
@@ -344,13 +348,16 @@ def profile(request, username):
                     teach_tags.append(each_profile_tag)
                 elif each_profile_tag.listing_type == 'LEARN':
                     learn_tags.append(each_profile_tag)
+                else:
+                    other_tags.append(each_profile_tag)
 
             return django_render(request, 'profile.html',
                                  {'profile_endorsements_made': profile_endorsements_made,
                                   'profile_endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,
                                   'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
-                                  'listings': listings})
+                                  'offer_tags':offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
+                                  'learn_tags': learn_tags, 'other_tags': other_tags, 'listings': listings})
     return locals(), template
 
 
