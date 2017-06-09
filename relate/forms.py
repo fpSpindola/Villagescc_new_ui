@@ -19,7 +19,7 @@ class EndorseForm(forms.ModelForm):
     }
 
     weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
-                                required=True, min_value=1, widget=forms.NumberInput(attrs={
+                                required=True, min_value=0, widget=forms.NumberInput(attrs={
             'class': 'form-control', 'style': 'width: 82%'
         }))
     
@@ -115,7 +115,7 @@ class BlankTrust(forms.ModelForm):
     recipient_name = forms.CharField(label='Choose the trust receiver', required=True,
                                      widget=forms.TextInput(attrs={'class': 'form-control typeahead'}))
 
-    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)", required=True, min_value=1, widget=forms.NumberInput(attrs={
+    weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)", required=True, min_value=0, widget=forms.NumberInput(attrs={
         'class': 'form-control'}))
 
     text = forms.CharField(label='Testimonial (This is a public statement)', required=False,

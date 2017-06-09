@@ -156,7 +156,7 @@ class SignInUserRegister(View):
                 # Notifications.
                 send_registration_email(profile)
                 messages.info(request, MESSAGES['registration_done'])
-                return HttpResponseRedirect(reverse('frontend:home'))
+                return HttpResponseRedirect(reverse('accounts:sign_in_user:edit_profile'))
             # else:
             #     messages.add_message(request, messages.ERROR, 'An error occurred, please contact an administrator.')
             #     return django_render(request, 'accounts/sign_in.html', {'form': form})

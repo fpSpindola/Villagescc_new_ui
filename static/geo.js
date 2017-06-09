@@ -42,7 +42,6 @@ function initialize_geo(initial_lat, initial_lng) {
 		mapTypeControl: false,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	debugger;
 	map = new google.maps.Map($('#map_canvas')[0], map_options);
 	marker = new google.maps.Marker({
 			map: map, 
@@ -66,7 +65,6 @@ function initialize_geo(initial_lat, initial_lng) {
 }
 
 function get_browser_location() {
-	debugger;
 	// Access browser html5 geolocation API.
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {

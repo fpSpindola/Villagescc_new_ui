@@ -74,7 +74,7 @@ def redirect_after_locator(request):
     next = request.GET.get('next')
     if next and ':' not in next:  # Local redirects only -- no 'http://...'.
         return HttpResponseRedirect(next)
-    return redirect('feed')
+    return redirect('frontend:home')
 
 def get_geoip_coords(request):
     lat, lng = '', ''

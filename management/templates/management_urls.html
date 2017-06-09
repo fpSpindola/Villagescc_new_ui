@@ -1,20 +1,48 @@
 {% extends 'base.html' %}
 
-
-
 {% block content %}
-<h3 class="page-title container">
-    <a href="{% url 'management_urls' %}">
-        <i class="fa fa-sitemap"></i> Management
-    </a> | Management URLs
-</h3>
-    <hr>
-<div class="container">
-    <div class="row">
+
+    <style>
+        .nav-tabs .fa {
+            margin-right: 15px;
+        }
+    </style>
+
+<ul class="nav nav-tabs" role="tablist" style="position: relative; top: 20px;">
+    <li class="nav-item">
+        <a class="nav-link active" href="#urls-management" data-toggle="tab" role="tab">
+            <i class="fa fa-globe"></i>URLs
+        </a>
+    </li>
+    <li class="nav-item" id="user-management-tab">
+        <a class="nav-link" href="#users-management" data-toggle="tab" role="tab">
+            <i class="fa fa-user"></i>Users
+        </a>
+    </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="urls-management" role="tabpanel">
+      <div id="reportrange" class="form-control col-lg-4 pull-left">
+          <i class="fa fa-calendar"></i>&nbsp;
+          <span></span> <b class="caret"></b>
+                <a href="{% url 'management_urls' %}">
+                    <i class="fa fa-sitemap"></i> Management
+                </a> | Management URLs
+            </div>
+      <div class="row">
         <div class="col-sm-12"><a href="{% url 'categories:categories_manager:manage_categories' %}">
             <i class="fa fa-tag"></i> Manage Categories</a></div>
         <div class="col-sm-12"><a href="{% url 'categories:subcategories_manager:manage_subcategories' %}">
             <i class="fa fa-tags"></i> Manage Subcategories</a></div>
     </div>
+  </div>
+  <div class="tab-pane" id="users-management" role="tabpanel"></div>
+</div>
+
+    <hr>
+<div class="container">
+
 </div>
 {% endblock %}

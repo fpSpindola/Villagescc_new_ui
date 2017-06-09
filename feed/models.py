@@ -146,6 +146,8 @@ class FeedManager(GeoManager):
             query = query.extra(
                 where=["tsearch @@ plainto_tsquery(%s)"],
                 params=[tsearch])
+
+        # query = query.order_by('')
         return query
 
     def create_from_item(self, item):

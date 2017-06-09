@@ -222,7 +222,7 @@ post_delete.connect(Profile.post_delete, sender=Profile,
 
 class Settings(models.Model):
     "Profile settings."
-    profile = models.OneToOneField(Profile, related_name='settings')
+    profile = models.OneToOneField(Profile, related_name='settings', on_delete=models.CASCADE)
     email = EmailField(blank=True)
     endorsement_limited = models.BooleanField(
         _("Limited hearts"), default=True, help_text=_(
