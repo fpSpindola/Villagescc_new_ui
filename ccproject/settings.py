@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'oe@ut#9t8xzd0%19xobf3c4jqa75&#!@+e27ioubq=#r1^4h#8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -52,8 +52,6 @@ EMAIL_SUBJECT_PREFIX = "[Villages] "
 # Application definition
 
 INSTALLED_APPS = [
-    'dal',
-    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,8 +59,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'social_django',
 
     # Custom apps
+    'ccproject',
     'geo',
     'profile',
     'post',
@@ -129,6 +129,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -145,13 +148,13 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'villages_new_ui',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'villagesripple_new_ui',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     }
 }
 
@@ -178,8 +181,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
     'profile.auth_backends.CaseInsensitiveModelBackend',
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 
 SESSIONS_DIRECTORY = os.path.join(BASE_DIR, 'sessions')
 
@@ -220,9 +230,9 @@ ENDORSEMENT_BONUS = 5
 FEED_ITEMS_PER_PAGE = 20
 LISTING_ITEMS_PER_PAGE = 20
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/uploads/'
 
-MEDIA_ROOT = 'media'
+MEDIA_ROOT = 'uploads'
 
 GEOIP_PATH = '/usr/share/GeoIP'
 
@@ -234,3 +244,27 @@ LOCATION_SESSION_KEY = 'location_id'
 DEFAULT_LOCATION = ('49.2696243', '-123.0696036')  # East Vancouver.
 
 INVITATION_ONLY = False
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}
+
+SOCIAL_AUTH_FACEBOOK_KEY='1199641510163736'
+SOCIAL_AUTH_FACEBOOK_SECRET='5ba1f13b13013eb7735afb2799aeadda'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'accounts.facebook_authentication.pipeline.create_profile_data',
+    'accounts.facebook_authentication.pipeline.save_profile_picture',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details'
+)

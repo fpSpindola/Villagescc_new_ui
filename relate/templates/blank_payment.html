@@ -152,14 +152,12 @@
             limit: 20,
             templates: {
                 suggestion: function (data) {
-                    debugger;
                     return "<div><strong>" + data.suggest.name + "</strong> &nbsp" + data.suggest.username + "</div>"
                 }
             }
         });
         var max_amount_span = $("#max-amount");
         $("#id_recipient").bind('typeahead:selected', function (e) {
-            debugger;
             $.ajax({
                 url:'/get_user_photo/' + $("#id_recipient").val(),
                 type:'POST',
@@ -169,7 +167,6 @@
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 },
                 success: function (e) {
-                    debugger;
                     if(e['data']['has_trust']){
                         $("#id_weight").val(e['data']['credit_limit']);
                         $("#id_text").val(e['data']['text'])
@@ -178,7 +175,6 @@
                 $('#profile-image').attr("hidden", false);
                 $('#label-profile-image').attr("hidden", false);
                 $('#label-profile-image').attr("hidden", false);
-                debugger;
                 if(!e['data']['can_ripple']) {
                     $('label[for="id_ripple_0"]').closest('li').hide();
                     $('#id_ripple_1').attr('checked', true);
@@ -186,7 +182,7 @@
                     $('.ripple-hours').attr("hidden", false);
                 }else if(e['data']['can_ripple']) {
                     if(!$('label[for="id_ripple_0"]').closest('li').is(":visible")){
-                        $('label[for="id_ripple_0"]').closest('li').attr("hidden", false);
+                        $('label[for="id_ripple_0"]').closest('li').show()
                     }
                     $('#id_ripple_0').attr('checked', true);
                     $('.ripple-hours').html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
