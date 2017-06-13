@@ -24,7 +24,7 @@
                 {% endif %}
             {% endfor %}
             <li>
-                <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Register with Facebook</a>
+                <a href="{% url 'social:begin' 'facebook' %}?next=/settings/">Register with Facebook</a>
             </li>
             <button type="submit" class="btn btn-primary pull-right">
                     <i class="fa fa-sign-in"></i>&nbsp;Submit

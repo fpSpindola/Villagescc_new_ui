@@ -250,6 +250,9 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',
 }
 
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+
 SOCIAL_AUTH_FACEBOOK_KEY='1199641510163736'
 SOCIAL_AUTH_FACEBOOK_SECRET='5ba1f13b13013eb7735afb2799aeadda'
 
@@ -263,8 +266,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_by_email',
     'social_core.pipeline.user.create_user',
     'accounts.facebook_authentication.pipeline.create_profile_data',
-    'accounts.facebook_authentication.pipeline.save_profile_picture',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details'
+    'social_core.pipeline.user.user_details',
 )
