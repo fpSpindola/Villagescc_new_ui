@@ -112,3 +112,10 @@ post_save.connect(Endorsement.post_save, sender=Endorsement,
                   dispatch_uid='relate.models')
 post_delete.connect(Endorsement.post_delete, sender=Endorsement,
                     dispatch_uid='relate.models')
+
+
+class Referral(models.Model):
+    referrer = models.ForeignKey(Profile, related_name='referral_made')
+    recipient = models.ForeignKey(
+        Profile, related_name='referral_received')
+    created_at = models.DateTimeField(auto_now=True)

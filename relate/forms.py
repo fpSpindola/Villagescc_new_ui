@@ -121,6 +121,8 @@ class BlankTrust(forms.ModelForm):
     text = forms.CharField(label='Testimonial (This is a public statement)', required=False,
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
 
+    referral = forms.BooleanField(label='Refer this person')
+
     data_profile = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
