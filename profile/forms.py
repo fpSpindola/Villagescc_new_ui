@@ -33,10 +33,7 @@ class RegistrationForm(UserCreationForm):
         max_length=100, required=False, label=_("Name"), help_text=_(
             "Name displayed to other users. You can change this later."),
         widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # last_name = forms.CharField(
-    #     max_length=100, required=False, label=_("Last name"), help_text=_(
-    #         "Name displayed to other users. You can change this later."),
-    #     widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     email = forms.EmailField(
         max_length=EmailField.MAX_EMAIL_LENGTH, label=_("Email"), help_text=_(
             "The address to receive notifications from Villages."),
