@@ -45,7 +45,12 @@
                             <label for="{{ trust_form.text.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.text.label }}</label>
                             {{ trust_form.text.errors }}
                             <div class="input-group">
-                                {{ trust_form.text}}
+                                {{ trust_form.text }}
+                            </div>
+                            <label for="{{ trust_form.referral.label }}" class="control-label {% if field.errors %}error{% endif %}">{{ trust_form.referral.label }}</label>
+                            {{ trust_form.referral.errors }}
+                            <div class="input-group">
+                                {{ trust_form.referral }}
                             </div>
                             <div class="alert alert-warning collapse" id="error_id_text"></div>
                             <label for="{{ trust_form.anonymous.label }}" class="align-check-label {% if field.errors %}error{% endif %}"><div class="align-check-input">{{ trust_form.anonymous }}</div>{{ trust_form.anonymous.label }}</label>

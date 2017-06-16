@@ -19,13 +19,11 @@ class EndorseForm(forms.ModelForm):
     }
 
     weight = forms.IntegerField(label="Credit Limit (Measured in 'Village Hours'.)",
-                                required=True, min_value=0, widget=forms.NumberInput(attrs={
-            'class': 'form-control', 'style': 'width: 82%'
-        }))
+                                required=True, min_value=0,
+                                widget=forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
 
-    referral = forms.BooleanField(label='Refer this person', required=False,
-                                  widget=forms.CheckboxInput(attrs={'class': 'form-control',
-                                                                    'style': 'width: auto; box-shadow:none;'}))
+    referral = forms.BooleanField(label='Refer this person', required=True,
+                                  widget=forms.CheckboxInput())
     
     class Meta:
         model = Endorsement

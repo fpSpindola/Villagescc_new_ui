@@ -16,6 +16,7 @@ from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
 from relate.models import Endorsement
 from listings.models import Listings
+from relate.models import Referral
 from general.mail import send_notification
 from django.utils.translation import ugettext as _
 from feed.models import FeedItem
@@ -68,6 +69,11 @@ def endorse_user(request, recipient_username):
                            endorser=request.profile, recipient=recipient)
         if form.is_valid():
             endorsement = form.save()
+            if form.cleaned_data['referral']:
+                new_referral = Referral()
+                new_referral.referrer = request.profile
+                new_referral.recipient = recipient
+                new_referral.save()
             send_endorsement_notification(endorsement)
             messages.info(request, MESSAGES['endorsement_saved'])
             data['recipient'] = recipient_username
