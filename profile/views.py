@@ -29,6 +29,7 @@ from profile.forms import (
     RegistrationForm, ProfileForm, ContactForm, SettingsForm, InvitationForm,
     RequestInvitationForm, ForgotPasswordForm, FormProfileTag)
 from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
+from relate.models import Referral
 from post.models import Post
 import ripple.api as ripple
 from geo.util import location_required
@@ -305,11 +306,18 @@ def my_profile(request):
         else:
             other_tags.append(each_profile_tag)
 
+    referral = Referral.objects.filter(recipient=request.profile)
+    if referral:
+        referral_count = referral.count()
+    else:
+        referral_count = None
+
     return django_render(request, 'my_profile.html',
                          {'profile': request.profile, 'listings': listings, 'endorsements_made': endorsements_made,
                           'endorsements_received': endorsements_received, 'offer_tags': offer_tags,
                           'request_tags': request_tags, 'teach_tags': teach_tags, 'learn_tags': learn_tags,
-                          'other_tags': other_tags, 'listing_form': listing_form})
+                          'other_tags': other_tags, 'listing_form': listing_form, 'referral': referral,
+                          'referral_count': referral_count})
 
 
 @render()

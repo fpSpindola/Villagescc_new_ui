@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tag_utils %}
 
 {% block title %}{{ profile }}{% endblock %}
 
@@ -43,8 +44,10 @@
                 <div class="col-md-4" style="text-align: center; padding-left: 100px;">
                     <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
                     <p class="profile-star-rating">
-                    <th>{% trans 'Reputation: ' %}</th>
-                    <td>{% reputation profile request.profile %}</td>
+                    {% if referral_count %}
+                        <th>{% trans 'Referred by: ' %}</th>
+                        <td>{{ referral_count }} people</td>
+                    {% endif %}
                     </p>
                     <p><i class="fa fa-balance-scale" aria-hidden="true"></i>
                         {% blocktrans count hours=profile.overall_balance %} - {{ hours }} hour
@@ -151,6 +154,9 @@
                                 </div>
                                 <p class="text">Description: {{ each_endorsement_received.text }}</p>
                                 <p class="text">From <a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> to <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a></p>
+                                {% if each_endorsement_received.endorser|check_referral:request.profile %}
+                                    <p class="text"><i class="fa fa-thumbs-o-up" aria-hidden="true">&nbsp<a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> referred <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a> services</i></p>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     {% else %}
@@ -175,6 +181,9 @@
                                 <p class="text">Description: {{ each_endorsement_made.text }}</p>
                                 <p class="text">From {{ each_endorsement_made.endorser.name }} to
                                     <a href="{{ each_endorsement_made.recipient.get_absolute_url }}">{{ each_endorsement_made.recipient.name }}</a></p>
+                                {% if each_endorsement_made.endorser|check_referral:each_endorsement_made.recipient %}
+                                    <p class="text"><i class="fa fa-thumbs-o-up" aria-hidden="true">&nbsp<a href="{{ each_endorsement_received.endorser.get_absolute_url }}">{{ each_endorsement_received.endorser.name }}</a> referred <a href="{{ each_endorsement_received.recipient.get_absolute_url }}">{{ profile.name }}</a> services</i></p>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     {% else %}
