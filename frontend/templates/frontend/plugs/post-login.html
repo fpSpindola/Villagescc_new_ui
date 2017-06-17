@@ -492,6 +492,10 @@
                 else if(data["data"]["stat"] == "existing"){
                     $('#id_weight').val(data['data']['weight']);
                     $('#id_text').val(data['data']['text']);
+                    debugger;
+                    if(data["data"]["refer"]) {
+                        $("#id_referral").prop('checked', true)
+                    }
                     $('#spin-modal').fadeOut();
                     $('.trust-modal-title').text('Trust ' +profile_username);
                     $("#new-trust-modal").modal("show");

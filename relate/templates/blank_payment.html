@@ -191,7 +191,7 @@
                 $('#spin-modal').fadeOut();
                 },
                 error: function (e){
-                    if (data.status === 500) {
+                    if (e.status === 500) {
                         showInternalServerError();
                         $('#spin-modal').fadeOut();
                     }
@@ -203,7 +203,7 @@
         debugger;
         var profile = $('#id_recipient').val();
         $("#id_recipient").val(profile);
-        var url = '/blank_payment/'+profile;
+        var url = '/pay/'+profile;
         $.ajax({
             url: url,
             type: 'POST',
@@ -217,7 +217,9 @@
                 showSuccessMessage('Payment sent')
             },
             error: function (data) {
-                showFormErrors(d['responseJSON']['errors'])
+                debugger;
+                console.log(data);
+                showFormErrors(data['responseJSON']['errors'])
             }
 
         })

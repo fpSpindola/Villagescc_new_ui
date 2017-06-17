@@ -2,6 +2,7 @@ import json
 
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,7 @@ import ripple.api as ripple
 from listings.forms import ListingsForms
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
-from relate.models import Endorsement
+from relate.models import Endorsement, Referral
 from listings.models import Listings
 from relate.models import Referral
 from general.mail import send_notification
@@ -38,9 +39,14 @@ def trust_ajax(request, recipient_username):
         return JsonResponse({'data': data})
     try:
         endorsement = Endorsement.objects.get(endorser=request.profile, recipient=recipient)
+
+        referral = Referral.objects.filter(referrer=endorsement.endorser, recipient=endorsement.recipient)
+
         data['weight'] = endorsement.weight
         data['text'] = endorsement.text
         data['recipient'] = recipient_username
+        if referral:
+            data['refer'] = True
         data['stat'] = 'existing'
     except Endorsement.DoesNotExist:
         data['stat'] = "ok"
@@ -48,7 +54,6 @@ def trust_ajax(request, recipient_username):
 
 
 def endorse_user(request, recipient_username):
-    print('Text')
     data = {}
     recipient = get_object_or_404(Profile, user__username=recipient_username)
     if recipient == request.profile:
@@ -229,6 +234,10 @@ def get_user_photo(request, profile_username):
     data = {}
     payments = []
     profile = Profile.objects.get(user__username=profile_username)
+    if profile == request.profile:
+        data['error'] = "same_user"
+        data['error_message'] = "You can't send a trust to yourself"
+        return JsonResponse({'data': data})
     payment_list = FeedItem.objects.filter(poster_id=request.profile.id, recipient_id=profile.id).all()
     recipient = get_object_or_404(Profile, id=profile.id)
     try:
@@ -241,11 +250,14 @@ def get_user_photo(request, profile_username):
         for each_payment in payment_list:
             payments.append('{0} paid {1} in {2}'.format(each_payment.poster.name, each_payment.recipient.name, each_payment.date.date()))
     if trust:
+        refer = Referral.objects.filter(referrer=request.profile, recipient=recipient)
+        if refer:
+            data['refer'] = True
         data['has_trust'] = True
         data['credit_limit'] = trust.weight
         data['text'] = trust.text
         data['updated'] = trust.updated
-    profile_photo_path = '/media/'+str(profile.photo)
+    profile_photo_path = '/uploads/'+str(profile.photo)
     data['profile_photo_path'] = profile_photo_path
     data['payment_list'] = payments
     data['max_amount'] = max_amount
@@ -341,8 +353,9 @@ def blank_payment(request):
         send_payment_notification(payment)
         messages.add_message(request, messages.INFO, 'Payment sent.')
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
-        return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
-                                                             'profile': profile})
+        return HttpResponseRedirect(reverse('blank_payment_user'))
+        # return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
+        #                                                      'profile': profile})
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,

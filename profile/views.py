@@ -359,13 +359,20 @@ def profile(request, username):
                 else:
                     other_tags.append(each_profile_tag)
 
+            referral = Referral.objects.filter(recipient=profile)
+            if referral:
+                referral_count = referral.count()
+            else:
+                referral_count = None
+
             return django_render(request, 'profile.html',
                                  {'profile_endorsements_made': profile_endorsements_made,
                                   'profile_endorsements_received': profile_endorsements_received,
                                   'account': account, 'listing_form': listing_form, 'profile': profile,
                                   'trust_form': trust_form, 'payment_form': payment_form, 'contact_form': contact_form,
                                   'offer_tags':offer_tags, 'request_tags': request_tags, 'teach_tags': teach_tags,
-                                  'learn_tags': learn_tags, 'other_tags': other_tags, 'listings': listings})
+                                  'learn_tags': learn_tags, 'other_tags': other_tags, 'listings': listings,
+                                  'referral': referral, 'referral_count': referral_count})
     return locals(), template
 
 
