@@ -434,7 +434,7 @@
         $('#spin-modal').fadeIn();
         var listing_id = $(this).attr('data-listing-id');
         var url = '/get_listing_info/'+listing_id;
-        var listing_picture_path = '/media/';
+        var listing_picture_path = '/uploads/';
         $.ajax({
             url: url,
             type: 'GET',

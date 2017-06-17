@@ -75,10 +75,12 @@ def endorse_user(request, recipient_username):
         if form.is_valid():
             endorsement = form.save()
             if form.cleaned_data['referral']:
-                new_referral = Referral()
-                new_referral.referrer = request.profile
-                new_referral.recipient = recipient
-                new_referral.save()
+                existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
+                if not existing_referral:
+                    new_referral = Referral()
+                    new_referral.referrer = request.profile
+                    new_referral.recipient = recipient
+                    new_referral.save()
             send_endorsement_notification(endorsement)
             messages.info(request, MESSAGES['endorsement_saved'])
             data['recipient'] = recipient_username
@@ -307,10 +309,12 @@ def blank_trust(request):
         if form.is_valid():
             endorsement = form.save()
             if form.cleaned_data['referral']:
-                new_referral = Referral()
-                new_referral.referrer = request.profile
-                new_referral.recipient = recipient
-                new_referral.save()
+                existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
+                if not existing_referral:
+                    new_referral = Referral()
+                    new_referral.referrer = request.profile
+                    new_referral.recipient = recipient
+                    new_referral.save()
             send_endorsement_notification(endorsement)
             messages.add_message(request, messages.INFO, 'Trust saved!')
             return django_render(request, 'blank_trust.html', {'form': form,

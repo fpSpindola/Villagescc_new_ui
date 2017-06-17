@@ -192,6 +192,12 @@
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 },
                 success: function (e) {
+
+                    $("#id_weight").val('');
+                    $("#id_text").val('');
+                    $("#id_referral").prop('checked', false);
+
+
                     if(e['data']['error']) {
                         $('#error-modal-alert').text(e["data"]["error_message"]);
                         $('#spin-modal').fadeOut();

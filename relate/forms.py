@@ -211,7 +211,7 @@ class BlankPaymentForm(forms.Form):
         # data = self.cleaned_data
         routed = data.get('ripple') == ROUTED
         obj = ripple.pay(
-            payer, recipient, int(data['amount']), data['memo'], routed=routed)
+            payer, recipient, float(data['amount']), data['memo'], routed=routed)
         # Create feed item
         FeedItem.create_feed_items(
             sender=ripple.RipplePayment, instance=obj, created=True)
