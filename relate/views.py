@@ -352,14 +352,14 @@ def blank_payment(request):
             form = BlankPaymentForm(max_ripple=None, initial=request.GET)
             return django_render(request, 'blank_payment.html', {'form': form,
                                                                  'listing_form': listing_form})
-        profile = recipient  # For profile_base.html.
-        payment = form.send_payment(request.profile, recipient, request.POST)
-        send_payment_notification(payment)
+        form.send_payment(request.profile, recipient, request.POST)
+        # send_payment_notification(payment)
         messages.add_message(request, messages.INFO, 'Payment sent.')
-        form = BlankPaymentForm(max_ripple=None, initial=request.GET)
+        # form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return HttpResponseRedirect(reverse('blank_payment_user'))
         # return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
-        #                                                      'profile': profile})
+        #                                                      'received_payments': received_payments,
+        #                                                      'made_payments': made_payments, 'profile': profile})
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
