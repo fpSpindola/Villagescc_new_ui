@@ -77,7 +77,7 @@ def edit_listing(request, listing_id):
                                       'price': listing.price,
                                       'subcategories': listing.subcategories,
                                       'tag': tags_to_template})
-        return render(request, 'listing_management/edit_listing.html', {'form': form})
+        return render(request, 'listing_management/edit_listing.html', {'form': form, 'listing_id': listing_id})
 
     messages.add_message(request, messages.ERROR, form.errors)
     form = ListingsForms(initial={'listing_type': listing.listing_type,
@@ -90,7 +90,7 @@ def edit_listing(request, listing_id):
 
 
 @transaction.atomic
-def delete_listing(request):
+def delete_listing(request, listing_id=''):
     if request.method == 'POST' and request.is_ajax():
         list_listings_to_remove = []
         for listing_id in request.POST.getlist('ids[]'):
@@ -101,4 +101,10 @@ def delete_listing(request):
                 Listings.objects.filter(id=listings.id).delete()
         except Exception as e:
             messages.add_message(request, messages.ERROR, 'An error occurred, please try again later.')
+    elif listing_id:
+        try:
+            Listings.objects.filter(id=listing_id).delete()
+            messages.add_message(request, messages.SUCCESS, 'Successfully deleted listing')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, 'Error deleting this listing')
     return HttpResponseRedirect(reverse('listing_management:manage_listings'))

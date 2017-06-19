@@ -22,7 +22,7 @@ class EndorseForm(forms.ModelForm):
                                 required=True, min_value=0,
                                 widget=forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
 
-    referral = forms.BooleanField(label='Refer this person', required=True,
+    referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=True,
                                   widget=forms.CheckboxInput())
     
     class Meta:
@@ -123,7 +123,7 @@ class BlankTrust(forms.ModelForm):
     text = forms.CharField(label='Testimonial (This is a public statement)', required=False,
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
 
-    referral = forms.BooleanField(label='Refer this person', required=False,
+    referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=False,
                                   widget=forms.CheckboxInput(attrs={'class': 'form-control',
                                                                     'style': 'width: auto; box-shadow:none;'}))
 

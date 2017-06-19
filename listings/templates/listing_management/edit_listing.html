@@ -44,11 +44,16 @@
      <div class="form-group form-footer">
         <div class="col-lg-offset-2 col-lg-10">
             <a href="{% url 'listing_management:manage_listings' %}">
-                <button type="button" class="btn btn-default"><i class="fa fa-sign-out"></i>Cancel</button>
+                <button type="button" class="btn btn-warning"><i class="fa fa-sign-out"></i>Cancel</button>
             </a>
             <button type="submit" class="btn btn-success"><i class="fa fa-check"></i>Save</button>
+
+            <a href="{% url 'listing_management:delete' listing_id %}">
+                <button type="button" class="btn btn-danger"><i class="fa fa-sign-out"></i>Delete</button>
+            </a>
         </div>
     </div>
+        </div>
 </form>
 
 <script>

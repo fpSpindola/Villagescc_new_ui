@@ -58,7 +58,7 @@
                 if (confirm('Are you sure ? ')) {
                     $.ajax({
                         async: false,
-                        url: '{% url 'listing_management:delete' %}',
+                        url: '{% url 'listing_management:delete' '' %}',
                         type: 'POST',
                         data: { ids:values, csrfmiddlewaretoken:"{{ csrf_token }}" },
                         success: function (data) {

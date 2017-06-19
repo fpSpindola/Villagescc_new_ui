@@ -81,7 +81,7 @@ def endorse_user(request, recipient_username):
                     new_referral.referrer = request.profile
                     new_referral.recipient = recipient
                     new_referral.save()
-            send_endorsement_notification(endorsement)
+            # send_endorsement_notification(endorsement)
             messages.info(request, MESSAGES['endorsement_saved'])
             data['recipient'] = recipient_username
             data['stat'] = 'ok'

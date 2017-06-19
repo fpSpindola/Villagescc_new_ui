@@ -75,11 +75,13 @@ INSTALLED_APPS = [
     'listings',
     'tags',
     'django_user_agents',
+    'django_social_share',
 
     # Ripple
     'account',
     'payment',
     'management',
+
 
 
     'accounts.apps.AccountsConfig',

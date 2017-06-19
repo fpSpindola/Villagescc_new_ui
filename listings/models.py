@@ -56,7 +56,7 @@ class ListingsManager(GeoManager):
         return items
 
     def _item_query(self, profile=None, location=None, radius=None, tsearch=None, trusted_only=False,
-                    up_to_date=None, request_profile=None, type_filter=None):
+                    up_to_date=None, request_profile=None, type_filter=None, listing_type=None):
         query = self.get_queryset().order_by('-updated')
         if up_to_date:
             query = query.filter(updated__lt=up_to_date)
@@ -84,7 +84,14 @@ class ListingsManager(GeoManager):
                 query = query.filter(subcategories__categories__categories_text=type_filter).order_by('-updated')
             else:
                 query = query.filter(subcategories__id=type_filter).order_by('-updated')
+
+        if listing_type:
+            query = query.filter(listing_type=listing_type).order_by('-updated')
+
         return query
+
+
+
 
 
 class Listings(models.Model):

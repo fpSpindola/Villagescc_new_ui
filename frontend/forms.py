@@ -43,7 +43,7 @@ class FormListingsSettings(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, data, profile, location=None, type_filter=None, *args, **kwargs):
-        self.profile, self.location, self.type_filter = (profile, location, type_filter)
+        self.profile, self.location, self.type_filter, self.listing_type = (profile, location, type_filter, data.get('listing_type'))
         data = data.copy()
         if 'radius' not in data:
             default_radius = (profile and profile.settings.feed_radius or DEFAULT_RADIUS)
@@ -64,7 +64,8 @@ class FormListingsSettings(forms.Form):
             items, count = Listings.objects.get_items_and_remaining(location=self.location, tsearch=tsearch,
                                                                     trusted_only=trusted, radius=query_radius,
                                                                     up_to_date=date, request_profile=self.profile,
-                                                                    type_filter=self.type_filter)
+                                                                    type_filter=self.type_filter,
+                                                                    listing_type=self.listing_type)
             if (not (self.profile and self.profile.settings.feed_radius) and
                 not self._explicit_radius and
                 len(items) < settings.LISTING_ITEMS_PER_PAGE and query_radius != None):

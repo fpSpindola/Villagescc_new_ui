@@ -119,3 +119,35 @@ class Referral(models.Model):
     recipient = models.ForeignKey(
         Profile, related_name='referral_received')
     created_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def date(self):
+        """
+        For FeedItem source interface, returns last updated date as the
+        feed item date.
+        """
+        return self.created_at
+
+    @property
+    def location(self):
+        "For FeedItem source interface.  Endorsements have no location."
+        return None
+
+    @property
+    def feed_public(self):
+        return False
+
+    @property
+    def feed_recipient(self):
+        return self.recipient
+
+    @property
+    def feed_poster(self):
+        return self.referrer
+
+    def get_search_text(self):
+        return [(self.referrer.name, 'C'),
+                (self.referrer.username, 'C'),
+                (self.recipient.name, 'C'),
+                (self.recipient.username, 'C'),
+               ]

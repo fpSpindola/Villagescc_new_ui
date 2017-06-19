@@ -37,7 +37,7 @@ TODO: Feed item expiry.
 
 from django.db import models, connection, transaction
 from django.db.models.signals import post_save, post_delete
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.conf import settings
 from django.contrib.gis.db.models import GeoManager
 from datetime import datetime
@@ -45,7 +45,7 @@ from datetime import datetime
 from profile.models import Profile
 from geo.models import Location
 from post.models import Post
-from relate.models import Endorsement
+from relate.models import Endorsement, Referral
 import ripple.api as api
 from general.util import cache_on_object
 from listings.models import Listings
@@ -56,6 +56,7 @@ ITEM_TYPES = {
     Profile: 'profile',
     Endorsement: 'endorsement',
     api.RipplePayment: 'acknowledgement',
+    Referral: 'referral',
 }
 
 # Reverse keys and values in ITEM_TYPES.
@@ -66,6 +67,12 @@ TRUSTED_SUBQUERY = (
     "feed_feeditem.poster_id in "
     "(select to_profile_id from profile_profile_trusted_profiles "
     "    where from_profile_id = %s)")
+
+REFERRAL_QUERY = (
+    "count(rec.id) as recipientid "
+    "from public.relate_referral rec "
+    "group by rec.recipient_id "
+    "order by recipientid desc")
 
 
 class FeedManager(GeoManager):
@@ -110,7 +117,7 @@ class FeedManager(GeoManager):
 
     def _feed_query(self, profile=None, location=None, radius=None,
                     item_type=None, tsearch=None, trusted_only=False,
-                    poster=None, recipient=None, up_to_date=None):
+                    poster=None, recipient=None, up_to_date=None, referral=None):
         "Build a query for feed items corresponding to a particular feed."
         query = self.get_queryset().order_by('-date')
         if up_to_date:
@@ -146,8 +153,8 @@ class FeedManager(GeoManager):
             query = query.extra(
                 where=["tsearch @@ plainto_tsquery(%s)"],
                 params=[tsearch])
-
-        # query = query.order_by('')
+        if referral:
+            query = FeedItem.objects.filter(item_type='referral').order_by('recipient_id').annotate(rcount=Count('recipient_id'))
         return query
 
     def create_from_item(self, item):
@@ -183,6 +190,7 @@ class FeedItem(models.Model):
             (ITEM_TYPES[Profile], 'Profile Update'),
             (ITEM_TYPES[api.RipplePayment], 'Acknowledgement'),
             (ITEM_TYPES[Endorsement], 'Endorsement'),
+            (ITEM_TYPES[Referral], 'Referral')
         ))
     item_id = models.PositiveIntegerField()
     location = models.ForeignKey(Location, null=True, blank=True)

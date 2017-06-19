@@ -45,7 +45,7 @@
                     <img src="{% profile_image_url request.profile '150x150' %}" alt="" height=88px width=88px class="img-circle">
                     <p class="profile-star-rating">
                     {% if referral_count %}
-                        <th>{% trans 'Referred by: ' %}</th>
+                        <th>{% trans 'Trusted referrals: ' %}</th>
                         <td>{{ referral_count }} people</td>
                     {% endif %}
                     </p>
