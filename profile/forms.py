@@ -11,7 +11,7 @@ from general.models import EmailField
 from general.mail import send_mail, send_mail_to_admin
 from django.utils import timezone
 
-alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+alphanumeric = RegexValidator(r'^[0-9a-zA-Z_\s]*$', 'Only alphanumeric characters are allowed.')
 
 ERRORS = {
     'email_dup': _("That email address is registered to another user."),

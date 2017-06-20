@@ -181,6 +181,18 @@ class FeedManager(GeoManager):
 
     def create_from_item(self, item):
         item_type = ITEM_TYPES[type(item)]
+        if item_type == 'profile':
+            referral_count = Referral.objects.filter(recipient_id=item.feed_recipient).count()
+            feed_item = self.create(
+                date=item.date if item.date else datetime.utcnow(),
+                poster=item.feed_poster,
+                recipient=item.feed_recipient,
+                item_type=item_type,
+                item_id=item.id,
+                public=item.feed_public,
+                location=item.location,
+                referral_count=referral_count)
+            feed_item.update_tsearch(item.get_search_text())
         feed_item = self.create(
             date=item.date if item.date else datetime.utcnow(),
             poster=item.feed_poster,
@@ -216,6 +228,8 @@ class FeedItem(models.Model):
         ))
     item_id = models.PositiveIntegerField()
     location = models.ForeignKey(Location, null=True, blank=True)
+    referral_count = models.IntegerField(null=True, blank=True)
+    balance = models.DecimalField(null=True, blank=True)
     public = models.BooleanField()
 
     objects = FeedManager()
