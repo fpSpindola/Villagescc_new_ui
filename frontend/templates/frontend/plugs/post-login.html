@@ -224,26 +224,7 @@
                                 <option value="LEARN">LEARN</option>
                             </select>
 
-
-{#                            <button type="button" class="btn btn-default btn-md btn-change" style="float: left; padding-bottom: 10px;">All listing types</button>#}
-{#                            <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-left: 5px; padding-bottom: 10px;">#}
-{#                            <span class="caret"></span>#}
-{#                            </button>#}
-{#                            <div class="col-md-2">#}
-{#                            </div>#}
-{#                            <!-- Given for loop to construct all -->#}
-{#                            <ul class="dropdown-menu">#}
-{#                                <li><a href="{% url 'frontend:home' 'OFFER' %}">OFFER</a></li>#}
-{#                                <li><a href="{% url 'frontend:home' 'REQUEST' %}">REQUEST</a></li>#}
-{#                                <li><a href="{% url 'frontend:home' 'TEACH' %}">TEACH</a></li>#}
-{#                                <li role="separator" class="divider"></li>#}
-{#                                <li><a href="{% url 'frontend:home' 'LEARN' %}">LEARN</a></li>#}
-{#                                <li><a href="{% url 'frontend:listing_type' 'GIFT' %}">Gift</a></li>#}
-{#                            </ul>#}
                             </div>
-{#                            <button type="button" class="btn btn-default btn-md pull-right">#}
-{#                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map visualization#}
-{#                            </button>#}
                         </div>
                         {% endif %}
                     {% if not is_listing %}
@@ -268,6 +249,95 @@
             </div>
 
         {% if feed_items %}
+            {% if request.GET.referral %}
+                <div class="col-md-10">
+                {% for each in feed_items %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{ each.recipient }}</div>
+                        <div class="panel-body">
+                            <a href="{{ each.recipient.get_absolute_url }}">
+                                <img src="{% profile_image_url each.recipient '150x150' %}" style="height: auto; width: 100px;">
+                            </a>
+                                <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
+                                    <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.recipient.user.profile.username }}">
+                                        <i class="fa fa-heart" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.recipient.user.profile.username }}">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.recipient.user.profile.username }}">
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+
+                        </div>
+                        {% if each.recipient.trusted %}
+                            <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ each.recipient.location }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                                </div>
+                                <div class="col-md-10 pull-left">
+                                    {{ each.recipient.overall_balance }} hours
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ each.recipient.user.last_login }}
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span style="color: grey;"><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                                </div>
+                                <div class="col-md-10" style="color: grey;">
+                                    {{ each.recipient.location }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span style="color: grey;"><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                                </div>
+                                <div class="col-md-10 pull-left" style="color: grey;">
+                                    {{ each.recipient.overall_balance }} hours
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span style="color: grey;"><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                                </div>
+                                <div class="col-md-10" style="color: grey;">
+                                    {{ each.recipient.user.last_login }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                {% empty %}
+                    <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+                {% endfor %}
+            {% if remaining_count %}
+                <p><a href="?{{ next_page_param_str }}">
+                    {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+                </a></p>
+            {% endif %}
+            </div>
+            {% else %}
             <div class="col-md-10">
                 {% for each in feed_items %}
                     <div class="panel panel-default">
@@ -357,6 +427,7 @@
                 <p><a href="?{{ next_page_param_str }}">
                     {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
                 </a></p>
+            {% endif %}
             {% endif %}
             </div>
 

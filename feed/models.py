@@ -166,8 +166,15 @@ class FeedManager(GeoManager):
                     "total_referral": len(group_qs),
                     "queryset": each_profile,
                 })
+            group_set = set()
+            unique_items = []
+            for x in groups:
+                key = str(x['recipient_id'])
+                if key not in group_set:
+                    group_set.add(key)
+                    unique_items.append(x)
             referral_profiles = []
-            for item in sorted(groups, key=lambda x: x['total_referral'], reverse=True):
+            for item in sorted(unique_items, key=lambda x: x['total_referral'], reverse=True):
                 referral_profiles.append(item['queryset'])
             return referral_profiles
         return query
