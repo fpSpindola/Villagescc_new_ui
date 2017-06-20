@@ -91,7 +91,10 @@ class FeedManager(GeoManager):
         return items, count - len(items)
 
     def get_feed_count(self, *args, **kwargs):
-        return self._feed_query(*args, **kwargs).count()
+        if kwargs.get('referral'):
+            return len(self._feed_query(*args, **kwargs))
+        else:
+            return self._feed_query(*args, **kwargs).count()
 
     def get_feed(self, *args, **kwargs):
         """
@@ -154,7 +157,19 @@ class FeedManager(GeoManager):
                 where=["tsearch @@ plainto_tsquery(%s)"],
                 params=[tsearch])
         if referral:
-            query = FeedItem.objects.filter(item_type='referral').order_by('recipient_id').annotate(rcount=Count('recipient_id'))
+            profiles = FeedItem.objects.filter(item_type='referral').all()
+            groups = []
+            for each_profile in profiles:
+                group_qs = each_profile.recipient.referral_received.all()
+                groups.append({
+                    "recipient_id": each_profile.recipient.id,
+                    "total_referral": len(group_qs),
+                    "queryset": each_profile,
+                })
+            referral_profiles = []
+            for item in sorted(groups, key=lambda x: x['total_referral'], reverse=True):
+                referral_profiles.append(item['queryset'])
+            return referral_profiles
         return query
 
     def create_from_item(self, item):

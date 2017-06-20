@@ -274,7 +274,11 @@
                         <div class="panel-heading">{{ each }}</div>
                         <div class="panel-body">
                             <a href="{{ each.get_absolute_url }}">
-                                <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
+                                {% if request.GET.referral %}
+                                    <img src="{% profile_image_url each.recipient '150x150' %}" style="height: auto; width: 100px;">
+                                {% else %}
+                                    <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
+                                {% endif %}
                             </a>
                                 <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
                                     <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">

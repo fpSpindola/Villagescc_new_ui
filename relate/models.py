@@ -128,6 +128,10 @@ class Referral(models.Model):
         """
         return self.created_at
 
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.objects.get(pk=id)
+
     @property
     def location(self):
         "For FeedItem source interface.  Endorsements have no location."
