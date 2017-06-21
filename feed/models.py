@@ -157,42 +157,31 @@ class FeedManager(GeoManager):
                 where=["tsearch @@ plainto_tsquery(%s)"],
                 params=[tsearch])
         if referral:
-            profiles = FeedItem.objects.filter(item_type='referral').all()
-            groups = []
-            for each_profile in profiles:
-                group_qs = each_profile.recipient.referral_received.all()
-                groups.append({
-                    "recipient_id": each_profile.recipient.id,
-                    "total_referral": len(group_qs),
-                    "queryset": each_profile,
-                })
-            group_set = set()
-            unique_items = []
-            for x in groups:
-                key = str(x['recipient_id'])
-                if key not in group_set:
-                    group_set.add(key)
-                    unique_items.append(x)
-            referral_profiles = []
-            for item in sorted(unique_items, key=lambda x: x['total_referral'], reverse=True):
-                referral_profiles.append(item['queryset'])
-            return referral_profiles
+            query = query.filter(item_type='profile').order_by('-referral_count')
+            # profiles = FeedItem.objects.filter(item_type='referral').all()
+            # groups = []
+            # for each_profile in profiles:
+            #     group_qs = each_profile.recipient.referral_received.all()
+            #     groups.append({
+            #         "recipient_id": each_profile.recipient.id,
+            #         "total_referral": len(group_qs),
+            #         "queryset": each_profile,
+            #     })
+            # group_set = set()
+            # unique_items = []
+            # for x in groups:
+            #     key = str(x['recipient_id'])
+            #     if key not in group_set:
+            #         group_set.add(key)
+            #         unique_items.append(x)
+            # referral_profiles = []
+            # for item in sorted(unique_items, key=lambda x: x['total_referral'], reverse=True):
+            #     referral_profiles.append(item['queryset'])
+            # return referral_profiles
         return query
 
     def create_from_item(self, item):
         item_type = ITEM_TYPES[type(item)]
-        if item_type == 'profile':
-            referral_count = Referral.objects.filter(recipient_id=item.feed_recipient).count()
-            feed_item = self.create(
-                date=item.date if item.date else datetime.utcnow(),
-                poster=item.feed_poster,
-                recipient=item.feed_recipient,
-                item_type=item_type,
-                item_id=item.id,
-                public=item.feed_public,
-                location=item.location,
-                referral_count=referral_count)
-            feed_item.update_tsearch(item.get_search_text())
         feed_item = self.create(
             date=item.date if item.date else datetime.utcnow(),
             poster=item.feed_poster,
@@ -228,8 +217,8 @@ class FeedItem(models.Model):
         ))
     item_id = models.PositiveIntegerField()
     location = models.ForeignKey(Location, null=True, blank=True)
-    referral_count = models.IntegerField(null=True, blank=True)
-    balance = models.DecimalField(null=True, blank=True)
+    referral_count = models.IntegerField(null=True, blank=True, default=0)
+    balance = models.DecimalField(null=True, blank=True, default=0, decimal_places=2, max_digits=12)
     public = models.BooleanField()
 
     objects = FeedManager()

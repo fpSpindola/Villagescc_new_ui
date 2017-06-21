@@ -81,6 +81,10 @@ def endorse_user(request, recipient_username):
                     new_referral.referrer = request.profile
                     new_referral.recipient = recipient
                     new_referral.save()
+
+                    new_referral_count = FeedItem.objects.filter(item_type='profile', poster=recipient)[0].referral_count + 1
+                    FeedItem.objects.filter(poster=recipient, item_type='profile').\
+                        update(referral_count=new_referral_count)
             # send_endorsement_notification(endorsement)
             messages.info(request, MESSAGES['endorsement_saved'])
             data['recipient'] = recipient_username
