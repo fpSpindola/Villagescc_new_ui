@@ -88,14 +88,6 @@
     });
     FB.AppEvents.logPageView();
   };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
 </script>
 
 <div id="fb-root"></div>
@@ -107,8 +99,6 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 </script>
-
-<script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=5946d83fce91310011812243&product=inline-share-buttons"></script>
 
 {% if request.user.is_authenticated %}
     {% include 'plugs/navigation-post-login.html' %}
