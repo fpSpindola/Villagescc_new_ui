@@ -243,11 +243,7 @@ def edit_settings(request):
         
     if 'change_settings' not in request.POST:
         tag_list = []
-        profile_tags_obj = request.profile.tag.all()
-        for profile_tag in profile_tags_obj:
-            tag_list.append(str(profile_tag.name))
-        settings_form = SettingsForm(instance=request.profile.settings,
-                                     initial={'tag': tag_list})
+        settings_form = SettingsForm(instance=request.profile.settings)
     if 'change_password' not in request.POST:
         password_form = PasswordChangeForm(request.user)
     return locals()
