@@ -16,8 +16,6 @@ from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from general.util import render, deflect_logged_in
 from django.shortcuts import render as django_render
-
-from accounts.views import SignInUserLogIn
 from listings.forms import ListingsForms
 from listings.models import Listings
 from listings.views import update_profile_tags
@@ -31,13 +29,11 @@ from profile.forms import (
 from profile.models import Profile, Invitation, PasswordResetLink, ProfilePageTag
 from relate.models import Referral
 from post.models import Post
-import ripple.api as ripple
 from geo.util import location_required
 from geo.models import Location
 from relate.models import Endorsement
 from feed.views import feed
 from general.mail import send_mail_from_system
-from django.views.decorators.cache import cache_page
 
 # Session key to store invite code for later signing up.
 INVITE_CODE_KEY = 'invite_code'
@@ -219,6 +215,8 @@ def reset_password(request, code):
 @login_required
 @render('settings.html')
 def edit_settings(request):
+    request.session['from_settings'] = True
+    social_auth = request.user.social_auth.filter(provider="facebook")
     if request.method == 'POST':
         if 'change_settings' in request.POST:
             old_email = request.profile.settings.email

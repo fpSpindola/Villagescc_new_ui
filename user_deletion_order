@@ -1,0 +1,24 @@
+delete auth_user > dependency on profile
+delete profile > dependency on feed_item
+ --delete all feed items by poster_id was OK
+ --delete all feed items by recipient_id was OK
+delete profile again > dependecy on trusted_profiles
+ --delete all trusted_profiles by "from_profile_id"
+ --delete all trusted_profiles by "to_profile_id"
+delete profile again > dependency on profile_settings
+ --delete profile settings
+ delete profile again > dependency on relate_endorsements
+ --delete all endorsements by recipient_id
+ --delete all endorsements by endorser_id
+Successfully removed profile
+Successfully removed user
+
+
+trusted_profiles = user.profile.trusted_profiles.filter(from_profile_id=user.profile.id)
+                if trusted_profiles:
+                    for each_trusted_profile in trusted_profiles:
+                        each_trusted_profile.delete()
+                trusting_profiles = user.profile.trusting_profiles.all()
+                if trusting_profiles:
+                    for each_trusting_profile in trusting_profiles:
+                        each_trusting_profile.delete()

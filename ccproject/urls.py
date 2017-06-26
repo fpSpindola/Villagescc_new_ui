@@ -50,7 +50,7 @@ urlpatterns = [
     url('^', include(relate_urls), name='relate'),
     url('^notifications/', include(notification_urls), name='notification'),
     url('^categories_manager/', include(categories_urls, namespace='categories')),
-    url('^management/', 'management.views.management_urls', name='management_urls'),
+    url('^management/', include(management_urls, namespace='management')),
     url(r'^get_profiles/', get_profiles, name='get_profiles'),
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja')),

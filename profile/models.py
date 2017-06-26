@@ -67,8 +67,6 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
-    tag = models.ManyToManyField(Tag, null=True, blank=True)
-
     trusted_profiles = models.ManyToManyField(
         'Profile', symmetrical=False, related_name='trusting_profiles',
         blank=True)

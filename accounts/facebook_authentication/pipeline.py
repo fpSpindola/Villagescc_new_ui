@@ -3,8 +3,28 @@ import datetime
 import pytz
 from django.core.files.base import ContentFile
 from profile.models import Profile, Settings
+from django.contrib.auth.models import User
 from requests import request, HTTPError
 from django.core.files.base import ContentFile
+from django.contrib import messages
+
+
+def bind_existing_account(strategy, user, response, details, is_new=False, *args, **kwargs):
+    if strategy.request.session.get('from_settings'):
+        if details.get('email'):
+            if not user.email == details.get('email'):
+                email_belongs_to_another_user = User.objects.filter(email=details.get('email')).all()
+                if email_belongs_to_another_user:
+                    del strategy.request.session['from_settings']
+                    messages.add_message(strategy.request, messages.WARNING, 'This email already belongs to another facebook account')
+                    return strategy.redirect('/')
+                else:
+                    User.objects.filter(id=user.id).update(email=details.get('email'))
+                    Settings.objects.filter(profile_id=user.profile.id).update(email=details.get('email'))
+                    del strategy.request.session['from_settings']
+                    return
+    else:
+        return
 
 
 def create_profile_data(strategy, user, response, details, is_new=False, *args, **kwargs):
