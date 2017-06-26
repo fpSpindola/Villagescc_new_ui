@@ -76,7 +76,6 @@ INSTALLED_APPS = [
     'tags',
     'notification',
     'django_user_agents',
-    'django_social_share',
 
     # Ripple
     'account',
