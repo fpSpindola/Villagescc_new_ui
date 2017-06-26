@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'oe@ut#9t8xzd0%19xobf3c4jqa75&#!@+e27ioubq=#r1^4h#8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -37,16 +37,16 @@ LOCALE_PATHS = (
 )
 
 
-SERVER_EMAIL = 'info@villages.cc'
+SERVER_EMAIL = 'help@villages.cc'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'info@villages.cc'
-EMAIL_HOST_USER = 'info@villages.cc'
-EMAIL_HOST_PASSWORD = 'infovillagescc'
+DEFAULT_FROM_EMAIL = 'help@villages.cc'
+EMAIL_HOST_USER = 'help@villages.cc'
+EMAIL_HOST_PASSWORD = 'helpvillagescc'
 SITE_DOMAIN = 'villages.cc'
-HELP_EMAIL = 'info@villages.cc'
+HELP_EMAIL = 'help@villages.cc'
 EMAIL_SUBJECT_PREFIX = "[Villages] "
 
 # Application definition
@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'about',
     'listings',
     'tags',
+    'notification',
     'django_user_agents',
     'django_social_share',
 
@@ -81,6 +82,7 @@ INSTALLED_APPS = [
     'account',
     'payment',
     'management',
+
 
 
 
@@ -260,6 +262,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET='5ba1f13b13013eb7735afb2799aeadda'
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
+    'accounts.facebook_authentication.pipeline.bind_existing_account',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',

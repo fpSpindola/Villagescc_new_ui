@@ -7,7 +7,6 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('profile', '0006_profilepagetag'),
         ('relate', '0003_merge'),
     ]
 

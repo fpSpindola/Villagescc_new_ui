@@ -1,23 +1,20 @@
 import json
-
-from dal import autocomplete
+import ripple.api as ripple
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.http import JsonResponse
 from general.util import render
 from django.shortcuts import render as django_render
-import ripple.api as ripple
 from listings.forms import ListingsForms
 from profile.models import Profile
 from relate.forms import EndorseForm, AcknowledgementForm, BlankTrust, BlankPaymentForm
 from relate.models import Endorsement, Referral
-from listings.models import Listings
-from relate.models import Referral
+from notification.models import Notification
+from notification.utils import create_notification
 from general.mail import send_notification
 from django.utils.translation import ugettext as _
 from feed.models import FeedItem
@@ -74,6 +71,7 @@ def endorse_user(request, recipient_username):
                            endorser=request.profile, recipient=recipient)
         if form.is_valid():
             endorsement = form.save()
+            create_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
             if form.cleaned_data['referral']:
                 existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
                 if not existing_referral:
@@ -166,6 +164,7 @@ def acknowledge_user(request, recipient_username):
         if form.is_valid():
             acknowledgement = form.send_acknowledgement(
                 request.profile, recipient)
+            create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
             send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
             return HttpResponseRedirect(acknowledgement.get_absolute_url())
@@ -189,7 +188,8 @@ def pay_user_ajax(request, recipient_username):
         if form.is_valid():
             acknowledgement = form.send_acknowledgement(
                 request.profile, recipient)
-            # send_acknowledgement_notification(acknowledgement)
+            create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
+            send_acknowledgement_notification(acknowledgement)
             messages.info(request, MESSAGES['acknowledgement_sent'])
             data['stat'] = 'ok'
             data['recipient'] = recipient_username
@@ -312,6 +312,7 @@ def blank_trust(request):
         form = BlankTrust(request.POST, instance=endorsement, endorser=request.profile, recipient=recipient)
         if form.is_valid():
             endorsement = form.save()
+            create_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
             if form.cleaned_data['referral']:
                 existing_referral = Referral.objects.filter(referrer=request.profile, recipient=recipient)
                 if not existing_referral:
@@ -357,12 +358,10 @@ def blank_payment(request):
             return django_render(request, 'blank_payment.html', {'form': form,
                                                                  'listing_form': listing_form})
         payment = form.send_payment(request.profile, recipient, request.POST)
+        create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
         send_payment_notification(payment)
         messages.add_message(request, messages.INFO, 'Payment sent.')
         return HttpResponseRedirect(reverse('blank_payment_user'))
-        # return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,
-        #                                                      'received_payments': received_payments,
-        #                                                      'made_payments': made_payments, 'profile': profile})
     else:
         form = BlankPaymentForm(max_ripple=None, initial=request.GET)
         return django_render(request, 'blank_payment.html', {'form': form, 'listing_form': listing_form,

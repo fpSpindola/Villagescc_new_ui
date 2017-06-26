@@ -9,6 +9,7 @@ from django.db.models import Q
 from listings.forms import ListingsForms
 from listings.models import LISTING_TYPE_CHECK
 from feed.forms import FeedFilterForm, DATE_FORMAT
+from notification.models import Notification
 from relate.forms import Endorsement, EndorseForm, AcknowledgementForm
 from profile.forms import ContactForm
 from frontend.forms import FormListingsSettings
@@ -131,26 +132,28 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         payment_form = AcknowledgementForm(max_ripple=None, initial=request.GET)
         contact_form = ContactForm()
+        notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
 
         context = locals()
         context.update(extra_context or {})
         return render(request, 'frontend/home.html',
                       {'url_params': url_params, 'feed_items': feed_items,
-                      'next_page_date': next_page_date, 'context': context,
-                      'form': form, 'listing_form': listing_form,
-                      'poster': poster, 'do_filter': do_filter,
-                      'remaining_count': remaining_count,
-                      'item_type': item_type, 'template': template,
-                      'url_param_str': url_param_str,
-                      'next_page_param_str': next_page_param_str,
-                      'extra_context': extra_context,
-                      'recipient': recipient, 'user_agent_type': user_agent_type,
-                      'item_sub_categories': item_sub_categories,
-                      'services_sub_categories': services_sub_categories,
-                      'rideshare_sub_categories': rideshare_sub_categories,
-                      'housing_sub_categories': housing_sub_categories,
-                      'categories': categories_list, 'trust_form': trust_form,
-                      'payment_form': payment_form, 'contact_form': contact_form})
+                       'next_page_date': next_page_date, 'context': context,
+                       'form': form, 'listing_form': listing_form,
+                       'poster': poster, 'do_filter': do_filter,
+                       'remaining_count': remaining_count,
+                       'item_type': item_type, 'template': template,
+                       'url_param_str': url_param_str,
+                       'next_page_param_str': next_page_param_str,
+                       'extra_context': extra_context,
+                       'recipient': recipient, 'user_agent_type': user_agent_type,
+                       'item_sub_categories': item_sub_categories,
+                       'services_sub_categories': services_sub_categories,
+                       'rideshare_sub_categories': rideshare_sub_categories,
+                       'housing_sub_categories': housing_sub_categories,
+                       'categories': categories_list, 'trust_form': trust_form,
+                       'payment_form': payment_form, 'contact_form': contact_form,
+                       'notification_number': notification_number})
     else:
         if request.method == 'POST':
             form = ListingsForms(request.POST, request.FILES)
@@ -204,6 +207,9 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         services_sub_categories = SubCategories.objects.all().filter(categories=2)
         rideshare_sub_categories = SubCategories.objects.all().filter(categories=3)
         housing_sub_categories = SubCategories.objects.all().filter(categories=4)
+
+        notification_number = Notification.objects.filter(status='NEW', recipient=request.profile).count()
+
         return render(request, 'frontend/home.html', {
             'item_sub_categories': item_sub_categories, 'subcategories': subcategories,
             'services_sub_categories': services_sub_categories, 'rideshare_sub_categories': rideshare_sub_categories,
@@ -213,7 +219,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'contact_form': contact_form, 'form_listing_settings': form_listing_settings,
             'item_type_name': item_type_name, 'is_listing': True, 'url_params': url_params,
             'listing_items': listing_items, 'next_page_date': next_page_date, 'remaining_count': remaining_count,
-            'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter})
+            'next_page_param_str': next_page_param_str, 'listing_type_filter': type_filter,
+            'notification_number': notification_number})
 
 
 def pre_home(request):

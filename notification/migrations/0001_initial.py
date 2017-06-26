@@ -7,18 +7,18 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('profile', '0005_profile_tag'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProfilePageTag',
+            name='Notification',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('listing_type', models.CharField(max_length=100, null=True, blank=True)),
+                ('notification_type', models.CharField(max_length=50)),
+                ('status', models.CharField(max_length=16, choices=[(b'READ', b'READ'), (b'NEW', b'NEW')])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('profile', models.ForeignKey(related_name='profile', to='profile.Profile')),
-                ('tag', models.ForeignKey(related_name='profile_tag', blank=True, to='tags.Tag', null=True)),
+                ('notifier', models.ForeignKey(related_name='notifier', to='profile.Profile')),
+                ('recipient', models.ForeignKey(related_name='notification_received', to='profile.Profile')),
             ],
         ),
     ]
