@@ -21,8 +21,12 @@
             <div class="row">
                 <span id="max-amount" class="label label-primary pull-right" hidden></span>
                 {% csrf_token %}
-                <div class="alert alert-info ripple-hours" hidden>
-                </div>
+                <div class="alert alert-info ripple-hours" hidden></div>
+
+                <input type="text" id="boolean-referral" data-referral="" hidden>
+
+                <input type="text" id="form-submit-checker" data-submit-checker="" hidden>
+
                 {% for field in form %}
                     {% if field.errors %}
                         <div class="form-group">
@@ -120,6 +124,32 @@
         </div>
     {% endif %}
 
+    <!-- Double Check Modal -->
+    <div class="modal fade" id="referralModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" role="alert">Would you like to refer this person's services to your friends?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal">
+                        <i class="fa fa-arrow-left"></i>Not yet
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveReferral" data-dismiss="modal">
+                        <i class="fa fa-check"></i>Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
         var recipients = new Bloodhound({
             datumTokenizer: function (datum) {
@@ -188,6 +218,11 @@
                     $('.ripple-hours').html("You can send a trusted payment of up to " + e['data']['max_amount'] + " hour(s) or a direct payment of any amount.");
                     $('.ripple-hours').attr("hidden", false);
                 }
+                debugger;
+                if(e['data']['refer']) {
+                    $('#boolean-referral').attr("data-referral", true);
+                }
+
                 $('#spin-modal').fadeOut();
                 },
                 error: function (e){
@@ -199,7 +234,29 @@
             });
         });
 
-    $("#save-payment").click(function () {
+        $("#blank-payment-form").submit(function (e) {
+            debugger;
+            if($("#form-submit-checker").attr("data-submit-checker") === "true"){
+                $("#form-submit-checker").attr("data-submit-checker", false);
+            } else {
+                e.preventDefault();
+                debugger;
+                var modal = $('#referralModal');
+                if($("#id_recipient").val() == '') {
+                    modal.find('.modal-body').html('Recipient is invalid');
+                    modal.modal();
+                } else {
+                    if($("#boolean-referral").attr("data-referral") === "true") {
+                        $("#form-submit-checker").attr("data-submit-checker", true);
+                        $("#blank-payment-form").submit();
+                    } else {
+                        modal.modal();
+                    }
+                }
+            }
+        });
+
+    $("#save-payment").click(function (e) {
         debugger;
         var profile = $('#id_recipient').val();
         $("#id_recipient").val(profile);
@@ -213,16 +270,36 @@
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             },
             success: function (data) {
-                debugger;
-                showSuccessMessage('Payment sent')
+                if (data['referral'] === true) {
+
+                } else {
+                    showSuccessMessage('Payment sent')
+                }
             },
             error: function (data) {
-                debugger;
                 console.log(data);
                 showFormErrors(data['responseJSON']['errors'])
             }
+        });
+    });
 
+    $("#saveReferral").click(function () {
+        var profile = $('#id_recipient').val();
+        $.ajax({
+            url: "{% url 'referral_on_payment' %}",
+            data: JSON.stringify({'profile': profile}),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function() {
+                $("#form-submit-checker").attr("data-submit-checker", true);
+                $("#blank-payment-form").submit();
+            }
         })
+    });
+
+    $("#not-refer").click(function (e) {
+        $("#form-submit-checker").attr("data-submit-checker", true);
+        $("#blank-payment-form").submit();
     })
 </script>
 

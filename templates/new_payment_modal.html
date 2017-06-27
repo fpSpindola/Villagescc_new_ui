@@ -45,6 +45,32 @@
         </div>
 </form>
 
+<!-- Double Check Modal -->
+    <div class="modal fade" id="referralModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" role="alert">Would you like to refer this person's services to your friends?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="not-refer" data-dismiss="modal">
+                        <i class="fa fa-arrow-left"></i>Not yet
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveReferral" data-dismiss="modal">
+                        <i class="fa fa-check"></i>Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
     function confirm_text() {
 		var can_ripple = {% if can_ripple %}true{% else %}false{% endif %};
@@ -90,7 +116,13 @@
                     $('#payment-msg').delay(2500).fadeOut('slow');
                     $("#save-payment").attr("disabled", false);
                     $('#new-payment-modal').modal("hide");
-                    location.reload();
+
+                    if(!data['data']['refer']) {
+                        var modal = $('#referralModal');
+                        modal.modal();
+                    } else {
+                        location.reload();
+                    }
 
                 }
                 else if(data['data']['stat'] == 'error'){
@@ -121,6 +153,23 @@
                 .find("input[type=checkbox], input[type=radio]")
                 .prop("checked", "")
                 .end();
-    })
+    });
 
+    $("#saveReferral").click(function() {
+        debugger;
+        var profile_username = $("#profile-username").val();
+        $.ajax({
+            url: "{% url 'referral_on_payment' %}",
+            data: JSON.stringify({'profile': profile_username}),
+            contentType: "application/json; charset=utf-8",
+            method: 'POST',
+            success: function() {
+                location.reload();
+            }
+        })
+    });
+
+    $("#not-refer").click(function (e) {
+        location.reload();
+    })
 </script>
