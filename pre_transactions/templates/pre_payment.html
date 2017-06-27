@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load staticfiles profile relate i18n %}
+{% load tag_utils %}
+
+{% block content %}
+
+<h3 class="page-title" style="padding-left: 10px;">
+<span>
+    <i class="fa fa-lightbulb-o"></i> Prefilled Payment
+</span> | <span style="font-size: 18px;"> Confirm your transaction</span>
+</h3>
+<hr>
+
+<div class="col-lg-6 col-lg-offset-3">
+        <form method="post" id="pre-trust-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Recipient: {{ recipient }}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 col-md-12">
+                            <a href="#" class="thumbnail">
+                                <img src="{% profile_image_url recipient '150x150' %}" alt="..."
+                                     style="width: 200px; height: 200px;"></a>
+                        </div>
+                        <div class="cointainer">
+                            <div class="form-group">
+
+                            {% if max_amount > 0 %}
+                                <div class="alert alert-info">
+                                  <strong>Info!</strong> You can send a trusted payment of up to {{ max_amount }} hour(s) or a direct payment of any amount.
+                                </div>
+                            {% endif %}
+
+                                <div>
+                                    <label class="radio-inline">
+                                        <input id="direct_payment" type="radio" name="direct">Direct payment
+                                    </label>
+                                    {% if can_ripple %}
+                                        <label class="radio-inline">
+                                            <input id="trusted_payment" type="radio" name="trusted">Trusted payment
+                                        </label>
+                                    {% endif %}
+                                </div>
+
+                                <label for="testimonial">Testimonial</label>
+                                <textarea id="testimonial" class="form-control" rows="4" cols="20">{{ text }}</textarea>
+
+                                <label for="id_weight">Hours</label>
+                                <input class="form-control" id="id_weight" min="0" name="weight" type="number" value="{{ hours }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="save-pre-trust" class=" btn btn-success gradient save-button">
+                    <i class="fa fa-check"></i> Save trust</button>
+                <a href="{% url 'pre_transactions:pre_trust' %}" class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</a>
+            </div>
+
+{#        <script>#}
+{#             $(document).ready(function () {#}
+{#                 if($("#trusted_payment").is(":checked")){#}
+{#                    $("#direct_payment").attr('checked', false);#}
+{#                 } else if($("#direct_payment").is(":checked") == true) {#}
+{#                     $("#trusted_payment").attr("checked", false)#}
+{#                 }#}
+{##}
+{#             });#}
+{#        </script>#}
+
+        </form>
+    </div>
+{% endblock %}

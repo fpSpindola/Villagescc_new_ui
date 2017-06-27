@@ -35,6 +35,7 @@ from listings import urls as listings_urls
 from notification import urls as notification_urls
 from categories import urls as categories_urls
 from management import urls as management_urls
+from pre_transactions import urls as pre_transactions_urls
 from relate.views import get_profiles
 
 urlpatterns = [
@@ -55,4 +56,5 @@ urlpatterns = [
     url(r'', include(geo_urls)),
     url(r'^payment_raja/', include(payment_urls, namespace='payment_raja')),
     url('', include('social_django.urls', namespace='social')),
+    url(r'^pre/', include(pre_transactions_urls, namespace='pre_transactions'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

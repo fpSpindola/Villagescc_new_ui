@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'listings',
     'tags',
     'notification',
+    'pre_transactions',
     'django_user_agents',
 
     # Ripple
@@ -151,13 +152,13 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'villages_new_ui',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'villagesripple_new_ui',
         'USER': 'postgres',
-        'PASSWORD': 'test123!'
+        'PASSWORD': 'teste123!'
     }
 }
 
