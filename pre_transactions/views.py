@@ -83,11 +83,18 @@ def pay(request):
         return render(request, 'pre_payment.html')
     else:
         if request.method == 'POST':
-            if request.POST.get('direct') == 'on':
-                payment_type = 'DIRECT'
-            elif request.POST.get('trusted') == 'on':
-                payment_type = 'ROUTED'
-            send_payment(request.profile, recipient, hours, text, payment_type)
+            payment_type = request.POST.get('ripple')
+
+            if text:
+                text = text.encode('UTF-8')
+            if hours:
+                hours = hours.encode('UTF-8')
+            if payment_type:
+                payment_type = payment_type.encode('UTF-8')
+
+            send_payment(request.profile, recipient, float(hours), text, payment_type)
+            messages.add_message(request, messages.SUCCESS, 'Successfully sent payment')
+            return HttpResponseRedirect(reverse('frontend:home'))
 
         else:
             max_amount = ripple.max_payment(request.profile, recipient)

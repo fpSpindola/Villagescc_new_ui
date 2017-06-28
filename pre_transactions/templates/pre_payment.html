@@ -13,7 +13,7 @@
 <hr>
 
 <div class="col-lg-6 col-lg-offset-3">
-        <form method="post" id="pre-trust-form" enctype="multipart/form-data">
+        <form method="post" id="pre-payment-form" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="panel panel-default">
                 <div class="panel-heading">Recipient: {{ recipient }}</div>
@@ -34,14 +34,18 @@
                             {% endif %}
 
                                 <div>
-                                    <label class="radio-inline">
-                                        <input id="direct_payment" type="radio" name="direct">Direct payment
-                                    </label>
-                                    {% if can_ripple %}
-                                        <label class="radio-inline">
-                                            <input id="trusted_payment" type="radio" name="trusted">Trusted payment
-                                        </label>
-                                    {% endif %}
+                                    <ul id="id_ripple">
+                                        {% if can_ripple %}
+                                        <li>
+                                            <label for="trusted_payment">
+                                            <input id="trusted_payment" name="ripple" style="float: left;" type="radio" value="routed">  Trusted payment</label>
+                                        </li>
+                                        {% endif %}
+                                        <li>
+                                            <label for="direct_payment">
+                                            <input checked="checked" id="direct_payment" name="ripple" style="float: left;" type="radio" value="direct">  Direct payment</label>
+                                        </li>
+                                    </ul>
                                 </div>
 
                                 <label for="testimonial">Testimonial</label>
@@ -57,17 +61,6 @@
                     <i class="fa fa-check"></i> Save trust</button>
                 <a href="{% url 'pre_transactions:pre_trust' %}" class="btn btn-danger"><i class="fa fa-sign-out"></i> Back</a>
             </div>
-
-{#        <script>#}
-{#             $(document).ready(function () {#}
-{#                 if($("#trusted_payment").is(":checked")){#}
-{#                    $("#direct_payment").attr('checked', false);#}
-{#                 } else if($("#direct_payment").is(":checked") == true) {#}
-{#                     $("#trusted_payment").attr("checked", false)#}
-{#                 }#}
-{##}
-{#             });#}
-{#        </script>#}
 
         </form>
     </div>

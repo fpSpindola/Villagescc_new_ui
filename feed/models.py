@@ -120,7 +120,7 @@ class FeedManager(GeoManager):
 
     def _feed_query(self, profile=None, location=None, radius=None,
                     item_type=None, tsearch=None, trusted_only=False,
-                    poster=None, recipient=None, up_to_date=None, referral=None):
+                    poster=None, recipient=None, up_to_date=None, referral=None, balance=None):
         "Build a query for feed items corresponding to a particular feed."
         query = self.get_queryset().order_by('-date')
         if up_to_date:
@@ -158,6 +158,9 @@ class FeedManager(GeoManager):
                 params=[tsearch])
         if referral:
             query = query.filter(item_type='profile').order_by('-referral_count')
+
+        if balance:
+            query = query.filter(item_type='profile').order_by('-balance')
             # profiles = FeedItem.objects.filter(item_type='referral').all()
             # groups = []
             # for each_profile in profiles:
