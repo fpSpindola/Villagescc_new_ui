@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
+from notification.utils import create_notification
+from notification.models import Notification
 from feed.models import FeedItem
 from relate.models import Endorsement
 from profile.models import Profile
@@ -39,6 +40,7 @@ def trust(request):
                 if weigth:
                     endorsement.weight = weigth
                 endorsement.save()
+                create_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
             else:
                 new_trust = Endorsement()
                 new_trust.endorser = request.profile
@@ -46,6 +48,7 @@ def trust(request):
                 new_trust.weight = weigth
                 new_trust.text = text
                 new_trust.save()
+                create_notification(notifier=request.profile, recipient=recipient, type=Notification.TRUST)
             messages.add_message(request, messages.SUCCESS, 'Successfully sent trust')
             return HttpResponseRedirect(reverse('frontend:home'))
         else:
@@ -93,6 +96,7 @@ def pay(request):
                 payment_type = payment_type.encode('UTF-8')
 
             send_payment(request.profile, recipient, float(hours), text, payment_type)
+            create_notification(notifier=request.profile, recipient=recipient, type=Notification.PAYMENT)
             messages.add_message(request, messages.SUCCESS, 'Successfully sent payment')
             return HttpResponseRedirect(reverse('frontend:home'))
 
