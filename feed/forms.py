@@ -44,6 +44,12 @@ class FeedFilterForm(forms.Form):
                                       'class': 'form-control checkbox-inline',
                                       'style': 'vertical-align: moddle; width: 15px;'
                                   }))
+
+    balance = forms.BooleanField(required=False,
+                                 widget=forms.CheckboxInput(attrs={
+                                      'class': 'form-control checkbox-inline',
+                                      'style': 'vertical-align: moddle; width: 15px;'
+                                  }))
     
     def __init__(self, data, profile, location=None, item_type=None,
                  poster=None, recipient=None, do_filter=False, *args, **kwargs):
@@ -80,13 +86,14 @@ class FeedFilterForm(forms.Form):
             query_radius = None
         trusted = data['trusted']
         referral = data['referral']
+        balance = data['balance']
 
         while True:
             items, count = FeedItem.objects.get_feed_and_remaining(
                 self.profile, location=self.location, tsearch=tsearch,
                 radius=query_radius, item_type=self.item_type,
                 trusted_only=trusted, up_to_date=date, poster=self.poster,
-                recipient=self.recipient, referral=referral)
+                recipient=self.recipient, referral=referral, balance=balance)
             # On first or anonymous visits without explicit radius, expand radius
             # until there are a bunch of items or until we're at max radius.
             if (not (self.profile and self.profile.settings.feed_radius) and

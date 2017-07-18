@@ -41,6 +41,12 @@
                  alt="{% trans 'Heart icon = trusted user' %}">
             {% trans 'Trusted only' %}</label>
         </span>
+        <span><label>{{ form.referral }}
+            {% trans 'Sort by referral' %}</label>
+        </span>
+        <span><label>{{ form.balance }}
+            {% trans 'Sort by balance' %}</label>
+        </span>
     {% else %}
         {{ form_listing_settings.radius }}
         <span><label>{{ form_listing_settings.trusted }}
@@ -128,6 +134,9 @@
         </span>
         <span><label>{{ form.referral }}
             {% trans 'Sort by referral' %}</label>
+        </span>
+        <span><label>{{ form.balance }}
+            {% trans 'Sort by balance' %}</label>
         </span>
     {% else %}
         {{ form_listing_settings.radius }}

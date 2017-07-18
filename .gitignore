@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-media/
+
 sessions/
 
 # C extensions
