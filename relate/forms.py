@@ -22,7 +22,8 @@ class EndorseForm(forms.ModelForm):
                                 required=True, min_value=0,
                                 widget=forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 82%'}))
 
-    referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)", required=True,
+    referral = forms.BooleanField(label="Refer This Person's Services to Friends? (Only refer a person if you have actually worked with them)",
+                                  required=False,
                                   widget=forms.CheckboxInput())
     
     class Meta:

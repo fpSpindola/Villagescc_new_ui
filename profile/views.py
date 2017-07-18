@@ -227,7 +227,7 @@ def edit_settings(request):
                 translation.activate(settings_obj.language)
                 request.session['django_language'] = translation.get_language()
                 if settings_obj.email != old_email:
-                    # send_new_address_email(settings_obj)
+                    send_new_address_email(settings_obj)
                     messages.info(request, MESSAGES['email_updated'])
                 else:
                     messages.info(request, MESSAGES['settings_changed'])

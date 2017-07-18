@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import elasticsearch
+import ujson
 from datetime import timedelta
-
 from database.databases import Database
 from database.connection_strings import POSTGRESQL
 
@@ -24,9 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'oe@ut#9t8xzd0%19xobf3c4jqa75&#!@+e27ioubq=#r1^4h#8'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -36,17 +33,44 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'ccproject', 'locale/'),
 )
 
+AUTH_LOCATION = '/home/ubuntu/.villages_auth.json'
 
-SERVER_EMAIL = 'help@villages.cc'
+
+def get_credentials(auth_location):
+    """
+
+    :param auth_location:
+    :return:
+    """
+    if os.path.exists(auth_location):
+        auth_data = ujson.loads(open(auth_location).read())
+        return auth_data['villages']['db_user'], \
+               auth_data['villages']['db_pass'], \
+               auth_data['villages']['db_name'], \
+               auth_data['ripple']['db_user'], \
+               auth_data['ripple']['db_pass'], \
+               auth_data['ripple']['db_name'], \
+               auth_data['mail']['mail_user'], \
+               auth_data['mail']['mail_pass'], \
+               auth_data['secret_key']
+
+
+villages_db_user, villages_db_pass, villages_db_name, ripple_db_user, ripple_db_pass, ripple_db_name, \
+mail_user, mail_password, secret_key = get_credentials(AUTH_LOCATION)
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = secret_key
+
+SERVER_EMAIL = mail_user
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'help@villages.cc'
-EMAIL_HOST_USER = 'help@villages.cc'
-EMAIL_HOST_PASSWORD = 'helpvillagescc'
+DEFAULT_FROM_EMAIL = mail_user
+EMAIL_HOST_USER = mail_user
+EMAIL_HOST_PASSWORD = mail_password
 SITE_DOMAIN = 'villages.cc'
-HELP_EMAIL = 'help@villages.cc'
+HELP_EMAIL = mail_user
 EMAIL_SUBJECT_PREFIX = "[Villages] "
 
 # Application definition
@@ -147,18 +171,19 @@ WSGI_APPLICATION = 'ccproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'villages_new_ui',
-        'USER': 'postgres',
-        'PASSWORD': 'teste123!'
+        'NAME': villages_db_name,
+        'USER': villages_db_user,
+        'PASSWORD': villages_db_pass
     },
     'ripple': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'villagesripple_new_ui',
-        'USER': 'postgres',
-        'PASSWORD': 'teste123!'
+        'NAME': ripple_db_name,
+        'USER': ripple_db_user,
+        'PASSWORD': ripple_db_pass
     }
 }
 
