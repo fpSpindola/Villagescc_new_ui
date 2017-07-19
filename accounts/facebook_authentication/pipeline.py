@@ -56,7 +56,7 @@ def create_profile_data(strategy, user, response, details, is_new=False, *args, 
             profile_settings.save()
             return
         except Exception as e:
-            print(e)
+            raise e
     elif user.date_joined >= (datetime.datetime.now(tz=pytz.utc) - datetime.timedelta(hours=1)):
         existing_profile = Profile.objects.get(user_id=user.id)
         url = 'https://graph.facebook.com/{0}/picture'.format(response['id'])
@@ -71,4 +71,4 @@ def create_profile_data(strategy, user, response, details, is_new=False, *args, 
             existing_profile.photo = 'facebook/{0}__social.jpg'.format(user.id)
             existing_profile.save()
         except Exception as e:
-            print(e)
+            raise e
