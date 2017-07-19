@@ -38,7 +38,7 @@ def create_profile_data(strategy, user, response, details, is_new=False, *args, 
         new_profile.name = user.username
         new_profile.user.email = details['email'] if 'email' in details else None
 
-        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+        url = 'https://graph.facebook.com/{0}/picture'.format(response['id'])
         try:
             img_content = request('GET', url, params={'type': 'large'})
             file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'uploads',
@@ -59,7 +59,7 @@ def create_profile_data(strategy, user, response, details, is_new=False, *args, 
             print(e)
     elif user.date_joined >= (datetime.datetime.now(tz=pytz.utc) - datetime.timedelta(hours=1)):
         existing_profile = Profile.objects.get(user_id=user.id)
-        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+        url = 'https://graph.facebook.com/{0}/picture'.format(response['id'])
         try:
             img_content = request('GET', url, params={'type': 'large'})
             file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'uploads',
