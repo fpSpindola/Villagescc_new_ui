@@ -44,8 +44,9 @@
         <span><label>{{ form.referral }}
             {% trans 'Sort by referral' %}</label>
         </span>
-        <span><label>{{ form.balance }}
+        <span><i class="fa fa-sort"></i><label>{{ form.balance }}
             {% trans 'Sort by balance' %}</label>
+
         </span>
     {% else %}
         {{ form_listing_settings.radius }}
@@ -137,6 +138,8 @@
         </span>
         <span><label>{{ form.balance }}
             {% trans 'Sort by balance' %}</label>
+            <i class="fa fa-sort-amount-desc" id="sort-balance-desc"></i>
+            <i class="fa fa-sort-amount-asc" id="sort-balance-asc" style="display: none"></i>
         </span>
     {% else %}
         {{ form_listing_settings.radius }}
