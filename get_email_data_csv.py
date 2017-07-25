@@ -7,7 +7,6 @@ os.environ["DJANGO_SETTINGS_MODULE"] = "ccproject.settings"
 django.setup()
 
 from profile.models import Profile
-from django.contrib.auth.models import User
 
 
 profiles = Profile.objects.all()
