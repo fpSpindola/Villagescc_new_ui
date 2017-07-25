@@ -39,17 +39,17 @@ class FeedFilterForm(forms.Form):
                                      'style': 'vertical-align: middle; width: 15px;'
                                  }))
 
-    referral = forms.BooleanField(required=False,
+    referral_filter = forms.BooleanField(required=False,
                                   widget=forms.CheckboxInput(attrs={
                                       'class': 'form-control checkbox-inline',
                                       'style': 'vertical-align: moddle; width: 15px;'
                                   }))
 
-    balance_high = forms.BooleanField(required=False,
-                                 widget=forms.CheckboxInput(attrs={
-                                      'class': 'form-control checkbox-inline',
-                                      'style': 'vertical-align: moddle; width: 15px;'
-                                  }))
+    # balance_high = forms.BooleanField(required=False,
+    #                              widget=forms.CheckboxInput(attrs={
+    #                                   'class': 'form-control checkbox-inline',
+    #                                   'style': 'vertical-align: moddle; width: 15px;'
+    #                               }))
     
     def __init__(self, data, profile, location=None, item_type=None,
                  poster=None, recipient=None, do_filter=False, *args, **kwargs):
@@ -76,7 +76,7 @@ class FeedFilterForm(forms.Form):
     def continued(self):
         return 'd' in self.data
         
-    def get_results(self):
+    def get_results(self, balance_low=None, balance_high=None):
         data = self.cleaned_data
         date = data.get('d') or datetime.now()
         tsearch = data.get('q')
@@ -85,9 +85,9 @@ class FeedFilterForm(forms.Form):
         if radius == INFINITE_RADIUS:
             query_radius = None
         trusted = data['trusted']
-        referral = data['referral']
-        balance_high = data.get('radio-high')
-        balance_low = data.get('radio-low')
+        referral = data['referral_filter']
+        balance_high = balance_high
+        balance_low = balance_low
 
         while True:
             items, count = FeedItem.objects.get_feed_and_remaining(

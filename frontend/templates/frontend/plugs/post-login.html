@@ -42,7 +42,7 @@
             {% trans 'Trusted only' %}</label>
         </span></div>
 
-        <div><span><label>{{ form.referral }}
+        <div><span><label>{{ form.referral_filter }}
             {% trans 'Sort by referral' %}</label>
         </span></div>
         <div><span>
@@ -139,7 +139,7 @@
 
     <div class="col-md-2">
 
-    {% if not listing_items %}
+    {% if not is_listing %}
         {{ form.radius }}
         <div><span><label>{{ form.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
@@ -147,17 +147,17 @@
             {% trans 'Trusted only' %}</label>
         </span></div>
 
-        <div><span><label>{{ form.referral }}
+        <div><span><label>{{ form.referral_filter }}
             {% trans 'Sort by referral' %}</label>
         </span></div>
         <div><span>
          <label class="custom-control custom-radio">
-              <input id="balance-high" name="radio-high" type="radio" class="custom-control-input">
+              <input id="balance-high" name="radio-low" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance low to high</span>
             </label>
             <label class="custom-control custom-radio">
-              <input id="balance-low" name="radio-low" type="radio" class="custom-control-input">
+              <input id="balance-low" name="radio-high" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance high to low</span>
             </label>

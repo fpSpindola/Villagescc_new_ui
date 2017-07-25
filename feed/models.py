@@ -120,7 +120,8 @@ class FeedManager(GeoManager):
 
     def _feed_query(self, profile=None, location=None, radius=None,
                     item_type=None, tsearch=None, trusted_only=False,
-                    poster=None, recipient=None, up_to_date=None, referral=None, balance=None):
+                    poster=None, recipient=None, up_to_date=None, referral=None,
+                    balance_high=None, balance_low=None):
         "Build a query for feed items corresponding to a particular feed."
         query = self.get_queryset().order_by('-date')
         if up_to_date:
@@ -159,28 +160,11 @@ class FeedManager(GeoManager):
         if referral:
             query = query.filter(item_type='profile').order_by('-referral_count')
 
-        if balance:
+        if balance_low:
+            query = query.filter(item_type='profile').order_by('balance')
+
+        if balance_high:
             query = query.filter(item_type='profile').order_by('-balance')
-            # profiles = FeedItem.objects.filter(item_type='referral').all()
-            # groups = []
-            # for each_profile in profiles:
-            #     group_qs = each_profile.recipient.referral_received.all()
-            #     groups.append({
-            #         "recipient_id": each_profile.recipient.id,
-            #         "total_referral": len(group_qs),
-            #         "queryset": each_profile,
-            #     })
-            # group_set = set()
-            # unique_items = []
-            # for x in groups:
-            #     key = str(x['recipient_id'])
-            #     if key not in group_set:
-            #         group_set.add(key)
-            #         unique_items.append(x)
-            # referral_profiles = []
-            # for item in sorted(unique_items, key=lambda x: x['total_referral'], reverse=True):
-            #     referral_profiles.append(item['queryset'])
-            # return referral_profiles
         return query
 
     def create_from_item(self, item):

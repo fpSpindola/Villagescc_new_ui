@@ -49,7 +49,16 @@ function init_feed_filter_form() {
 	$('#id_trusted').change(function() {
 		$(this).closest('form').submit();
 	});
-	$('#id_referral').change(function() {
+	$('#id_referral_filter').change(function() {
+		$(this).closest('form').submit();
+	});
+	$('#inputListingType').change(function () {
+		$(this).closest('form').submit();
+	});
+	$('#balance-low').change(function() {
+		$(this).closest('form').submit();
+	});
+	$('#balance-high').change(function() {
 		$(this).closest('form').submit();
 	});
 	$('#id_clear').click(function() {
