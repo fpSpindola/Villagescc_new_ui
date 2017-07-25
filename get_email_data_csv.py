@@ -1,8 +1,6 @@
 import os
 import django
 import csv
-import geopy
-import googlemaps
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "ccproject.settings"
 
@@ -27,9 +25,3 @@ for each_profile in profiles:
         writer.writerow(profile_data)
     except Exception as e:
         print(e)
-
-
-
-
-
-# reader = csv.reader(open("friends.csv", "rb"), delimiter=' ')
