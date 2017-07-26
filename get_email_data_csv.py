@@ -21,6 +21,5 @@ for each_profile in profiles:
                         each_profile.location.neighborhood]
         writer.writerow(profile_data)
         profile_data = [each_profile.name, each_profile.email]
-        writer.writerow(profile_data)
     except Exception as e:
         print(e)
