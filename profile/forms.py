@@ -225,7 +225,7 @@ class ContactForm(forms.Form):
 
     message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
 
-    data_profile = forms.CharField(widget=forms.HiddenInput())
+    data_profile = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def send(self, sender, recipient, subject=None,
              template='contact_email.txt', extra_context=None):

@@ -40,10 +40,10 @@ class FeedFilterForm(forms.Form):
                                  }))
 
     referral_filter = forms.BooleanField(required=False,
-                                  widget=forms.CheckboxInput(attrs={
-                                      'class': 'form-control checkbox-inline',
-                                      'style': 'vertical-align: moddle; width: 15px;'
-                                  }))
+                                         widget=forms.CheckboxInput(attrs={
+                                             'class': 'form-control checkbox-inline',
+                                             'style': 'vertical-align: moddle; width: 15px;'
+                                         }))
 
     # balance_high = forms.BooleanField(required=False,
     #                              widget=forms.CheckboxInput(attrs={
