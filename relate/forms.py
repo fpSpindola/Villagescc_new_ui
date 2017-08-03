@@ -1,7 +1,5 @@
 from decimal import Decimal as D
 from django import forms
-from django.core import validators
-from dal import autocomplete as dal_autocomplete
 from django.utils.translation import ugettext_lazy as _
 from relate.models import Endorsement
 from ripple import PRECISION, SCALE
