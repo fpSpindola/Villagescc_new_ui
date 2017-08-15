@@ -42,11 +42,16 @@
             {% trans 'Trusted only' %}</label>
         </span></div>
 
-        <div><span><label>{{ form.referral_filter }}
-            {% trans 'Sort by referral' %}</label>
-        </span></div>
+{#        <div><span><label>{{ form.referral_filter }}#}
+{#            {% trans 'Sort by referral' %}</label>#}
+{#        </span></div>#}
         <div><span>
-         <label class="custom-control custom-radio">
+            <label class="custom-control custom-radio">
+              <input id="referral" name="referral-radio" type="radio" class="custom-control-input">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">Sort by referral</span>
+            </label>
+            <label class="custom-control custom-radio">
               <input id="balance-high" name="radio-low" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance low to high</span>
@@ -56,10 +61,6 @@
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance high to low</span>
             </label>
-{#            <label>{{ form.balance }}#}
-{#            {% trans 'Sort by balance' %}</label>#}
-{#            <i class="fa fa-sort-amount-desc" id="sort-balance-desc"></i>#}
-{#            <i class="fa fa-sort-amount-asc" id="sort-balance-asc" style="display: none"></i>#}
         </span></div>
     {% else %}
         {{ form_listing_settings.radius }}
@@ -147,11 +148,16 @@
             {% trans 'Trusted only' %}</label>
         </span></div>
 
-        <div><span><label>{{ form.referral_filter }}
-            {% trans 'Sort by referral' %}</label>
-        </span></div>
+{#        <div><span><label>{{ form.referral_filter }}#}
+{#            {% trans 'Sort by referral' %}</label>#}
+{#        </span></div>#}
         <div><span>
-         <label class="custom-control custom-radio">
+            <label class="custom-control custom-radio">
+              <input id="id_referral_filter" name="referral-radio" type="radio" class="custom-control-input">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">Sort by referral</span>
+            </label>
+            <label class="custom-control custom-radio">
               <input id="balance-high" name="radio-low" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance low to high</span>
@@ -161,10 +167,6 @@
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Balance high to low</span>
             </label>
-{#            <label>{{ form.balance }}#}
-{#            {% trans 'Sort by balance' %}</label>#}
-{#            <i class="fa fa-sort-amount-desc" id="sort-balance-desc"></i>#}
-{#            <i class="fa fa-sort-amount-asc" id="sort-balance-asc" style="display: none"></i>#}
         </span></div>
     {% else %}
         {{ form_listing_settings.radius }}

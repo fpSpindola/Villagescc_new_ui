@@ -93,6 +93,10 @@ class FeedManager(GeoManager):
     def get_feed_count(self, *args, **kwargs):
         if kwargs.get('referral'):
             return len(self._feed_query(*args, **kwargs))
+        elif kwargs.get('balance_low'):
+            return len(self._feed_query(*args, **kwargs))
+        elif kwargs.get('balance_high'):
+            return len(self._feed_query(*args, **kwargs))
         else:
             return self._feed_query(*args, **kwargs).count()
 

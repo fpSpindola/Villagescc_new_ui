@@ -108,7 +108,8 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
         trust_form = EndorseForm(instance=endorsement, endorser=None, recipient=None)
         if form.is_valid():
             feed_items, remaining_count = form.get_results(form.data.get('radio-low'),
-                                                           form.data.get('radio-high'))
+                                                           form.data.get('radio-high'),
+                                                           form.data.get('referral-radio'))
             if do_filter:
                 form.update_sticky_filter_prefs()
         else:

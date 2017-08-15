@@ -76,7 +76,7 @@ class FeedFilterForm(forms.Form):
     def continued(self):
         return 'd' in self.data
         
-    def get_results(self, balance_low=None, balance_high=None):
+    def get_results(self, balance_low=None, balance_high=None, referral_radio=None):
         data = self.cleaned_data
         date = data.get('d') or datetime.now()
         tsearch = data.get('q')
@@ -85,7 +85,7 @@ class FeedFilterForm(forms.Form):
         if radius == INFINITE_RADIUS:
             query_radius = None
         trusted = data['trusted']
-        referral = data['referral_filter']
+        referral = referral_radio
         balance_high = balance_high
         balance_low = balance_low
 
