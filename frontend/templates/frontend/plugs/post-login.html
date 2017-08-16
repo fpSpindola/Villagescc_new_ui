@@ -15,13 +15,13 @@
     }
 
     #id_trusted {
-      width: 25px;
-      padding: 0;
-      margin:0;
-      vertical-align: bottom;
-      position: relative;
-      top: -1px;
-      *overflow: hidden;
+        width: 25px;
+        padding: 0;
+        margin:0;
+        vertical-align: bottom;
+        position: relative;
+        top: -1px;
+        *overflow: hidden;
     }
 
     #profile-listing-img {
@@ -32,20 +32,20 @@
 </style>
 
 <form action="" method="get">
-{% if user_agent_type == 'mobile' %}
-    <div class="col-md-2">
-    {% if not listing_items %}
-        {{ form.radius }}
-        <div><span><label>{{ form.trusted }}
+    {% if user_agent_type == 'mobile' %}
+        <div class="col-md-2">
+            {% if not listing_items %}
+                {{ form.radius }}
+                <div><span><label>{{ form.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
                  alt="{% trans 'Heart icon = trusted user' %}">
-            {% trans 'Trusted only' %}</label>
+                    {% trans 'Trusted only' %}</label>
         </span></div>
 
-{#        <div><span><label>{{ form.referral_filter }}#}
-{#            {% trans 'Sort by referral' %}</label>#}
-{#        </span></div>#}
-        <div><span>
+                {#        <div><span><label>{{ form.referral_filter }}#}
+                {#            {% trans 'Sort by referral' %}</label>#}
+                {#        </span></div>#}
+                <div><span>
             <label class="custom-control custom-radio">
               <input id="referral" name="referral-radio" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
@@ -62,96 +62,96 @@
               <span class="custom-control-description">Balance high to low</span>
             </label>
         </span></div>
-    {% else %}
-        {{ form_listing_settings.radius }}
-        <span><label>{{ form_listing_settings.trusted }}
+            {% else %}
+                {{ form_listing_settings.radius }}
+                <span><label>{{ form_listing_settings.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
                  alt="{% trans 'Heart icon = trusted user' %}">
-            {% trans 'Trusted only' %}</label>
+                    {% trans 'Trusted only' %}</label>
         </span>
-    {% endif %}
-    <div>
-        {% if feed_items %}
-            <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-        {% elif listing_items %}
-            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
-        {% endif %}
-    </div>
+            {% endif %}
+            <div>
+                {% if feed_items %}
+                    <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                {% elif listing_items %}
+                    <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                {% endif %}
+            </div>
             <nav class="sidebar">
                 <ul>
                     <li class="menu-group" style="padding-left: 0">
-                    <div id="all_categories"><i class="fa fa-globe"></i>ALL CATEGORIES</div>
-                    <ul class="collapse">
-                        {% for each in categories %}
-                        {% if each.categories_text == 'PRODUCTS' %}
-                            <li class="menu-group">
-                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
-                                <ul>
-                                    <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
-                                    <hr>
-                                    {% for each_sub_category in item_sub_categories %}
-                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% elif each.categories_text == 'SERVICES' %}
-                            <li class="menu-group">
-                                <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
-                                <ul>
-                                    <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
-                                    <hr>
-                                    {% for each_sub_category in services_sub_categories %}
-                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% elif each.categories_text == 'RIDESHARE' %}
-                            <li class="menu-group">
-                                <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
-                                <ul>
-                                    <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
-                                    <hr>
-                                    {% for each_sub_category in rideshare_sub_categories %}
-                                        <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% elif each.categories_text == 'HOUSING' %}
-                            <li class="menu-group">
-                                <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
-                                <ul>
-                                <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
-                                <hr>
-                                    {% for each_sub_category in housing_sub_categories %}
-                                        <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
+                        <div id="all_categories"><i class="fa fa-globe"></i>ALL CATEGORIES</div>
+                        <ul class="collapse">
+                            {% for each in categories %}
+                                {% if each.categories_text == 'PRODUCTS' %}
+                                    <li class="menu-group">
+                                        <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
+                                        <ul>
+                                            <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
+                                            <hr>
+                                            {% for each_sub_category in item_sub_categories %}
+                                                <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% elif each.categories_text == 'SERVICES' %}
+                                    <li class="menu-group">
+                                        <div><i class="fa fa-truck"></i> {{ each.categories_text }}</div>
+                                        <ul>
+                                            <li><a href="{% url 'frontend:home' 'SERVICES' %}">ALL SERVICES</a></li>
+                                            <hr>
+                                            {% for each_sub_category in services_sub_categories %}
+                                                <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% elif each.categories_text == 'RIDESHARE' %}
+                                    <li class="menu-group">
+                                        <div><i class="fa fa-bug"></i> {{ each.categories_text }}</div>
+                                        <ul>
+                                            <li><a href="{% url 'frontend:home' 'RIDESHARE' %}">ALL RIDESHARE</a></li>
+                                            <hr>
+                                            {% for each_sub_category in rideshare_sub_categories %}
+                                                <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% elif each.categories_text == 'HOUSING' %}
+                                    <li class="menu-group">
+                                        <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
+                                        <ul>
+                                            <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
+                                            <hr>
+                                            {% for each_sub_category in housing_sub_categories %}
+                                                <li><a href="#">{{ each_sub_category.id }}</a>{{ each_sub_category.sub_categories_text }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
                     </li>
 
                 </ul>
             </nav>
             <br>
         </div>
-{% else %}
+    {% else %}
 
-    <div class="col-md-2">
+        <div class="col-md-2">
 
-    {% if not is_listing %}
-        {{ form.radius }}
-        <div><span><label>{{ form.trusted }}
+            {% if not is_listing %}
+                {{ form.radius }}
+                <div><span><label>{{ form.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
                  alt="{% trans 'Heart icon = trusted user' %}">
-            {% trans 'Trusted only' %}</label>
+                    {% trans 'Trusted only' %}</label>
         </span></div>
 
-{#        <div><span><label>{{ form.referral_filter }}#}
-{#            {% trans 'Sort by referral' %}</label>#}
-{#        </span></div>#}
-        <div><span>
+                {#        <div><span><label>{{ form.referral_filter }}#}
+                {#            {% trans 'Sort by referral' %}</label>#}
+                {#        </span></div>#}
+                <div><span>
             <label class="custom-control custom-radio">
               <input id="id_referral_filter" name="referral-radio" type="radio" class="custom-control-input">
               <span class="custom-control-indicator"></span>
@@ -168,23 +168,23 @@
               <span class="custom-control-description">Balance high to low</span>
             </label>
         </span></div>
-    {% else %}
-        {{ form_listing_settings.radius }}
-        <span><label>{{ form_listing_settings.trusted }}
+            {% else %}
+                {{ form_listing_settings.radius }}
+                <span><label>{{ form_listing_settings.trusted }}
             <img src="{% static 'img/heart_icon.png' %}"
                  alt="{% trans 'Heart icon = trusted user' %}">
-            {% trans 'Trusted only' %}</label>
+                    {% trans 'Trusted only' %}</label>
         </span>
-    {% endif %}
+            {% endif %}
 
-    <div>
-        {% if feed_items %}
-            <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
-        {% elif listing_items %}
-            <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
-        {% endif %}
-    </div>
-    <hr>
+            <div>
+                {% if feed_items %}
+                    <a href="{% url 'frontend:home' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp Posts only</a>
+                {% elif listing_items %}
+                    <a href="{% url 'frontend:home_people' %}"><img src="{% static 'img/people.png' %}" height="22" width="22">&nbsp People only</a>
+                {% endif %}
+            </div>
+            <hr>
 
             <nav class="sidebar">
                 <ul>
@@ -197,7 +197,7 @@
                     {% for each in categories %}
                         {% if each.categories_text == 'PRODUCTS' %}
                             <li class="menu-group">
-                            <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
+                                <div><i class="fa fa-shopping-bag"></i> {{ each.categories_text }}</div>
                                 <ul class="collapse">
                                     <li><a href="{% url 'frontend:home' 'PRODUCTS' %}">ALL PRODUCTS</a></li>
                                     <hr>
@@ -232,8 +232,8 @@
                             <li class="menu-group">
                                 <div><i class="fa fa-home"></i> {{ each.categories_text }}</div>
                                 <ul class="collapse">
-                                <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
-                                <hr>
+                                    <li><a href="{% url 'frontend:home' 'HOUSING' %}">ALL HOUSING</a></li>
+                                    <hr>
                                     {% for each_sub_category in housing_sub_categories %}
                                         <li><a href="{% url 'frontend:home' each_sub_category.id %}">{{ each_sub_category.sub_categories_text }}</a></li>
                                     {% endfor %}
@@ -245,27 +245,37 @@
             </nav>
             <br>
         </div>
-{% endif %}
+    {% endif %}
 
-<section class="container-fluid" id="home-sub-menu">
-    <div class="row">
-        <div class="col-md-6">
-                    <ul style="padding-left: 0;">
-                <div class="form-group">
-                    <div class="btn-group">
-                        {% if is_listing %}
+    <section class="container-fluid" id="home-sub-menu">
+        <div class="row">
+            <div class="col-md-6">
+                <ul style="padding-left: 0;">
+                    <div class="form-group">
+                        <div class="filters-enabled home-toolbar-button-group">
+                            <a class="home-toolbar-button-group-button selected" title="Grid" href="/?view=grid"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
+                                <span class="home-toolbar-button-text">
+                Grid
+                </span>
+                            </a><a class="home-toolbar-button-group-button " title="Map" href="/?view=map"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
+                            <span class="home-toolbar-button-text">
+                Map
+                </span>
+                        </a></div>
+                        <div class="btn-group">
+                            {% if is_listing %}
 
-                            <select class="form-control" id="inputListingType" name="listing_type">
-                                <option selected value="">Choose a listing type</option>
-                                <option value="OFFER">OFFER</option>
-                                <option value="REQUEST">REQUEST</option>
-                                <option value="TEACH">TEACH</option>
-                                <option value="LEARN">LEARN</option>
-                            </select>
+                                <select class="form-control" id="inputListingType" name="listing_type">
+                                    <option selected value="">Choose a listing type</option>
+                                    <option value="OFFER">OFFER</option>
+                                    <option value="REQUEST">REQUEST</option>
+                                    <option value="TEACH">TEACH</option>
+                                    <option value="LEARN">LEARN</option>
+                                </select>
 
-                            </div>
-                        </div>
-                        {% endif %}
+                                </div>
+                                </div>
+                            {% endif %}
                     {% if not is_listing %}
                         <div class="form-group">
                             {{ form.q }}
@@ -275,197 +285,197 @@
                             {{ form_listing_settings.q }}
                         </div>
 
-{#                        {{ form_listing_settings.radius }}#}
+                        {#                        {{ form_listing_settings.radius }}#}
                     {% endif %}
 
                 </ul>
-                    {% if item_type_name %}
-                        <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
+                {% if item_type_name %}
+                    <p style="font-size: 15px; font-weight: 600; padding-bottom: 0;
                         font-family: 'Open Sans'; color: #000;">{{ item_type_name }}</p>
-                    {% endif %}
-                    <hr>
-                </form>
-            </div>
+                {% endif %}
+                <hr>
+</form>
+</div>
 
-        {% if feed_items %}
-            <div class="col-md-10">
-                {% for each in feed_items %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">{{ each }}</div>
-                        <div class="panel-body">
-                            <a href="{{ each.get_absolute_url }}">
-                                <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
-                            </a>
-                                <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
-                                    <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                        <i class="fa fa-heart" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                        <i class="fa fa-money" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                        </div>
-                        {% if each.trusted %}
-                            <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
-                                </div>
-                                <div class="col-md-10">
-                                    {{ each.location }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
-                                </div>
-                                <div class="col-md-10 pull-left">
-                                    {{ each.overall_balance }} hours
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
-                                </div>
-                                <div class="col-md-10">
-                                    {{ each.user.last_login }}
-                                </div>
-                            </div>
-                            <div class="pull-right" title="Number of referrals" data-toggle="tooltip"><i class="fa fa-thumbs-o-up">&nbsp;{{ each.referral_received.count }}</i></div>
-                        </div>
-
-                        {% else %}
-                            <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span style="color: grey;"><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
-                                </div>
-                                <div class="col-md-10" style="color: grey;">
-                                    {{ each.location }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span style="color: grey;"><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
-                                </div>
-                                <div class="col-md-10 pull-left" style="color: grey;">
-                                    {{ each.overall_balance }} hours
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span style="color: grey;"><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
-                                </div>
-                                <div class="col-md-10" style="color: grey;">
-                                    {{ each.user.last_login }}
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-
+{% if feed_items %}
+    <div class="col-md-10">
+        {% for each in feed_items %}
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ each }}</div>
+                <div class="panel-body">
+                    <a href="{{ each.get_absolute_url }}">
+                        <img src="{% profile_image_url each '150x150' %}" style="height: auto; width: 100px;">
+                    </a>
+                    <div class="btn-group btn-group-lg btn-top-adjust" role="group" aria-label="..." style="float: right;">
+                        <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                            <i class="fa fa-money" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </button>
                     </div>
-                {% empty %}
-                    <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
-                {% endfor %}
-            {% if remaining_count %}
-                <p><a href="?{{ next_page_param_str }}">
-                    {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
-                </a></p>
-            {% endif %}
-            </div>
-        {% elif listing_items %}
-            <div class="col-md-10">
-                <a class="btn btn-primary" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
-            </div>
-            <div class="col-md-10" style="padding-left: 0;">
+                </div>
+                {% if each.trusted %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                            </div>
+                            <div class="col-md-10">
+                                {{ each.location }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                            </div>
+                            <div class="col-md-10 pull-left">
+                                {{ each.overall_balance }} hours
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                            </div>
+                            <div class="col-md-10">
+                                {{ each.user.last_login }}
+                            </div>
+                        </div>
+                        <div class="pull-right" title="Number of referrals" data-toggle="tooltip"><i class="fa fa-thumbs-o-up">&nbsp;{{ each.referral_received.count }}</i></div>
+                    </div>
 
-            {% for each in listing_items %}
-                {% if each|check_is_trusted_listing:request.profile %}
-                    <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
-                        <div class="thumbnail">
-                            <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
-                            <p class="thumbnail-info">{{ each.title }}</p>
-                            <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
-                            <div class="caption" style="height: 115px;">
-                                <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
-                                    <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
-                                         style="margin-right: 10px;" class="img-circle inline"/>
-                                </a>
-
-                                <div style="overflow: hidden;">
-                                    {% for each_tag in each.tag.all %}
-                                        <span class="label label-info">{{ each_tag.name }}</span>
-                                    {% endfor %}
-                                </div>
-
-                                <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
-                                    <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
-                                        <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                            <i class="fa fa-money" aria-hidden="true"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-
-                                </div>
+                {% else %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span style="color: grey;"><i class="fa fa-location-arrow" style="font-size: medium">&nbspLocation:</i></span>
+                            </div>
+                            <div class="col-md-10" style="color: grey;">
+                                {{ each.location }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span style="color: grey;"><i class="fa fa-balance-scale" style="font-size: medium">&nbspBalance:</i></span>
+                            </div>
+                            <div class="col-md-10 pull-left" style="color: grey;">
+                                {{ each.overall_balance }} hours
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span style="color: grey;"><i class="fa fa-calendar" style="font-size: medium">&nbspLast visit:</i></span>
+                            </div>
+                            <div class="col-md-10" style="color: grey;">
+                                {{ each.user.last_login }}
                             </div>
                         </div>
                     </div>
-            {% else %}
-                <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
-                    <div class="thumbnail" style="background: grey">
-                        <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
-                        <p class="thumbnail-info">{{ each.title }}</p>
-                        <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
-                        <div class="caption" style="height: 115px;">
-                            <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
-                                <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
-                                     style="margin-right: 10px;" class="img-circle inline"/>
-                            </a>
+                {% endif %}
 
+            </div>
+        {% empty %}
+            <p><em>{{ empty_string|default:_('No activity.') }}</em></p>
+        {% endfor %}
+        {% if remaining_count %}
+            <p><a href="?{{ next_page_param_str }}">
+                {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+            </a></p>
+        {% endif %}
+    </div>
+{% elif listing_items %}
+    <div class="col-md-10">
+        <a class="btn btn-primary" href="{% url 'listing_management:manage_listings' %}">Manage Listing</a>
+    </div>
+    <div class="col-md-10" style="padding-left: 0;">
+
+    {% for each in listing_items %}
+        {% if each|check_is_trusted_listing:request.profile %}
+            <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
+                <div class="thumbnail">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                    <p class="thumbnail-info">{{ each.title }}</p>
+                    <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
+                    <div class="caption" style="height: 115px;">
+                        <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
+                            <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
+                                 style="margin-right: 10px;" class="img-circle inline"/>
+                        </a>
+
+                        <div style="overflow: hidden;">
                             {% for each_tag in each.tag.all %}
                                 <span class="label label-info">{{ each_tag.name }}</span>
-
                             {% endfor %}
-                            <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
-                                <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
-                                    <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
-                                        <i class="fa fa-heart" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
-                                        <i class="fa fa-money" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                    </button>
-                                </div>
+                        </div>
+
+                        <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
+                            <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
+                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div id="div_listing_{{ each.user.profile.username }}" class="container-fluid col-sm-4">
+                <div class="thumbnail" style="background: grey">
+                    <img class="listing listing-modal" src="{% product_image_url each '280x280' %}" data-listing-id="{{ each.id }}" alt="...">
+                    <p class="thumbnail-info">{{ each.title }}</p>
+                    <p class="thumbnail-tag" style="left: 70px;">{{ each.listing_type }} | {{ each.price }} VH</p>
+                    <div class="caption" style="height: 115px;">
+                        <a href="{{ each.user.profile.get_absolute_url }}" style="float: left;">
+                            <img id="profile-listing-img" src="{% profile_image_url each.user.profile '60x60' %}" data-toggle="tooltip" title="{{ each.user.profile.name }}"
+                                 style="margin-right: 10px;" class="img-circle inline"/>
+                        </a>
+
+                        {% for each_tag in each.tag.all %}
+                            <span class="label label-info">{{ each_tag.name }}</span>
+
+                        {% endfor %}
+                        <div class="col-sm-12" style="padding-left: 0; padding-top: 5px;">
+                            <div class="btn-group btn-group-md btn-top-adjust" role="group" aria-label="..." style="display: block;">
+                                <button id="" type="button" class="btn btn-default btn-danger trust-modal" title="Trust this person" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-success payment-modal" title="Check your payments" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-default btn-primary contact-modal" title="Contact the owner" data-profile-username="{{ each.user.profile.username }}">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            {% endif %}
-            {% endfor %}
-        {% else %}
-            <div class="col-md-9">
-                <strong>There is nothing to show</strong>
             </div>
         {% endif %}
-        <div class="col-sm-12">
-         {% if remaining_count %}
-                <p><a href="?{{ next_page_param_str }}">
-                    {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
-                </a></p>
-            {% endif %}
-        </div>
-        </div>
-     </div>
+    {% endfor %}
+{% else %}
+    <div class="col-md-9">
+        <strong>There is nothing to show</strong>
+    </div>
+{% endif %}
+<div class="col-sm-12">
+    {% if remaining_count %}
+        <p><a href="?{{ next_page_param_str }}">
+            {% blocktrans %}{{ remaining_count }} More &raquo;{% endblocktrans %}
+        </a></p>
+    {% endif %}
+</div>
+</div>
+</div>
 </section>
 
 <script>
@@ -477,9 +487,9 @@
 
 
     $(".listing-twitter-share").click(function () {
-       var listing_id = $(".listing-modal").attr("data-listing-id");
-       var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text=Listing%20share%20';
-       $(".listing-twitter-share").attr("href", url)
+        var listing_id = $(".listing-modal").attr("data-listing-id");
+        var url = 'https://twitter.com/share?url=https%3A%2F%2Fvillages.cc%2Flisting_details%2F'+listing_id+'&via=Villagescc&related=villagesmarketplace%2Ctwitter&hashtags=villagescc%2Clisting&text=Listing%20share%20';
+        $(".listing-twitter-share").attr("href", url)
     })
 </script>
 
