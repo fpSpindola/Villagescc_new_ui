@@ -41,10 +41,6 @@
                  alt="{% trans 'Heart icon = trusted user' %}">
                     {% trans 'Trusted only' %}</label>
         </span></div>
-
-                {#        <div><span><label>{{ form.referral_filter }}#}
-                {#            {% trans 'Sort by referral' %}</label>#}
-                {#        </span></div>#}
                 <div><span>
             <label class="custom-control custom-radio">
               <input id="referral" name="referral-radio" type="radio" class="custom-control-input">
@@ -147,10 +143,6 @@
                  alt="{% trans 'Heart icon = trusted user' %}">
                     {% trans 'Trusted only' %}</label>
         </span></div>
-
-                {#        <div><span><label>{{ form.referral_filter }}#}
-                {#            {% trans 'Sort by referral' %}</label>#}
-                {#        </span></div>#}
                 <div><span>
             <label class="custom-control custom-radio">
               <input id="id_referral_filter" name="referral-radio" type="radio" class="custom-control-input">
@@ -254,14 +246,14 @@
                     <div class="form-group">
                         <div class="filters-enabled home-toolbar-button-group">
                             <a class="home-toolbar-button-group-button selected" title="Grid" href="/?view=grid"><i class="ss-thumbnails icon-fix home-button-group-icon"></i>
-                                <span class="home-toolbar-button-text">
-                Grid
-                </span>
-                            </a><a class="home-toolbar-button-group-button " title="Map" href="/?view=map"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
-                            <span class="home-toolbar-button-text">
-                Map
-                </span>
-                        </a></div>
+                                <span class="home-toolbar-button-text">Grid
+                                </span>
+                            </a>
+                            <a class="home-toolbar-button-group-button " title="Map" href="{% url 'frontend:map' %}"><i class="ss-maplocation icon-fix home-button-group-icon"></i>
+                                <span class="home-toolbar-button-text">Map
+                                </span>
+                            </a>
+                        </div>
                         <div class="btn-group">
                             {% if is_listing %}
 
@@ -284,8 +276,6 @@
                         <div class="form-group">
                             {{ form_listing_settings.q }}
                         </div>
-
-                        {#                        {{ form_listing_settings.radius }}#}
                     {% endif %}
 
                 </ul>

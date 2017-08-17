@@ -225,5 +225,9 @@ def home(request, type_filter=None, item_type=None, template='frontend/home.html
             'notification_number': notification_number})
 
 
+def map_visualization(request):
+    return render(request, 'frontend/plugs/map-visualization.html')
+
+
 def pre_home(request):
     return render(request, 'home_banner.html')
